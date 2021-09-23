@@ -82,4 +82,73 @@ public class BulkCargo extends Cargo {
             this.type,
             this.tonnage);
     }
+
+    /**
+     * Returns true if and only if this BulkCargo is equal to the other given
+     * BulkCargo.
+     *
+     * For two BulkCargo to be equal, they must have the same ID,
+     * destination, type and tonnage.
+     *
+     *
+     * @param o other object to check equality
+     *
+     * @return true if equal, false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof BulkCargo)) {
+            return false;
+        }
+        BulkCargo bulkCargo = (BulkCargo) o;
+        return super.equals(bulkCargo)
+                && type == bulkCargo.getType()
+                && tonnage == bulkCargo.getTonnage();
+    }
+
+    /**
+     * Returns the hash code of this BulkCargo.
+     *
+     * Two BulkCargo are equal according to {@link #equals(Object)} method
+     * should have the same hash code.
+     *
+     * @return hash code of this BulkCargo.
+     */
+    @Override
+    public int hashCode() {
+        return super.hashCode() % type.hashCode() + tonnage;
+    }
+
+    /**
+     * Returns the machine-readable string representation of this BulkCargo.
+     *
+     * The format of the string to return is
+     *
+     * {@code BulkCargo:id:destination:type:tonnage}
+     *
+     * Where:
+     * <ul>
+     *     <li>
+     *         {@code id} is the id of this cargo
+     *     </li>
+     *     <li>
+     *         {@code destination} is the destination of this cargo
+     *     </li>
+     *     <li>
+     *         {@code type} is the bulk cargo type
+     *     </li>
+     *     <li>
+     *         {@code tonnage} is the bulk cargo weight in tonnes
+     *     </li>
+     * </ul>
+     *
+     * For example:
+     * {@code BulkCargo:2:Germany:GRAIN:50}
+     *
+     * @return encoded string representation of this Cargo
+     */
+    @Override
+    public String encode() {
+        return "";
+    }
 }

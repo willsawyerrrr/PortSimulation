@@ -39,6 +39,39 @@ public class Container extends Cargo {
     }
 
     /**
+     * Returns true if and only if this Container is equal to the other given
+     * Container
+     *
+     * For two Containers to be equal, they must have the same ID,
+     * destination and type.
+     *
+     * @param o other object to check for equality
+     *
+     * @return true if equal, false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Container)) {
+            return false;
+        }
+        Container container = (Container) o;
+        return super.equals(container)
+                && type == container.getType();
+    }
+
+    /**
+     * Returns the hash code of this Container.
+     *
+     * Two Containers that are equal according to the {@link #equals(Object)}
+     * method shoudl have the same hash code.
+     *
+     * @return hash code of this Container.
+     */
+    public int hashCode() {
+        return super.hashCode() % type.hashCode();
+    }
+
+    /**
      * Returns the human-readable string representation of this Container.
      * <p>
      * The format of the string to return is
@@ -61,4 +94,30 @@ public class Container extends Cargo {
             this.type);
     }
 
+    /**
+     * Returns the machine-readable string representation of this Container.
+     *
+     * The format of the string to return is
+     *
+     * {@code Container:id:destination:type}
+     *
+     * Where:
+     * <ul>
+     *     <li>
+     *         {@code id} is the id of this cargo
+     *     </li>
+     *     <li>
+     *         {@code destination} is the destination of this cargo
+     *     </li>
+     *     <li>
+     *         {@code type} is the container type
+     *     </li>
+     * </ul>
+     *
+     * For example:
+     * {@code Container:3:Australia:OPEN_TOP}
+     */
+    public String encode() {
+        return "";
+    }
 }

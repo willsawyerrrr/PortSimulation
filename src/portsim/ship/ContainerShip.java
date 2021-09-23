@@ -145,6 +145,33 @@ public class ContainerShip extends Ship {
     }
 
     /**
+     * Returns true if an only if this ContainerShip is equal to the other
+     * given ContainerShip.
+     *
+     * For to ContainerShips to be equal, they must have the same name, fla,
+     * IMO number, and container capacity.
+     *
+     * @param o other object to check equality
+     *
+     * @return true if equal, false otherwise
+     */
+    public boolean equals(Object o) {
+        return false;
+    }
+
+    /**
+     * Returns the hash code of this ContainerShip.
+     *
+     * Two ContainerShips that are equal according to {@link #equals(Object)}
+     * method should have the same hash code.
+     *
+     * @return hash code of this ContainerShip.
+     */
+    public int hashCode() {
+        return 0;
+    }
+
+    /**
      * Returns the human-readable string representation of this ContainerShip.
      * <p>
      * The format of the string to return is
@@ -168,5 +195,53 @@ public class ContainerShip extends Ship {
         return String.format("%s carrying %d containers",
             super.toString(),
             this.containers.size());
+    }
+
+    /**
+     * Returns the machine-readable string representation of this Ship.
+     *
+     * The format of the string to return is
+     *
+     * {@code ShipClass:imoNumber:name:origin:flag:capacity:cargoNum:[ID1,
+     * ID2,...]}
+     *
+     * Where:
+     * <ul>
+     *     <li>
+     *         {@code ShipClass} is the Ship class name
+     *     </li>
+     *     <li>
+     *         {@code imoNumber} is the IMO number of the ship
+     *     </li>
+     *     <li>
+     *         {@code name} is the name of this ship
+     *     </li>
+     *     <li>
+     *         {@code origin} is the country of origin of this ship
+     *     </li>
+     *     <li>
+     *         {@code flag} is the nautical flag of this ship
+     *     </li>
+     *     <li>
+     *         {@code capacity} is the container capacity of this ship
+     *     </li>
+     *     <li>
+     *         {@code cargoNum} is the number of containers currently on board
+     *     </li>
+     *     <li>
+     *         {@code ID1,ID2,...} are the IDs of the cargo on the ship
+     *         separated with a comma or an empty string "" if there are none
+     *     </li>
+     * </ul>
+     *
+     * For example:
+     * {@code ContainerShip:1338622:Columbus:Unknown:HOTEL:200:3:23,1,51}
+     * or
+     * {@code ContainerShip:1338622:Columbus:Unknown:HOTEL:200:0:}
+     *
+     * @return encoded string representation of this Ship
+     */
+    public String encode() {
+        return "";
     }
 }

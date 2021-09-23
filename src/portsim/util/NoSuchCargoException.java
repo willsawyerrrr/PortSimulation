@@ -1,5 +1,7 @@
 package portsim.util;
 
+import java.io.Serializable;
+
 /**
  * Exception thrown when a piece of cargo is requested by a given ID but
  * no cargo with that ID exists.
@@ -12,7 +14,7 @@ package portsim.util;
  *
  * @ass1_partial
  */
-public class NoSuchCargoException extends Exception {
+public class NoSuchCargoException extends Exception implements Serializable {
     /**
      * Constructs a new NoSuchCargoException with no detail message or cause.
      *

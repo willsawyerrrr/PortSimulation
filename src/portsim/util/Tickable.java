@@ -7,5 +7,5 @@ public interface Tickable {
     /**
      * Method to be called once on every simulation tick.
      */
-    default void elapseOneMinute() {}
+    void elapseOneMinute();
 }

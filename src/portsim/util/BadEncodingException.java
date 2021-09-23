@@ -1,10 +1,12 @@
 package portsim.util;
 
+import java.io.Serializable;
+
 /**
  * Exception thrown when an encoded string is not correct according to the
  * appropriate {@code fromString()} method.
  */
-public class BadEncodingException extends Exception {
+public class BadEncodingException extends Exception implements Serializable {
     /**
      * Constructs a new BadEncodingException with no detail message or cause.
      *

@@ -1,6 +1,7 @@
 package portsim.port;
 
 import portsim.ship.Ship;
+import portsim.util.BadEncodingException;
 
 
 /**
@@ -115,4 +116,103 @@ public abstract class Quay {
             (this.ship != null ? this.ship.getImoNumber() : "None"));
     }
 
+    /**
+     * Returns true if and only if this Quay is equal to the other given Quay.
+     *
+     * For two Quays to be equal, they must have the same ID and ship docked
+     * status (must be either both empty or both be occupied).
+     *
+     * @param o other object to check quality
+     *
+     * @return true if equal, false otherwise
+     */
+    public boolean equals(Object o) {
+        return false;
+    }
+
+    /**
+     * Returns the hash code of the quay.
+     *
+     * Two quays that are equal according to {@link #equals(Object)} method
+     * should have the same hash code.
+     *
+     * @return hash code of this quay.
+     */
+    public int hashCode() {
+        return 0;
+    }
+
+    /**
+     * Returns the machine-readable string representation of this Quay.
+     *
+     * The format of the string to return is
+     * {@code QuayClass:id:imoNumber}
+     *
+     * Where:
+     * <ul>
+     *     <li>
+     *         {@code QuayClass} is the Quay class name
+     *     </li>
+     *     <li>
+     *         {@code id} is the ID of this quay
+     *     </li>
+     *     <li>
+     *         {@code imoNumber} is the IMO number of the ship docked at this
+     *         quay, or {@code None} if the quay is unoccupied.
+     *     </li>
+     * </ul>
+     *
+     * For example:
+     * {@code BulkQuay:3:1258691}
+     * or
+     * {@code ContainerQuay:3:None}
+     *
+     * @return encoded string representation of this quay
+     */
+    public String encode() {
+        return "";
+    }
+
+    /**
+     * Reads a Quay from its encoded representation in the given string.
+     *
+     * The format of the string should match the encoded representation of a
+     * Quay, as described in {@link #encode()} (and subclasses).
+     *
+     * The encoded string is invalid if any of the following conditions are
+     * true:
+     * <ul>
+     *     <li>
+     *         The number of colons (:) detected was more/fewer than expected.
+     *     </li>
+     *     <li>
+     *         The quay id is nto a long (i.e. cannot be parsed by {@code
+     *         Long.parseLong(String)}).
+     *     </li>
+     *     <li>
+     *         The quay id is less than one (1).
+     *     </li>
+     *     <li>
+     *         The quay type specified is not one of {@link BulkQuay} or
+     *         {@link ContainerQuay}
+     *     </li>
+     *     <li>
+     *         If the encoded ship is not {@code None} then the shi pmust
+     *         exist and the imoNumber specified must be an integer (i.e. can
+     *         be parsed by {@code Integer.parseInt(String)}).
+     *     </li>
+     *     <li>
+     *         The quay capacity is not an integer (i.e. cannot be parsed by
+     *         {@code Integer.parseInt(String)}).
+     *     </li>
+     * </ul>
+     *
+     * @return decoded Quay instance
+     *
+     * @throws BadEncodingException if the format of the given string is
+     * invalid according to the rules above
+     */
+    public static Quay fromString() throws BadEncodingException {
+        return null;
+    }
 }

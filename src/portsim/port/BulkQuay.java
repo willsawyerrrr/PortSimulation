@@ -40,6 +40,34 @@ public class BulkQuay extends Quay {
     }
 
     /**
+     * Returns true if and only if this BulkQuay is equal to the other given
+     * BulkQuay.
+     *
+     * For two BulkQuays to be equal, they must have the same ID, ship status
+     * (must either both be empty or both be occupied) and same tonnage
+     * capacity.
+     *
+     * @param o other object to check quality
+     *
+     * @return true if equal, false otherwise
+     */
+    public boolean equals(Object o) {
+        return false;
+    }
+
+    /**
+     * Returns the hash code of this BulkQuay.
+     *
+     * Two BulkQuays that are equal according to {@link #equals(Object)}
+     * should have the same hash code.
+     *
+     * @return hash code of this quay.
+     */
+    public int hashCode() {
+        return 0;
+    }
+
+    /**
      * Returns the human-readable string representation of this BulkQuay.
      * <p>
      * The format of the string to return is
@@ -62,4 +90,20 @@ public class BulkQuay extends Quay {
         return super.toString() + " - " + this.maxTonnage;
     }
 
+    /**
+     * Returns the machine-readable string representation of this BulkQuay.
+     *
+     * The format of the string to return is
+     * {@code BulkQuay:id:imoNumber:maxTonnage}
+     *
+     * For example:
+     * {@code BulkQuay:3:1258691:120}
+     * or:
+     * {@code BulkQuay:3:None:120}
+     *
+     * @return encoded string representation of this quay
+     */
+    public String encode() {
+        return "";
+    }
 }

@@ -2,9 +2,13 @@ package portsim.ship;
 
 import portsim.cargo.Cargo;
 import portsim.port.Quay;
+import portsim.util.BadEncodingException;
+import portsim.util.Encodable;
+import portsim.util.NoSuchShipException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Represents a ship whose movement is managed by the system.
@@ -13,7 +17,7 @@ import java.util.Map;
  *
  * @ass1_partial
  */
-public abstract class Ship {
+public abstract class Ship implements Encodable {
     /**
      * Name of the ship
      */
@@ -51,9 +55,11 @@ public abstract class Ship {
      * @param name       name of the ship
      * @param originFlag port of origin
      * @param flag       the nautical flag this ship is flying
+     *
      * @throws IllegalArgumentException if a ship already exists with the given
      *                                  imoNumber, imoNumber &lt; 0 or imoNumber is not 7 digits
      *                                  long (no leading zero's [0])
+     *
      * @ass1_partial
      */
     public Ship(long imoNumber, String name, String originFlag,
@@ -70,6 +76,166 @@ public abstract class Ship {
         this.name = name;
         this.originFlag = originFlag;
         this.flag = flag;
+    }
+
+    /**
+     * Checks is a ship exists in the simulation using its IMO number.
+     *
+     * @param imoNumber unique key to identify ship
+     *
+     * @return true if there is a ship with key {@code imoNumber} else false
+     */
+    public static boolean shipExists(long imoNumber) {
+        return false;
+    }
+
+    /**
+     * Returns the ship specified by the IMO number.
+     *
+     * @param imoNumber unique key to identify ship
+     *
+     * @return Ship specified by the given IMO number
+     * @throws NoSuchShipException if the ship does not exist
+     */
+    public static Ship getShipByImoNumber(long imoNumber)
+            throws NoSuchShipException {
+        return null;
+    }
+
+    /**
+     * Returns the databse of ships currently active in the simulation as a
+     * mapping from the ship's IMO number to its Ship instance.
+     *
+     * Adding or removing elements from the returned map should not affect
+     * the original map.
+     *
+     * @return ship registry database
+     */
+    public static Map<Long, Ship> getShipRegistry() {
+        return new HashMap<>(shipRegistry);
+    }
+
+    /**
+     * Returns true if and only if this ship is qual to the other given ship.
+     *
+     * For two ships to be equal, they must have the same name, flag, origin
+     * port, and IMO number.
+     *
+     * @param o other object to check equality
+     *
+     * @return true if equal, false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Ship)) {
+            return false;
+        }
+        Ship ship = (Ship) o;
+        return name.equals(ship.getName())
+                && flag == ship.getFlag()
+                && originFlag.equals(ship.getOriginFlag())
+                && imoNumber == ship.getImoNumber();
+    }
+
+    /**
+     * Returns the hash code of this ship.
+     *
+     * Two ships that are equal according to the {@link #equals(Object)}
+     * method should have the same hash code.
+     *
+     * @return hash code of this ship.
+     */
+    @Override
+    public int hashCode() {
+        return (name.hashCode() * flag.hashCode()) % originFlag.hashCode()
+                + (int) imoNumber;
+    }
+
+    /**
+     * Returns the machine-readable string representation of this Ship.
+     *
+     * The format of the string to return is
+     *
+     * {@code ShipClass:imoNumber:name:origin:flag}
+     *
+     * Where:
+     * <ul>
+     *     <li>
+     *         {@code ShipClass} is the Ship class name
+     *     </li>
+     *     <li>
+     *         {@code imoNumber} is the IMO number of the ship
+     *     </li>
+     *     <li>
+     *         {@code name} is the name of this ship
+     *     </li>
+     *     <li>
+     *         {@code origin} is the country of origin of this ship
+     *     </li>
+     *     <li>
+     *         {@code flag} is the nautical flag of this ship
+     *     </li>
+     * </ul>
+     *
+     * For example:
+     * {@code Ship:1258691:Evergreen:Australia:BRAVO}
+     *
+     * @return encoded string representation of this Ship
+     */
+    public String encode() {
+        return "";
+    }
+
+    /**
+     * Reads a Ship from its encoded representation in the given string.
+     *
+     * The format of the string should match the encoded representation of a
+     * Ship, as described in {@link #encode()} (and subclasses).
+     * The encoded string is invalid if any of the following conditions are
+     * true:
+     * <ul>
+     *     <li>
+     *         The number of colons (:) detected was more/fewer than expected
+     *     </li>
+     *     <li>
+     *         The ship's IMO number is not an integer (i.e. cannot be parsed
+     *         by {@code Integer.parseInt(String)})
+     *     </li>
+     *     <li>
+     *         The ship's IMO number is less than one (1)
+     *     </li>
+     *     <li>
+     *         The ship's type specified is not one of {@link ContainerShip}
+     *         or {@link BulkCarrier}
+     *     </li>
+     *     <li>
+     *         The encoded Nautical flag is not one of
+     *         {@link NauticalFlag#values()}
+     *     </li>
+     *     <li>
+     *         The encoded cargo to add does not exist in the simulation
+     *         according to {@link Cargo#cargoExists(int)}
+     *     </li>
+     *     <li>
+     *         The encoded cargo can not be added to the ship according to
+     *         {@link #canLoad(Cargo)}<br>
+     *         <b>NOTE: Keep this in mind when making your own save files</b>
+     *     </li>
+     *     <li>
+     *         Any of the parsed values given to a subclass constructor
+     *         causes an {@code IllegalArgumentException}.
+     *     </li>
+     * </ul>
+     *
+     * @param string string containing the encoded Ship
+     *
+     * @return decoded ship instance
+     *
+     * @throws BadEncodingException if the format of the given string is
+     * invalid according to the rules above
+     */
+    public static Ship fromString(String string) throws BadEncodingException {
+        return null;
     }
 
     /**
@@ -169,8 +335,8 @@ public abstract class Ship {
     }
 
     /**
-     * Resets the global ship registry.
-     * This utility method is for the testing suite.
+     * Resets the global ship registry. This utility method is for the
+     * testing suite.
      *
      * @given
      */

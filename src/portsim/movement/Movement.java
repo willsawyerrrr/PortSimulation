@@ -79,4 +79,32 @@ public abstract class Movement {
             this.time);
     }
 
+    /**
+     * Returns the machine-readable string representation of this movement.
+     *
+     * The format of the string to return is
+     *
+     * {@code MovementClass:time:direction}
+     *
+     * Where:
+     * <ul>
+     *     <li>
+     *         {@code MovementClass} is the Movement class name
+     *     </li>
+     *     <li>
+     *         {@code time} is the time that the movement will be actioned
+     *     </li>
+     *     <li>
+     *         {@code direction} is the direction of the movement
+     *     </li>
+     * </ul>
+     *
+     * For example:
+     * {@code CargoMovement:120:INBOUND}
+     *
+     * @return encoded string representation of this movement
+     */
+    public String encode() {
+        return "";
+    }
 }

@@ -1,5 +1,7 @@
 package portsim.port;
 
+import portsim.util.BadEncodingException;
+
 /**
  * A Container Quay is a type of quay specifically designed for the unloading of
  * Container Ship vessels.
@@ -39,6 +41,35 @@ public class ContainerQuay extends Quay {
         return maxContainers;
     }
 
+
+    /**
+     * Returns true if and only if this ContainerQuay is equal to the other
+     * given ContainerQuay.
+     *
+     * For two ContainerQuays to be equal, they must have the same ID, ship
+     * docked status (must either both be empty or both be occupied) and same
+     * container capacity.
+     *
+     * @param o other object to check equality
+     *
+     * @return true if equal, false otherwise
+     */
+    public boolean equals(Object o) {
+        return false;
+    }
+
+    /**
+     * Returns the hash code of this ContainerQuay.
+     *
+     * Two ContainerQuays that are equal according to {@link #equals(Object)}
+     * should have the same hash code.
+     *
+     * @return hash code of this quay.
+     */
+    public int hashCode() {
+        return 0;
+    }
+
     /**
      * Returns the human-readable string representation of this ContainerQuay.
      * <p>
@@ -63,4 +94,35 @@ public class ContainerQuay extends Quay {
         return super.toString() + " - " + this.maxContainers;
     }
 
+    /**
+     * Returns the machine-readable string representation of this ContainerQuay.
+     *
+     * The format of the string to return is
+     * {@code ContainerQuay:idLimoNumber:maxContainers}
+     *
+     * Where:
+     * <ul>
+     *     <li>
+     *         {@code id} is the Id of this quay
+     *     </li>
+     *     <li>
+     *         {@code imoNumber} is the IMO number of the ship docked at this
+     *         quay, or {@code None} if the quay is unoccupied.
+     *     </li>
+     *     <li>
+     *         {@code maxContainers} is the maximum number of containers this
+     *         quay can handle
+     *     </li>
+     * </ul>
+     *
+     * For example:
+     * {@code ContainerQuay:3:1258691:100}
+     * or
+     * {@code ContainerQuay:3:None:100}
+     *
+     * @return encoded string representation of this quay
+     */
+    public String encode() {
+        return "";
+    }
 }

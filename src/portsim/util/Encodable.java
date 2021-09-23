@@ -10,7 +10,5 @@ public interface Encodable {
      *
      * @return encoded String representation
      */
-    default String encode() {
-        return "";
-    }
+    String encode();
 }

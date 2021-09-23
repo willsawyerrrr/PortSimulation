@@ -31,9 +31,11 @@ public class BulkCarrier extends Ship {
      * @param originFlag port of origin
      * @param flag       the nautical flag this ship is flying
      * @param capacity   the tonnage capacity of this ship
+     *
      * @throws IllegalArgumentException if a ship already exists with the given
      *                                  imoNumber, imoNumber &lt; 0, imoNumber is not 7 digits long
      *                                  or if the tonnage capacity is &lt; than 0
+     *                                  
      * @ass1
      */
     public BulkCarrier(long imoNumber, String name, String originFlag,
@@ -141,6 +143,33 @@ public class BulkCarrier extends Ship {
     }
 
     /**
+     * Returns true if anf only if this BulkCarrier is equal to the other
+     * given BulkCarrier.
+     *
+     * For two BulkCarriers to be equal, they must have the same name, flag,
+     * origin flag, IMO number, and tonnage capacity.
+     *
+     * @param o other object to check equality
+     *
+     * @return true if equal, false otherwise
+     */
+    public boolean equals(Object o) {
+        return false;
+    }
+
+    /**
+     * Returns the hash code of this BulkCarrier.
+     *
+     * Two BulkCarriers that equal according to {@link #equals(Object)}
+     * method should have the same hash code.
+     *
+     * @return hash code of this BulkCarrier.
+     */
+    public int hashCode() {
+        return 0;
+    }
+
+    /**
      * Returns the human-readable string representation of this BulkCarrier.
      * <p>
      * The format of the string to return is
@@ -166,7 +195,49 @@ public class BulkCarrier extends Ship {
         String base = super.toString() + " carrying ";
         return this.cargo != null ? base + this.cargo.getType() : base
             + "nothing";
+    }
 
-
+    /**
+     * Returns the machine-readable string representation of this BulkCarrier.
+     *
+     * The format of the string to return is
+     *
+     * {@code BulkCarrier:imoNumber:name:origin:flag:capacity:id}
+     *
+     * Where:
+     * <ul>
+     *     <li>
+     *         {@code ShipClass} is the Ship class name
+     *     </li>
+     *     <li>
+     *         {@code imoNumber} is the IMO number of the ship
+     *     </li>
+     *     <li>
+     *         {@code name} is the name of this ship
+     *     </li>
+     *     <li>
+     *         {@code origin} is the country of origin of this ship
+     *     </li>
+     *     <li>
+     *         {@code flag} is the nautical flag of this ship
+     *     </li>
+     *     <li>
+     *         {@code capacity} is the tonnage capacity of this ship
+     *     </li>
+     *     <li>
+     *         {@code id} is the ID of the cargo on the ship or an empty
+     *         string "" if there is none
+     *     </li>
+     * </ul>
+     *
+     * For example:
+     * {@code BulkCarrier:1248691:Voyager:New Zealand:HOTEL:200:3}
+     * or:
+     * {@code BulkCarrier:1248291:Searcher:Australia:BRAVE:220:}
+     *
+     * @return encoded string representation of this Ship
+     */
+    public String encode() {
+        return "";
     }
 }

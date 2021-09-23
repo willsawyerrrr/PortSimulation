@@ -1,12 +1,14 @@
 package portsim.util;
 
+import java.io.Serializable;
+
 /**
  * Exception thrown when a ship is requested by a given IMO number but no
  * ship with that IMO number exists.
  *
  * See {@link portsim.ship.Ship#getShipByImoNumber(long)}.
  */
-public class NoSuchShipException extends Exception {
+public class NoSuchShipException extends Exception implements Serializable {
     /**
      * Constructs a new NoSuchShipException with no detail message or cause.
      *

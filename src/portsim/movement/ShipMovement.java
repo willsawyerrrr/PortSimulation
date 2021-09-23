@@ -1,6 +1,7 @@
 package portsim.movement;
 
 import portsim.ship.Ship;
+import portsim.util.BadEncodingException;
 
 /**
  * The movement of a ship coming into or out of the port.
@@ -66,4 +67,80 @@ public class ShipMovement extends Movement {
             this.ship.getName());
     }
 
+    /**
+     * Returns the machine-readable string representation of this ship movement.
+     *
+     * The format of the string to return is
+     *
+     * {@code ShipMovement:time:direction:imoNumber}
+     *
+     * Where:
+     * <ul>
+     *     <li>
+     *         {@code time} is the time that the movement will be actioned
+     *     </li>
+     *     <li>
+     *         {@code direction} is the direction of the movement
+     *     </li>
+     *     <li>
+     *         {@code imoNumber} is the imoNUmber of the ship that is moving
+     *     </li>
+     * </ul>
+     *
+     * For example:
+     * {@code ShipMovement:120:INBOUND:1258691}
+     *
+     * @return encoded string representation of this movement
+     */
+    public String encode() {
+        return "";
+    }
+
+    /**
+     * Creates a ship movement from a string encoding.
+     *
+     * The format of the string should match the encoded representation of a
+     * ship movement, as described in {@link #encode()}.
+     *
+     * The encoded string is invalid if any of the following conditions are
+     * true:
+     *
+     * <ul>
+     *     <li>
+     *         The number of colons (:) detected was more/fewer than expected.
+     *     </li>
+     *     <li>
+     *         The time is not a long (i.e. cannot be parsed by {@code Long
+     *         .parseInt(String)}).
+     *     </li>
+     *     <li>
+     *         The time is less than zero (0).
+     *     </li>
+     *     <li>
+     *         The movementDirection is not one of the valid directions (See
+     *         {@link MovementDirection}.
+     *     </li>
+     *     <li>
+     *         The imoNumber is not a long (i.e. cannot be parsed by {@code
+     *         Long.parseLong(String)}).
+     *     </li>
+     *     <li>
+     *         The imoNumber is less than zero (0).
+     *     </li>
+     *     <li>
+     *         There is no ship that exists with specified imoNumber.
+     *     </li>
+     * </ul>
+     *
+     * @param string string containing the encoded ShipMovement
+     *
+     * @return decoded ShipMovement instance
+     *
+     * @throws BadEncodingException if the format of the given string is
+     * invalid according to the rules above
+     */
+    public static ShipMovement fromString(String string)
+        throws BadEncodingException {
+        return null;
+    }
 }
