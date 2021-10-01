@@ -72,10 +72,15 @@ public abstract class Ship implements Encodable {
             throw new IllegalArgumentException("The imoNumber of the ship "
                 + "must have 7 digits (no leading zero's [0]): " + imoNumber);
         }
+        if (shipExists(imoNumber)) {
+            throw new IllegalArgumentException("The imoNumber of the ship " +
+                    "must be unique: " + imoNumber);
+        }
         this.imoNumber = imoNumber;
         this.name = name;
         this.originFlag = originFlag;
         this.flag = flag;
+        shipRegistry.put(imoNumber, this);
     }
 
     /**
@@ -86,7 +91,7 @@ public abstract class Ship implements Encodable {
      * @return true if there is a ship with key {@code imoNumber} else false
      */
     public static boolean shipExists(long imoNumber) {
-        return false;
+        return shipRegistry.containsKey(imoNumber);
     }
 
     /**
@@ -95,15 +100,100 @@ public abstract class Ship implements Encodable {
      * @param imoNumber unique key to identify ship
      *
      * @return Ship specified by the given IMO number
+     *
      * @throws NoSuchShipException if the ship does not exist
      */
     public static Ship getShipByImoNumber(long imoNumber)
             throws NoSuchShipException {
-        return null;
+        if (shipRegistry.containsKey(imoNumber)) {
+            return shipRegistry.get(imoNumber);
+        }
+        throw new NoSuchShipException("No ship exists with imoNumber: "
+                + imoNumber);
     }
 
     /**
-     * Returns the databse of ships currently active in the simulation as a
+     * Check if this ship can dock with the specified quay according
+     * to the conditions determined by the ships type.
+     *
+     * @param quay quay to be checked
+     *
+     * @return true if the Quay satisfies the conditions else false
+     *
+     * @ass1
+     */
+    public abstract boolean canDock(Quay quay);
+
+    /**
+     * Checks if the specified cargo can be loaded onto the ship according
+     * to the conditions determined by the ships type and contents.
+     *
+     * @param cargo cargo to be loaded
+     *
+     * @return true if the Cargo satisfies the conditions else false
+     *
+     * @ass1
+     */
+    public abstract boolean canLoad(Cargo cargo);
+
+    /**
+     * Loads the specified cargo onto the ship.
+     *
+     * @param cargo cargo to be loaded
+     *
+     * @require Cargo given is able to be loaded onto this ship according to
+     * the implementation of {@link Ship#canLoad(Cargo)}
+     *
+     * @ass1
+     */
+    public abstract void loadCargo(Cargo cargo);
+
+    /**
+     * Returns this ship's name.
+     *
+     * @return name
+     *
+     * @ass1
+     */
+    public String getName() {
+        return this.name;
+    }
+
+    /**
+     * Returns this ship's IMO number.
+     *
+     * @return imoNumber
+     *
+     * @ass1
+     */
+    public long getImoNumber() {
+        return this.imoNumber;
+    }
+
+    /**
+     * Returns this ship's flag denoting its origin.
+     *
+     * @return originFlag
+     *
+     * @ass1
+     */
+    public String getOriginFlag() {
+        return this.originFlag;
+    }
+
+    /**
+     * Returns the nautical flag the ship is flying.
+     *
+     * @return flag
+     *
+     * @ass1
+     */
+    public NauticalFlag getFlag() {
+        return this.flag;
+    }
+
+    /**
+     * Returns the database of ships currently active in the simulation as a
      * mapping from the ship's IMO number to its Ship instance.
      *
      * Adding or removing elements from the returned map should not affect
@@ -152,6 +242,33 @@ public abstract class Ship implements Encodable {
     }
 
     /**
+     * Returns the human-readable string representation of this Ship.
+     * <p>
+     * The format of the string to return is
+     * <pre>ShipClass name from origin [flag]</pre>
+     * Where:
+     * <ul>
+     *   <li>{@code ShipClass} is the Ship class</li>
+     *   <li>{@code name} is the name of this ship</li>
+     *   <li>{@code origin} is the country of origin of this ship</li>
+     *   <li>{@code flag} is the nautical flag of this ship</li>
+     * </ul>
+     * For example: <pre>BulkCarrier Evergreen from Australia [BRAVO]</pre>
+     *
+     * @return string representation of this Ship
+     *
+     * @ass1
+     */
+    @Override
+    public String toString() {
+        return String.format("%s %s from %s [%s]",
+            this.getClass().getSimpleName(),
+            this.name,
+            this.originFlag,
+            this.flag);
+    }
+
+    /**
      * Returns the machine-readable string representation of this Ship.
      *
      * The format of the string to return is
@@ -183,7 +300,12 @@ public abstract class Ship implements Encodable {
      * @return encoded string representation of this Ship
      */
     public String encode() {
-        return "";
+        return String.format("%s:%d:%s:%s:%s",
+                this.getClass().getSimpleName(),
+                imoNumber,
+                name,
+                originFlag,
+                flag);
     }
 
     /**
@@ -236,102 +358,6 @@ public abstract class Ship implements Encodable {
      */
     public static Ship fromString(String string) throws BadEncodingException {
         return null;
-    }
-
-    /**
-     * Check if this ship can dock with the specified quay according
-     * to the conditions determined by the ships type.
-     *
-     * @param quay quay to be checked
-     * @return true if the Quay satisfies the conditions else false
-     * @ass1
-     */
-    public abstract boolean canDock(Quay quay);
-
-    /**
-     * Checks if the specified cargo can be loaded onto the ship according
-     * to the conditions determined by the ships type and contents.
-     *
-     * @param cargo cargo to be loaded
-     * @return true if the Cargo satisfies the conditions else false
-     * @ass1
-     */
-    public abstract boolean canLoad(Cargo cargo);
-
-    /**
-     * Loads the specified cargo onto the ship.
-     *
-     * @param cargo cargo to be loaded
-     * @require Cargo given is able to be loaded onto this ship according to
-     * the implementation of {@link Ship#canLoad(Cargo)}
-     * @ass1
-     */
-    public abstract void loadCargo(Cargo cargo);
-
-    /**
-     * Returns this ship's name.
-     *
-     * @return name
-     * @ass1
-     */
-    public String getName() {
-        return this.name;
-    }
-
-    /**
-     * Returns this ship's IMO number.
-     *
-     * @return imoNumber
-     * @ass1
-     */
-    public long getImoNumber() {
-        return this.imoNumber;
-    }
-
-    /**
-     * Returns this ship's flag denoting its origin.
-     *
-     * @return originFlag
-     * @ass1
-     */
-    public String getOriginFlag() {
-        return this.originFlag;
-    }
-
-    /**
-     * Returns the nautical flag the ship is flying.
-     *
-     * @return flag
-     * @ass1
-     */
-    public NauticalFlag getFlag() {
-        return this.flag;
-    }
-
-    /**
-     * Returns the human-readable string representation of this Ship.
-     * <p>
-     * The format of the string to return is
-     * <pre>ShipClass name from origin [flag]</pre>
-     * Where:
-     * <ul>
-     *   <li>{@code ShipClass} is the Ship class</li>
-     *   <li>{@code name} is the name of this ship</li>
-     *   <li>{@code origin} is the country of origin of this ship</li>
-     *   <li>{@code flag} is the nautical flag of this ship</li>
-     * </ul>
-     * For example: <pre>BulkCarrier Evergreen from Australia [BRAVO]</pre>
-     *
-     * @return string representation of this Ship
-     * @ass1
-     */
-    @Override
-    public String toString() {
-        return String.format("%s %s from %s [%s]",
-            this.getClass().getSimpleName(),
-            this.name,
-            this.originFlag,
-            this.flag);
     }
 
     /**

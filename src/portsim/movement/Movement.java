@@ -23,10 +23,13 @@ public abstract class Movement {
      *
      * @param time      the time the movement should occur
      * @param direction the direction of the movement
+     *
      * @throws IllegalArgumentException if time &lt; 0
+     *
      * @ass1
      */
-    public Movement(long time, MovementDirection direction) throws IllegalArgumentException {
+    public Movement(long time, MovementDirection direction)
+            throws IllegalArgumentException {
         if (time < 0) {
             throw new IllegalArgumentException("Time must be greater than"
                 + " or equal to 0: " + time);
@@ -39,6 +42,7 @@ public abstract class Movement {
      * Returns the time the movement should be actioned.
      *
      * @return movement time
+     *
      * @ass1
      */
     public long getTime() {
@@ -49,6 +53,7 @@ public abstract class Movement {
      * Returns the direction of the movement.
      *
      * @return movement direction
+     *
      * @ass1
      */
     public MovementDirection getDirection() {
@@ -105,6 +110,9 @@ public abstract class Movement {
      * @return encoded string representation of this movement
      */
     public String encode() {
-        return "";
+        return String.format("%s:%d:%s",
+                this.getClass().getSimpleName(),
+                time,
+                direction);
     }
 }

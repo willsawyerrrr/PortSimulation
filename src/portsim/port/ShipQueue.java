@@ -3,7 +3,9 @@ package portsim.port;
 import portsim.ship.Ship;
 import portsim.util.BadEncodingException;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * Queue of ships waiting to enter a Quay at the port. Ships are chosen based
@@ -11,9 +13,15 @@ import java.util.List;
  */
 public class ShipQueue {
     /**
+     * The ships waiting to dock at the port
+     */
+    List<Ship> queue;
+
+    /**
      * Constructs a new ShipQueue with an initially empty queue of ships.
      */
     public ShipQueue() {
+        queue = new ArrayList<>();
     }
 
     /**
@@ -25,7 +33,7 @@ public class ShipQueue {
      * @return next ship to dock
      */
     public Ship poll() {
-        return null;
+        return queue.remove(0);
     }
 
     /**
@@ -66,7 +74,7 @@ public class ShipQueue {
      * @return next ship in queue
      */
     public Ship peek() {
-        return null;
+        return queue.get(0);
     }
 
     /**
@@ -75,6 +83,7 @@ public class ShipQueue {
      * @param ship to be added to queue
      */
     public void add(Ship ship) {
+        queue.add(ship);
     }
 
     /**
@@ -90,7 +99,7 @@ public class ShipQueue {
      * @return ships in queue
      */
     public List<Ship> getShipQueue() {
-        return null;
+        return new ArrayList<>(queue);
     }
 
     /**
@@ -105,7 +114,13 @@ public class ShipQueue {
      * @return true if equal, false otherwise
      */
     public boolean equals(Object o) {
-        return false;
+        if (!(o instanceof ShipQueue)) {
+            return false;
+        }
+        ShipQueue other = (ShipQueue) o;
+        // If A subset of B and B subset of A, then A = B.
+        return getShipQueue().containsAll(other.getShipQueue())
+                && other.getShipQueue().containsAll(getShipQueue());
     }
 
     /**
@@ -117,7 +132,11 @@ public class ShipQueue {
      * @return hash code of this ship queue.
      */
     public int hashCode() {
-        return 0;
+        int code = 1;
+        for (Ship ship : queue) {
+            code = (code * ship.hashCode()) % 10000;
+        }
+        return code;
     }
 
     /**
@@ -146,7 +165,13 @@ public class ShipQueue {
      * @return encoded string representation of this ShipQueue
      */
     public String encode() {
-        return "";
+        StringJoiner joiner = new StringJoiner(",");
+        for (Ship ship : getShipQueue()) {
+            joiner.add(String.valueOf(ship.getImoNumber()));
+        }
+        return String.format("ShipQueue:%d:%s",
+                getShipQueue().size(),
+                joiner);
     }
 
     /**

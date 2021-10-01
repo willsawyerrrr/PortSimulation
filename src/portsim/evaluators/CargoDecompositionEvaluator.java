@@ -1,9 +1,16 @@
 package portsim.evaluators;
 
-import portsim.cargo.BulkCargoType;
-import portsim.cargo.ContainerType;
+import portsim.cargo.*;
+import portsim.movement.CargoMovement;
 import portsim.movement.Movement;
+import portsim.movement.MovementDirection;
+import portsim.movement.ShipMovement;
+import portsim.ship.BulkCarrier;
+import portsim.ship.ContainerShip;
+import portsim.ship.Ship;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,6 +26,21 @@ import java.util.Map;
  */
 public class CargoDecompositionEvaluator extends StatisticsEvaluator {
     /**
+     * Record of cargo seen at this port
+     */
+    private Map<String, Integer> cargoStats;
+
+    /**
+     * Record of bulk cargo seen at this port
+     */
+    private Map<BulkCargoType, Integer> bulkCargoStats;
+
+    /**
+     * Record of containers seen at this port
+     */
+    private Map<ContainerType, Integer> containerStats;
+
+    /**
      * Constructs a new CargoDecompositionEvaluator.
      */
     public CargoDecompositionEvaluator() {
@@ -31,7 +53,7 @@ public class CargoDecompositionEvaluator extends StatisticsEvaluator {
      * @return cargo distribution map
      */
     public Map<String, Integer> getCargoDistribution() {
-        return null;
+        return new HashMap<>(cargoStats);
     }
 
     /**
@@ -40,7 +62,7 @@ public class CargoDecompositionEvaluator extends StatisticsEvaluator {
      * @return bulk cargo distribution map
      */
     public Map<BulkCargoType, Integer> getBulkCargoDistribution() {
-        return null;
+        return new HashMap<>(bulkCargoStats);
     }
 
     /**
@@ -49,7 +71,7 @@ public class CargoDecompositionEvaluator extends StatisticsEvaluator {
      * @return container distribution map
      */
     public Map<ContainerType, Integer> getContainerDistribution() {
-        return null;
+        return new HashMap<>(containerStats);
     }
 
     /**
@@ -90,9 +112,9 @@ public class CargoDecompositionEvaluator extends StatisticsEvaluator {
      *     </ol>
      *     </li>
      *     <li>
+     *         If the movement is a CargoMovement, Retrieve the cargo
+     *         from the movement. For the cargo retrieved:
      *         <ol>
-     *             If the movement is a CargoMovement, Retrieve the cargo
-     *             from the movement. For the cargo retrieved:
      *             <li>
      *                 Complete steps 1-4 as given above for ShipMovement
      *             </li>
@@ -102,5 +124,89 @@ public class CargoDecompositionEvaluator extends StatisticsEvaluator {
      *
      * @param movement movement to read
      */
-    public void onProcessMovement(Movement movement) {}
+    public void onProcessMovement(Movement movement) {
+        if (movement.getDirection() == MovementDirection.INBOUND
+                && movement instanceof ShipMovement) {
+            Ship ship = ((ShipMovement) movement).getShip();
+
+            if (ship instanceof BulkCarrier) {
+                BulkCargo bulkCargo = ((BulkCarrier) ship).getCargo();
+
+                updateValue(cargoStats, bulkCargo.getClass().getSimpleName());
+                updateValue(bulkCargoStats, bulkCargo.getType());
+            } else if (ship instanceof ContainerShip) {
+                List<Container> containers = ((ContainerShip) ship).getCargo();
+
+                for (Container con : containers) {
+                    updateValue(cargoStats, con.getClass().getSimpleName());
+                    updateValue(containerStats, con.getType());
+                }
+            }
+        } else if (movement.getDirection() == MovementDirection.INBOUND
+                && movement instanceof CargoMovement) {
+            CargoMovement cargoMovement = (CargoMovement) movement;
+            List<Cargo> cargo = cargoMovement.getCargo();
+
+            for (Cargo piece : cargo) {
+                updateValue(cargoStats, piece.getClass().getSimpleName());
+
+                if (cargo instanceof BulkCargo) {
+                    updateValue(bulkCargoStats, ((BulkCargo) cargo).getType());
+                } else if (cargo instanceof Container) {
+                    updateValue(containerStats, ((Container) cargo).getType());
+                }
+            }
+        }
+    }
+
+    /**
+     * Increments the value mapped to by the given key, if it exists.
+     * Otherwise, creates a new map entry with value of 1.
+     *
+     * @param statistics cargo seen at this port
+     * @param key cargo class
+     */
+    private void updateValue(Map<String, Integer> statistics,
+                             String key) {
+        if (statistics.containsKey(key)) {
+            Integer old = statistics.get(key);
+            statistics.replace(key, old + 1);
+        } else {
+            statistics.put(key, 1);
+        }
+    }
+
+    /**
+     * Increments the value mapped to by the given key, if it exists.
+     * Otherwise, creates a new map entry with value of 1.
+     *
+     * @param statistics cargo seen at this port
+     * @param key type of bulk cargo
+     */
+    private void updateValue(Map<BulkCargoType, Integer> statistics,
+                             BulkCargoType key) {
+        if (statistics.containsKey(key)) {
+            Integer old = statistics.get(key);
+            statistics.replace(key, old + 1);
+        } else {
+            statistics.put(key, 1);
+        }
+    }
+
+    /**
+     * Increments the value mapped to by the given key, if it exists.
+     * Otherwise, creates a new map entry with value of 1.
+     *
+     * @param statistics cargo seen at this port
+     * @param key type of container
+     */
+    private void updateValue(Map<ContainerType, Integer> statistics,
+                             ContainerType key) {
+        if (statistics.containsKey(key)) {
+            Integer old = statistics.get(key);
+            statistics.replace(key, old + 1);
+        } else {
+            statistics.put(key, 1);
+        }
+    }
 }

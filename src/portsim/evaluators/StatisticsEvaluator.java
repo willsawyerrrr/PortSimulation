@@ -8,7 +8,9 @@ import portsim.util.Tickable;
  * various aspects of the port's operation.
  */
 public abstract class StatisticsEvaluator implements Tickable {
-    /** The time since the evaluator was created. */
+    /**
+     * The time since the evaluator was created.
+     */
     long time;
 
     /**
@@ -29,12 +31,6 @@ public abstract class StatisticsEvaluator implements Tickable {
     }
 
     /**
-     * Simulate a minute passing. The time since the evaluator was created
-     * should be incremented by one.
-     */
-    public void elapseOneMinute() {}
-
-    /**
      * Read a movement to update the relevant evaluator data.
      *
      * This method is called by the
@@ -43,4 +39,12 @@ public abstract class StatisticsEvaluator implements Tickable {
      * @param movement movement to read
      */
     public abstract void onProcessMovement(Movement movement);
+
+    /**
+     * Simulate a minute passing. The time since the evaluator was created
+     * should be incremented by one.
+     */
+    public void elapseOneMinute() {
+        time++;
+    }
 }

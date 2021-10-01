@@ -9,7 +9,7 @@ import portsim.port.Quay;
  */
 public class QuayOccupancyEvaluator extends StatisticsEvaluator {
     /**
-     * Port for the QuayOccupancyEvaluator to monitor for quays.
+     * Port to monitor for quays.
     */
     private Port port;
 
@@ -31,7 +31,13 @@ public class QuayOccupancyEvaluator extends StatisticsEvaluator {
      * @return number of quays
      */
     public int getQuaysOccupied() {
-        return 0;
+        int occupied = 0;
+        for (Quay quay : port.getQuays()) {
+            if (!(quay.isEmpty())) {
+                occupied++;
+            }
+        }
+        return occupied;
     }
 
     /**

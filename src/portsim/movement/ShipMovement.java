@@ -22,7 +22,9 @@ public class ShipMovement extends Movement {
      * @param time      the time the movement should occur
      * @param direction the direction of the movement
      * @param ship      the ship which that is waiting to move
+     *
      * @throws IllegalArgumentException if time &lt; 0
+     *
      * @ass1
      */
     public ShipMovement(long time, MovementDirection direction, Ship ship)
@@ -93,7 +95,9 @@ public class ShipMovement extends Movement {
      * @return encoded string representation of this movement
      */
     public String encode() {
-        return "";
+        return String.format("%s:%d",
+                super.encode(),
+                this.ship.getImoNumber());
     }
 
     /**

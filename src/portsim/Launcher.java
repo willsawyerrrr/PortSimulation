@@ -12,6 +12,7 @@ import java.io.IOException;
 
 /**
  * Entry point for the GUI of the Port Simulation.
+ *
  * @given
  */
 public class Launcher extends Application {
@@ -30,7 +31,9 @@ public class Launcher extends Application {
      * <ul>
      * <li>{@code port_file} is the path to the file containing the port</li>
      * </ul>
+     *
      * @param args command line arguments
+     *
      * @given
      */
     public static void main(String[] args) {
@@ -51,6 +54,7 @@ public class Launcher extends Application {
 
     /**
      * {@inheritDoc}
+     *
      * @given
      */
     @Override

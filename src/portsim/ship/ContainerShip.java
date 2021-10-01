@@ -9,6 +9,7 @@ import portsim.util.NoSuchCargoException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * Represents a ship capable of carrying shipping containers.
@@ -35,9 +36,12 @@ public class ContainerShip extends Ship {
      * @param originFlag port of origin
      * @param flag       the nautical flag this ship is flying
      * @param capacity   the container capacity of this ship
+     *
      * @throws IllegalArgumentException if a ship already exists with the given
-     *                                  imoNumber, imoNumber &lt; 0, imoNumber is not 7 digits long
-     *                                  or if the container capacity is &lt; than 0
+     *                                  imoNumber, imoNumber &lt; 0,
+     *                                  imoNumber is not 7 digits long or if
+     *                                  the container capacity is &lt; than 0
+     *
      * @ass1
      */
     public ContainerShip(long imoNumber, String name, String originFlag,
@@ -62,7 +66,9 @@ public class ContainerShip extends Ship {
      * </ol>
      *
      * @param quay quay to be checked
+     *
      * @return true if the Quay satisfies the conditions else false
+     *
      * @ass1
      */
     @Override
@@ -88,7 +94,9 @@ public class ContainerShip extends Ship {
      * </ol>
      *
      * @param cargo cargo to be loaded
+     *
      * @return true if the Cargo satisfies the conditions else false
+     *
      * @ass1
      */
     public boolean canLoad(Cargo cargo) {
@@ -105,8 +113,10 @@ public class ContainerShip extends Ship {
      * Loads the specified cargo onto the ship.
      *
      * @param cargo cargo to be loaded
+     *
      * @require Cargo given is able to be loaded onto this ship according to
      * {@link ContainerShip#canLoad(Cargo)}
+     *
      * @ass1
      */
     public void loadCargo(Cargo cargo) {
@@ -119,8 +129,10 @@ public class ContainerShip extends Ship {
      * The ship's cargo should be set to an empty list.
      *
      * @return the ship's cargo before it was unloaded
-     * @throws NoSuchCargoException if the ship has already been unloaded (i.e. the ship has no
-     *                              cargo onboard)
+     *
+     * @throws NoSuchCargoException if the ship has already been unloaded
+     *                              (i.e. the ship has no cargo onboard)
+     *
      * @ass1
      */
     public List<Container> unloadCargo() throws NoSuchCargoException {
@@ -138,6 +150,7 @@ public class ContainerShip extends Ship {
      * Adding or removing elements from the returned list should not affect the original list.
      *
      * @return containers on the vessel
+     *
      * @ass1
      */
     public List<Container> getCargo() {
@@ -156,7 +169,12 @@ public class ContainerShip extends Ship {
      * @return true if equal, false otherwise
      */
     public boolean equals(Object o) {
-        return false;
+        if (!(o instanceof ContainerShip)) {
+            return false;
+        }
+        ContainerShip containerShip = (ContainerShip) o;
+        return super.equals(containerShip)
+                && containerCapacity == containerShip.containerCapacity;
     }
 
     /**
@@ -168,7 +186,7 @@ public class ContainerShip extends Ship {
      * @return hash code of this ContainerShip.
      */
     public int hashCode() {
-        return 0;
+        return super.hashCode() * containerCapacity;
     }
 
     /**
@@ -242,6 +260,14 @@ public class ContainerShip extends Ship {
      * @return encoded string representation of this Ship
      */
     public String encode() {
-        return "";
+        StringJoiner joiner = new StringJoiner(",");
+        for (Container container : this.getCargo()) {
+            joiner.add(String.valueOf(container.getId()));
+        }
+        return String.format("%s:%d:%d:%s",
+                super.encode(),
+                containerCapacity,
+                this.getCargo().size(),
+                joiner);
     }
 }

@@ -25,7 +25,9 @@ public abstract class Quay {
      * Creates a new Quay with the given ID, with no ship docked at the quay.
      *
      * @param id quay ID
+     *
      * @throws IllegalArgumentException if ID &lt; 0
+     *
      * @ass1
      */
     public Quay(int id) throws IllegalArgumentException {
@@ -41,7 +43,8 @@ public abstract class Quay {
      * Get the id of this quay
      *
      * @return quay id
-     * @ass1
+     * @
+     * ass1
      */
     public int getId() {
         return id;
@@ -51,6 +54,7 @@ public abstract class Quay {
      * Docks the given ship at the Quay so that the quay becomes occupied.
      *
      * @param ship ship to dock to the quay
+     *
      * @ass1
      */
     public void shipArrives(Ship ship) {
@@ -62,6 +66,7 @@ public abstract class Quay {
      * The current ship should be set to {@code null}.
      *
      * @return the current ship or null if quay is empty.
+     *
      * @ass1
      */
     public Ship shipDeparts() {
@@ -74,6 +79,7 @@ public abstract class Quay {
      * Returns whether a ship is currently docked at this quay.
      *
      * @return true if there is no ship docked else false
+     *
      * @ass1
      */
     public boolean isEmpty() {
@@ -84,10 +90,42 @@ public abstract class Quay {
      * Returns the ship currently docked at the quay.
      *
      * @return ship at quay or null if no ship is docked
+     *
      * @ass1
      */
     public Ship getShip() {
         return ship;
+    }
+
+    /**
+     * Returns true if and only if this Quay is equal to the other given Quay.
+     *
+     * For two Quays to be equal, they must have the same ID and ship docked
+     * status (must be either both empty or both be occupied).
+     *
+     * @param o other object to check quality
+     *
+     * @return true if equal, false otherwise
+     */
+    public boolean equals(Object o) {
+        if (!(o instanceof Quay)) {
+            return false;
+        }
+        Quay quay = (Quay) o;
+        return id == quay.getId()
+                && this.isEmpty() == quay.isEmpty();
+    }
+
+    /**
+     * Returns the hash code of the quay.
+     *
+     * Two quays that are equal according to {@link #equals(Object)} method
+     * should have the same hash code.
+     *
+     * @return hash code of this quay.
+     */
+    public int hashCode() {
+        return id * ((Boolean) this.isEmpty()).hashCode();
     }
 
     /**
@@ -111,35 +149,9 @@ public abstract class Quay {
     @Override
     public String toString() {
         return String.format("%s %d [Ship: %s]",
-            this.getClass().getSimpleName(),
-            this.id,
-            (this.ship != null ? this.ship.getImoNumber() : "None"));
-    }
-
-    /**
-     * Returns true if and only if this Quay is equal to the other given Quay.
-     *
-     * For two Quays to be equal, they must have the same ID and ship docked
-     * status (must be either both empty or both be occupied).
-     *
-     * @param o other object to check quality
-     *
-     * @return true if equal, false otherwise
-     */
-    public boolean equals(Object o) {
-        return false;
-    }
-
-    /**
-     * Returns the hash code of the quay.
-     *
-     * Two quays that are equal according to {@link #equals(Object)} method
-     * should have the same hash code.
-     *
-     * @return hash code of this quay.
-     */
-    public int hashCode() {
-        return 0;
+                this.getClass().getSimpleName(),
+                this.id,
+                (this.ship != null ? this.ship.getImoNumber() : "None"));
     }
 
     /**
@@ -170,7 +182,11 @@ public abstract class Quay {
      * @return encoded string representation of this quay
      */
     public String encode() {
-        return "";
+        return String.format("%s:%d:%s",
+                this.getClass().getSimpleName(),
+                id,
+                (this.isEmpty() ? "None" :
+                        String.valueOf(ship.getImoNumber())));
     }
 
     /**

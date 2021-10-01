@@ -1,7 +1,10 @@
 package portsim.evaluators;
 
 import portsim.movement.Movement;
+import portsim.movement.MovementDirection;
+import portsim.movement.ShipMovement;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -11,6 +14,11 @@ import java.util.Map;
  * flag has been seen in inbound movements.
  */
 public class ShipFlagEvaluator extends StatisticsEvaluator {
+    /**
+     * Record of flags seen at this port
+     */
+    private Map<String, Integer> flagStats;
+
     /**
      * Constructs a new ShipFlagEvaluator.
      */
@@ -24,7 +32,7 @@ public class ShipFlagEvaluator extends StatisticsEvaluator {
      * @return flag distribution
      */
     public Map<String, Integer> getFlagDistribution() {
-        return null;
+        return new HashMap<>(flagStats);
     }
 
     /**
@@ -63,5 +71,16 @@ public class ShipFlagEvaluator extends StatisticsEvaluator {
      *
      * @param movement movement to read
      */
-    public void onProcessMovement(Movement movement) {}
+    public void onProcessMovement(Movement movement) {
+        if (movement instanceof ShipMovement
+                && movement.getDirection() == MovementDirection.INBOUND) {
+            String flag = ((ShipMovement) movement).getShip().getOriginFlag();
+            if (flagStats.containsKey(flag)) {
+                Integer old = flagStats.get(flag);
+                flagStats.replace(flag, old, old + 1);
+            } else {
+                flagStats.put(flag, 1);
+            }
+        }
+    }
 }

@@ -18,12 +18,14 @@ public class Container extends Cargo {
      * @param id          cargo ID
      * @param destination destination port
      * @param type        type of container
+     *
      * @throws IllegalArgumentException if a cargo already exists with the
      *                                  given ID or ID &lt; 0
+     *
      * @ass1
      */
     public Container(int id, String destination, ContainerType type)
-        throws IllegalArgumentException {
+            throws IllegalArgumentException {
         super(id, destination);
         this.type = type;
     }
@@ -63,7 +65,7 @@ public class Container extends Cargo {
      * Returns the hash code of this Container.
      *
      * Two Containers that are equal according to the {@link #equals(Object)}
-     * method shoudl have the same hash code.
+     * method should have the same hash code.
      *
      * @return hash code of this Container.
      */
@@ -118,6 +120,8 @@ public class Container extends Cargo {
      * {@code Container:3:Australia:OPEN_TOP}
      */
     public String encode() {
-        return "";
+        return String.format("%s:%s",
+                this.getClass().getSimpleName(),
+                type);
     }
 }

@@ -60,14 +60,17 @@ public class BulkCarrier extends Ship {
      * </ol>
      *
      * @param quay quay to be checked
+     *
      * @return true if the Quay satisfies the conditions else false
+     *
      * @ass1
      */
     @Override
     public boolean canDock(Quay quay) {
         if (quay instanceof BulkQuay) {
             BulkQuay bulkQuay = (BulkQuay) quay;
-            return this.cargo == null || bulkQuay.getMaxTonnage() >= this.cargo.getTonnage();
+            return this.cargo == null
+                    || bulkQuay.getMaxTonnage() >= this.cargo.getTonnage();
         }
         return false;
     }
@@ -86,7 +89,9 @@ public class BulkCarrier extends Ship {
      * </ol>
      *
      * @param cargo cargo to be loaded
+     *
      * @return true if the Cargo satisfies the conditions else false
+     *
      * @ass1
      */
     public boolean canLoad(Cargo cargo) {
@@ -106,8 +111,10 @@ public class BulkCarrier extends Ship {
      * Loads the specified cargo onto the ship.
      *
      * @param cargo cargo to be loaded
+     *
      * @require Cargo given is able to be loaded onto this ship according to
      * {@link BulkCarrier#canLoad(Cargo)}
+     *
      * @ass1
      */
     public void loadCargo(Cargo cargo) {
@@ -120,7 +127,9 @@ public class BulkCarrier extends Ship {
      * The ship's current cargo should be set to {@code null} at the end of the operation.
      *
      * @return the ships cargo
+     *
      * @throws NoSuchCargoException if the ship has already been unloaded
+     *
      * @ass1
      */
     public BulkCargo unloadCargo() throws NoSuchCargoException {
@@ -136,6 +145,7 @@ public class BulkCarrier extends Ship {
      * Returns the current cargo onboard this vessel.
      *
      * @return bulk cargo on the vessel
+     *
      * @ass1
      */
     public BulkCargo getCargo() {
@@ -154,7 +164,12 @@ public class BulkCarrier extends Ship {
      * @return true if equal, false otherwise
      */
     public boolean equals(Object o) {
-        return false;
+        if (!(o instanceof BulkCarrier)) {
+            return false;
+        }
+        BulkCarrier carrier = (BulkCarrier) o;
+        return super.equals(carrier)
+                && tonnageCapacity == carrier.tonnageCapacity;
     }
 
     /**
@@ -166,7 +181,7 @@ public class BulkCarrier extends Ship {
      * @return hash code of this BulkCarrier.
      */
     public int hashCode() {
-        return 0;
+        return super.hashCode() * tonnageCapacity;
     }
 
     /**
@@ -188,6 +203,7 @@ public class BulkCarrier extends Ship {
      * BulkCarrier Evergreen from Australia [BRAVO] carrying OIL</pre>
      *
      * @return string representation of this BulkCarrier
+     *
      * @ass1
      */
     @Override
@@ -238,6 +254,9 @@ public class BulkCarrier extends Ship {
      * @return encoded string representation of this Ship
      */
     public String encode() {
-        return "";
+        return String.format("%s:%d:%d",
+                super.encode(),
+                tonnageCapacity,
+                cargo.getId());
     }
 }

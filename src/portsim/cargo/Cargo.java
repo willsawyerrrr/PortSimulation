@@ -48,15 +48,20 @@ public abstract class Cargo implements Encodable {
         if (id < 0) {
             throw new IllegalArgumentException("Cargo ID must be greater than"
                 + " or equal to 0: " + id);
+        } else if (cargoRegistry.containsKey(id)) {
+            throw new IllegalArgumentException("Cargo already exists with "
+                    + "id: " + id);
         }
         this.id = id;
         this.destination = destination;
+        cargoRegistry.put(id, this);
     }
 
     /**
      * Retrieve the ID of this piece of cargo.
      *
      * @return the cargo's ID
+     *
      * @ass1
      */
     public int getId() {
@@ -67,6 +72,7 @@ public abstract class Cargo implements Encodable {
      * Retrieve the destination of this piece of cargo.
      *
      * @return the cargo's destination
+     *
      * @ass1
      */
     public String getDestination() {
@@ -83,7 +89,7 @@ public abstract class Cargo implements Encodable {
      * @return cargo registry
      */
     public static Map<Integer, Cargo> getCargoRegistry() {
-        return null;
+        return new HashMap<>(cargoRegistry);
     }
 
     /**
@@ -95,7 +101,7 @@ public abstract class Cargo implements Encodable {
      * {@code id} false otherwise
      */
     public static boolean cargoExists(int id) {
-        return false;
+        return cargoRegistry.containsKey(id);
     }
 
     /**
@@ -108,7 +114,10 @@ public abstract class Cargo implements Encodable {
      * @throws NoSuchCargoException if the cargo does not exist in the registry
      */
     public static Cargo getCargoById(int id) throws NoSuchCargoException {
-        return null;
+        if (cargoRegistry.containsKey(id)) {
+            return cargoRegistry.get(id);
+        }
+        throw new NoSuchCargoException("No cargo exists with id: " + id);
     }
 
     /**
@@ -168,6 +177,40 @@ public abstract class Cargo implements Encodable {
     }
 
     /**
+     * Returns the machine-readable string representation of this Cargo.
+     *
+     * The format of the string to return is
+     *
+     * {@code CargoClass:id:destination}
+     *
+     * Where:
+     * <ul>
+     *     <li>
+     *         {@code CargoClass} is the Cargo class name
+     *     </li>
+     *     <li>
+     *         {@code id} is the id of this cargo
+     *     </li>
+     *     <li>
+     *         {@code destination} is the destination of this cargo
+     *     </li>
+     * </ul>
+     *
+     * For example:
+     * {@code Container:3:Australia}
+     * OR
+     * {@code BulkCargo:2:France}
+     *
+     * @return encoded string representation of this Cargo
+     */
+    public String encode() {
+        return String.format("%s:%d:%s",
+                this.getClass().getSimpleName(),
+                this.id,
+                this.destination);
+    }
+
+    /**
      * Reads a piece of cargo from its encoded representation in the given
      * string.
      *
@@ -220,43 +263,12 @@ public abstract class Cargo implements Encodable {
     }
 
     /**
-     * Returns the machine-readable string representaition of this Cargo.
-     *
-     * The format of the string to return is
-     *
-     * {@code CargoClass:id:destination}
-     *
-     * Where:
-     * <ul>
-     *     <li>
-     *         {@code CargoClass} is the Cargo class name
-     *     </li>
-     *     <li>
-     *         {@code id} is the id of this cargo
-     *     </li>
-     *     <li>
-     *         {@code destination} is the destination of this cargo
-     *     </li>
-     * </ul>
-     *
-     * For example:
-     * {@code Container:3:Australia}
-     * OR
-     * {@code BulkCargo:2:France}
-     *
-     * @return encoded string representation of this Cargo
-     */
-    public String encode() {
-        return "";
-    }
-
-    /**
      * Resets the global cargo registry.
      * This utility method is for the testing suite.
      *
      * @given
      */
     public static void resetCargoRegistry() {
-        Cargo.cargoRegistry = new HashMap<>();
+        cargoRegistry = new HashMap<>();
     }
 }

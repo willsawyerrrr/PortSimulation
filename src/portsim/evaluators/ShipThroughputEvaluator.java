@@ -1,6 +1,12 @@
 package portsim.evaluators;
 
 import portsim.movement.Movement;
+import portsim.movement.MovementDirection;
+import portsim.movement.ShipMovement;
+import portsim.ship.Ship;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Gathers data on how many ships pass through the port over time.
@@ -14,6 +20,12 @@ import portsim.movement.Movement;
  */
 public class ShipThroughputEvaluator extends StatisticsEvaluator {
     /**
+     * The movements of ships which have passed through the port in the last
+     * 60 minutes
+     */
+    private List<Movement> throughput;
+
+    /**
      * Constructs a new ShipThroughputElevator.
      *
      * Immediately after creating a new ShipThroughputEvaluator,
@@ -21,6 +33,7 @@ public class ShipThroughputEvaluator extends StatisticsEvaluator {
      */
     public ShipThroughputEvaluator() {
         super();
+        throughput = new ArrayList<>();
     }
 
     /**
@@ -30,7 +43,7 @@ public class ShipThroughputEvaluator extends StatisticsEvaluator {
      * @return ships throughput
      */
     public int getThroughputPerHour() {
-        return 0;
+        return throughput.size();
     }
 
     /**
@@ -69,5 +82,23 @@ public class ShipThroughputEvaluator extends StatisticsEvaluator {
      *
      * @param movement movement to read
      */
-    public void onProcessMovement(Movement movement) {}
+    public void onProcessMovement(Movement movement) {
+        if (movement instanceof ShipMovement
+                && movement.getDirection() == MovementDirection.OUTBOUND) {
+            throughput.add(movement);
+        }
+    }
+
+    /**
+     * Simulate a minute passing. The time since the evaluator was created
+     * should be incremented by one.
+     *
+     * If it has been more than 60 minutes since a ship exited the port, it
+     * should no longer be counted towards the count returned by
+     * {@link #getThroughputPerHour()}.
+     */
+    public void elapseOneMinute() {
+        super.elapseOneMinute();
+        throughput.removeIf(movement -> time - movement.getTime() == 60);
+    }
 }

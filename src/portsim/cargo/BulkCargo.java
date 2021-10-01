@@ -23,8 +23,10 @@ public class BulkCargo extends Cargo {
      * @param destination destination port
      * @param tonnage     the weight of the cargo
      * @param type        the type of cargo
+     *
      * @throws IllegalArgumentException if a cargo already exists with the
      *                                  given ID or ID &lt; 0 or tonnage &lt; 0
+     *
      * @ass1
      */
     public BulkCargo(int id, String destination, int tonnage,
@@ -42,6 +44,7 @@ public class BulkCargo extends Cargo {
      * Returns the weight in tonnes of this bulk cargo.
      *
      * @return cargo tonnage
+     *
      * @ass1
      */
     public int getTonnage() {
@@ -52,35 +55,11 @@ public class BulkCargo extends Cargo {
      * Returns the BulkCargoType of this bulk cargo.
      *
      * @return cargo type
+     *
      * @ass1
      */
     public BulkCargoType getType() {
         return type;
-    }
-
-    /**
-     * Returns the human-readable string representation of this BulkCargo.
-     * <p>
-     * The format of the string to return is
-     * <pre>BulkCargo id to destination [type - tonnage]</pre>
-     * Where:
-     * <ul>
-     *   <li>{@code id} is the id of this cargo </li>
-     *   <li>{@code destination} is the destination of the cargo </li>
-     *   <li>{@code type} is the type of cargo</li>
-     *   <li>{@code tonnage} is the tonnage of the cargo</li>
-     * </ul>
-     * For example: <pre>BulkCargo 42 to Brazil [OIL - 420]</pre>
-     *
-     * @return string representation of this BulkCargo
-     * @ass1
-     */
-    @Override
-    public String toString() {
-        return String.format("%s [%s - %d]",
-            super.toString(),
-            this.type,
-            this.tonnage);
     }
 
     /**
@@ -89,7 +68,6 @@ public class BulkCargo extends Cargo {
      *
      * For two BulkCargo to be equal, they must have the same ID,
      * destination, type and tonnage.
-     *
      *
      * @param o other object to check equality
      *
@@ -117,6 +95,31 @@ public class BulkCargo extends Cargo {
     @Override
     public int hashCode() {
         return super.hashCode() % type.hashCode() + tonnage;
+    }
+
+    /**
+     * Returns the human-readable string representation of this BulkCargo.
+     * <p>
+     * The format of the string to return is
+     * <pre>BulkCargo id to destination [type - tonnage]</pre>
+     * Where:
+     * <ul>
+     *   <li>{@code id} is the id of this cargo </li>
+     *   <li>{@code destination} is the destination of the cargo </li>
+     *   <li>{@code type} is the type of cargo</li>
+     *   <li>{@code tonnage} is the tonnage of the cargo</li>
+     * </ul>
+     * For example: <pre>BulkCargo 42 to Brazil [OIL - 420]</pre>
+     *
+     * @return string representation of this BulkCargo
+     * @ass1
+     */
+    @Override
+    public String toString() {
+        return String.format("%s [%s - %d]",
+                super.toString(),
+                this.type,
+                this.tonnage);
     }
 
     /**
@@ -149,6 +152,9 @@ public class BulkCargo extends Cargo {
      */
     @Override
     public String encode() {
-        return "";
+        return String.format("%s:%s:%d",
+                super.toString(),
+                this.type,
+                this.tonnage);
     }
 }

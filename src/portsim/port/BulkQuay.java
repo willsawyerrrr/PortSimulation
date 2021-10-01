@@ -52,7 +52,12 @@ public class BulkQuay extends Quay {
      * @return true if equal, false otherwise
      */
     public boolean equals(Object o) {
-        return false;
+        if (!(o instanceof BulkQuay)) {
+            return false;
+        }
+        BulkQuay bulkQuay = (BulkQuay) o;
+        return super.equals(bulkQuay)
+                && maxTonnage == bulkQuay.getMaxTonnage();
     }
 
     /**
@@ -64,7 +69,7 @@ public class BulkQuay extends Quay {
      * @return hash code of this quay.
      */
     public int hashCode() {
-        return 0;
+        return super.hashCode() % maxTonnage;
     }
 
     /**
@@ -104,6 +109,8 @@ public class BulkQuay extends Quay {
      * @return encoded string representation of this quay
      */
     public String encode() {
-        return "";
+        return String.format("%s:%d",
+                super.encode(),
+                maxTonnage);
     }
 }

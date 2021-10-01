@@ -6,6 +6,7 @@ import portsim.util.BadEncodingException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * The movement of cargo coming into or out of the port.
@@ -26,7 +27,9 @@ public class CargoMovement extends Movement {
      * @param time      the time the movement should occur
      * @param direction the direction of the movement
      * @param cargo     the cargo to be moved
+     *
      * @throws IllegalArgumentException if time &lt; 0
+     *
      * @ass1
      */
     public CargoMovement(long time, MovementDirection direction,
@@ -104,7 +107,14 @@ public class CargoMovement extends Movement {
      * @return encoded string representation of this movement
      */
     public String encode() {
-        return "";
+        StringJoiner joiner = new StringJoiner(":");
+        for (Cargo cargo : this.getCargo()) {
+            joiner.add(String.valueOf(cargo.getId()));
+        }
+        return String.format("%s:%d:%s",
+                super.toString(),
+                this.cargo.size(),
+                joiner);
     }
 
     /**
