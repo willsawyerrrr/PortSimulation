@@ -118,6 +118,8 @@ public class Container extends Cargo {
      *
      * For example:
      * {@code Container:3:Australia:OPEN_TOP}
+     *
+     * @return encoded string representation of this Cargo
      */
     public String encode() {
         return String.format("%s:%s",

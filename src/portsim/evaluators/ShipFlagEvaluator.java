@@ -32,7 +32,7 @@ public class ShipFlagEvaluator extends StatisticsEvaluator {
      * @return flag distribution
      */
     public Map<String, Integer> getFlagDistribution() {
-        return new HashMap<>(flagStats);
+        return flagStats.isEmpty() ? new HashMap<>() : new HashMap<>(flagStats);
     }
 
     /**

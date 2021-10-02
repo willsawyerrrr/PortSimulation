@@ -57,8 +57,9 @@ public abstract class Ship implements Encodable {
      * @param flag       the nautical flag this ship is flying
      *
      * @throws IllegalArgumentException if a ship already exists with the given
-     *                                  imoNumber, imoNumber &lt; 0 or imoNumber is not 7 digits
-     *                                  long (no leading zero's [0])
+     *                                  imoNumber, imoNumber &lt; 0 or
+     *                                  imoNumber is not 7 digits long (no
+     *                                  leading zero's [0])
      *
      * @ass1_partial
      */
@@ -68,13 +69,14 @@ public abstract class Ship implements Encodable {
             throw new IllegalArgumentException("The imoNumber of the ship "
                 + "must be positive: " + imoNumber);
         }
-        if (String.valueOf(imoNumber).length() != 7 || String.valueOf(imoNumber).startsWith("0")) {
+        if (String.valueOf(imoNumber).length() != 7 ||
+                String.valueOf(imoNumber).startsWith("0")) {
             throw new IllegalArgumentException("The imoNumber of the ship "
                 + "must have 7 digits (no leading zero's [0]): " + imoNumber);
         }
         if (shipExists(imoNumber)) {
-            throw new IllegalArgumentException("The imoNumber of the ship " +
-                    "must be unique: " + imoNumber);
+            throw new IllegalArgumentException("The imoNumber of the ship "
+                    + "must be unique: " + imoNumber);
         }
         this.imoNumber = imoNumber;
         this.name = name;

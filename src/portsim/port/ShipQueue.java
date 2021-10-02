@@ -15,7 +15,7 @@ public class ShipQueue {
     /**
      * The ships waiting to dock at the port
      */
-    List<Ship> queue;
+    private List<Ship> queue;
 
     /**
      * Constructs a new ShipQueue with an initially empty queue of ships.

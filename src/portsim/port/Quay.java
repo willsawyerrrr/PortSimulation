@@ -213,7 +213,7 @@ public abstract class Quay {
      *         {@link ContainerQuay}
      *     </li>
      *     <li>
-     *         If the encoded ship is not {@code None} then the shi pmust
+     *         If the encoded ship is not {@code None} then the ship must
      *         exist and the imoNumber specified must be an integer (i.e. can
      *         be parsed by {@code Integer.parseInt(String)}).
      *     </li>
@@ -228,7 +228,7 @@ public abstract class Quay {
      * @throws BadEncodingException if the format of the given string is
      * invalid according to the rules above
      */
-    public static Quay fromString() throws BadEncodingException {
+    public static Quay fromString(String string) throws BadEncodingException {
         return null;
     }
 }

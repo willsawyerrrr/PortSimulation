@@ -11,6 +11,7 @@ import portsim.ship.Ship;
 import portsim.util.BadEncodingException;
 import portsim.util.NoSuchCargoException;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
 
@@ -98,10 +99,10 @@ public class Port {
      * @throws IllegalArgumentException if time &lt; 0
      */
     public Port(String name, long time, ShipQueue shipQueue, List<Quay> quays,
-            List<Cargo> storedCargo) throws IllegalArgumentException {
+            List<Cargo> storedCargo) {
         if (time < 0) {
-            throw new IllegalArgumentException("Time must be greater than or " +
-                    "equal to 0: " + time);
+            throw new IllegalArgumentException("Time must be greater than or "
+                    + "equal to 0: " + time);
         }
         this.name = name;
         this.time = time;
@@ -121,14 +122,14 @@ public class Port {
      *
      * @param movement movement to add
      *
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if the movement's action time has
+     * already passed
      */
-    public void addMovement(Movement movement)
-            throws IllegalArgumentException {
+    public void addMovement(Movement movement) throws IllegalArgumentException {
         long difference = time - movement.getTime();
         if (difference > 0) {
-            throw new IllegalArgumentException("This movement should have " +
-                    "occurred " + difference + " minutes ago.");
+            throw new IllegalArgumentException("This movement should have "
+                    + "occurred " + difference + " minutes ago.");
         }
         movements.add(movement);
     }
@@ -204,8 +205,8 @@ public class Port {
                                 stored -> moving.getId() == stored.getId());
                     }
                     break;
-                }
             }
+        }
         for (StatisticsEvaluator evaluator : evaluators) {
             evaluator.onProcessMovement(movement);
         }
@@ -374,12 +375,16 @@ public class Port {
                         BulkCarrier ship = (BulkCarrier) quay.getShip();
                         try {
                             storedCargo.add(ship.unloadCargo());
-                        } catch (NoSuchCargoException ignored) {}
+                        } catch (NoSuchCargoException ignored) {
+                            // Do nothing
+                        }
                     } else if (quay.getShip() instanceof ContainerShip) {
                         ContainerShip ship = (ContainerShip) quay.getShip();
                         try {
                             storedCargo.addAll(ship.unloadCargo());
-                        } catch (NoSuchCargoException ignored) {}
+                        } catch (NoSuchCargoException ignored) {
+                            // Do nothing
+                        }
                     }
                 }
             }
@@ -712,7 +717,7 @@ public class Port {
      *                                   when reading from the reader
      */
     public static Port initialisePort(Reader reader)
-            throws IndexOutOfBoundsException, BadEncodingException {
+            throws IOException, BadEncodingException {
         throw new BadEncodingException();
     }
 }

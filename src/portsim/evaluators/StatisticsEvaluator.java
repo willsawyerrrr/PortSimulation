@@ -11,7 +11,7 @@ public abstract class StatisticsEvaluator implements Tickable {
     /**
      * The time since the evaluator was created.
      */
-    long time;
+    private long time;
 
     /**
      * Creates a statistics evaluator and initialises the time since the

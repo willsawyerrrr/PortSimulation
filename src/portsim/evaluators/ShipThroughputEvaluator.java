@@ -99,6 +99,7 @@ public class ShipThroughputEvaluator extends StatisticsEvaluator {
      */
     public void elapseOneMinute() {
         super.elapseOneMinute();
-        throughput.removeIf(movement -> time - movement.getTime() == 60);
+        throughput.removeIf(
+                movement -> this.getTime() - movement.getTime() == 60);
     }
 }
