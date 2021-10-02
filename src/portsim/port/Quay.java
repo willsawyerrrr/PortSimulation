@@ -223,6 +223,8 @@ public abstract class Quay {
      *     </li>
      * </ul>
      *
+     * @param string string containing the encoded Quay
+     *
      * @return decoded Quay instance
      *
      * @throws BadEncodingException if the format of the given string is

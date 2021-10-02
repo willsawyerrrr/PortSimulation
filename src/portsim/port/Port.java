@@ -71,7 +71,7 @@ public class Port {
      *
      * @ass1_partial
      */
-    public Port(String name) throws IllegalArgumentException {
+    public Port(String name) {
         this.name = name;
         this.time = 0;
         this.shipQueue = new ShipQueue();
@@ -99,7 +99,7 @@ public class Port {
      * @throws IllegalArgumentException if time &lt; 0
      */
     public Port(String name, long time, ShipQueue shipQueue, List<Quay> quays,
-            List<Cargo> storedCargo) {
+            List<Cargo> storedCargo) throws IllegalArgumentException {
         if (time < 0) {
             throw new IllegalArgumentException("Time must be greater than or "
                     + "equal to 0: " + time);
@@ -511,7 +511,7 @@ public class Port {
         builder.append("StoredCargo:");
         builder.append(storedCargo.size());
         builder.append(":");
-        if (storedCargo.size() > 0){
+        if (storedCargo.size() > 0) {
             StringJoiner joiner = new StringJoiner(",");
             for (Cargo cargo : storedCargo) {
                 joiner.add(String.valueOf(cargo.getId()));

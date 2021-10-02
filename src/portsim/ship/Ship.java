@@ -69,8 +69,8 @@ public abstract class Ship implements Encodable {
             throw new IllegalArgumentException("The imoNumber of the ship "
                 + "must be positive: " + imoNumber);
         }
-        if (String.valueOf(imoNumber).length() != 7 ||
-                String.valueOf(imoNumber).startsWith("0")) {
+        if (String.valueOf(imoNumber).length() != 7
+                || String.valueOf(imoNumber).startsWith("0")) {
             throw new IllegalArgumentException("The imoNumber of the ship "
                 + "must have 7 digits (no leading zero's [0]): " + imoNumber);
         }
