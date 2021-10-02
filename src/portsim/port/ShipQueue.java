@@ -1,5 +1,7 @@
 package portsim.port;
 
+import portsim.ship.ContainerShip;
+import portsim.ship.NauticalFlag;
 import portsim.ship.Ship;
 import portsim.util.BadEncodingException;
 
@@ -33,7 +35,9 @@ public class ShipQueue {
      * @return next ship to dock
      */
     public Ship poll() {
-        return queue.remove(0);
+        Ship ship = peek();
+        queue.remove(ship);
+        return ship;
     }
 
     /**
@@ -74,6 +78,29 @@ public class ShipQueue {
      * @return next ship in queue
      */
     public Ship peek() {
+        if (queue.isEmpty()) {
+            return null;
+        }
+        for (Ship ship : queue) {
+            if (ship.getFlag() == NauticalFlag.BRAVO) {
+                return ship;
+            }
+        }
+        for (Ship ship : queue) {
+            if (ship.getFlag() == NauticalFlag.WHISKEY) {
+                return ship;
+            }
+        }
+        for (Ship ship : queue) {
+            if (ship.getFlag() == NauticalFlag.HOTEL) {
+                return ship;
+            }
+        }
+        for (Ship ship : queue) {
+            if (ship instanceof ContainerShip) {
+                return ship;
+            }
+        }
         return queue.get(0);
     }
 
