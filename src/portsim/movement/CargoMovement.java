@@ -114,7 +114,7 @@ public class CargoMovement extends Movement {
             joiner.add(String.valueOf(cargo.getId()));
         }
         return String.format("%s:%d:%s",
-                super.toString(),
+                super.encode(),
                 this.cargo.size(),
                 joiner);
     }

@@ -155,7 +155,7 @@ public class BulkCargo extends Cargo {
     @Override
     public String encode() {
         return String.format("%s:%s:%d",
-                super.toString(),
+                super.encode(),
                 this.type,
                 this.tonnage);
     }

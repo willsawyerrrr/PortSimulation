@@ -99,7 +99,9 @@ public class ContainerQuay extends Quay {
      */
     @Override
     public String toString() {
-        return super.toString() + " - " + this.maxContainers;
+        return String.format("%s - %d",
+                super.toString(),
+                maxContainers);
     }
 
     /**

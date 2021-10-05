@@ -125,7 +125,7 @@ public class Container extends Cargo {
      */
     public String encode() {
         return String.format("%s:%s",
-                this.getClass().getSimpleName(),
+                super.encode(),
                 type);
     }
 

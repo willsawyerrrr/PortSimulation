@@ -95,7 +95,9 @@ public class BulkQuay extends Quay {
      */
     @Override
     public String toString() {
-        return super.toString() + " - " + this.maxTonnage;
+        return String.format("%s - %d",
+                super.toString(),
+                this.maxTonnage);
     }
 
     /**
