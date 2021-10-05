@@ -24,6 +24,7 @@ public class ShipFlagEvaluator extends StatisticsEvaluator {
      */
     public ShipFlagEvaluator() {
         super();
+        flagStats = new HashMap<>();
     }
 
     /**
