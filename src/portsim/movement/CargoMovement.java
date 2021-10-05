@@ -109,7 +109,7 @@ public class CargoMovement extends Movement {
      * @return encoded string representation of this movement
      */
     public String encode() {
-        StringJoiner joiner = new StringJoiner(":");
+        StringJoiner joiner = new StringJoiner(",");
         for (Cargo cargo : this.getCargo()) {
             joiner.add(String.valueOf(cargo.getId()));
         }
@@ -178,8 +178,7 @@ public class CargoMovement extends Movement {
         long time;
         MovementDirection direction;
         int numCargo;
-        String[] rawCargoIds;
-        int[] parsedCargoIds;
+        String[] cargoIds;
         List<Cargo> cargo;
 
         if (!attributes[0].equals("CargoMovement") || attributes.length != 5) {
@@ -195,19 +194,15 @@ public class CargoMovement extends Movement {
                 throw new BadEncodingException();
             }
 
-            rawCargoIds = attributes[4].split(",");
-            if (numCargo != rawCargoIds.length) {
+            cargoIds = attributes[4].split(",");
+            if (numCargo != cargoIds.length) {
                 throw new BadEncodingException();
             }
 
-            parsedCargoIds = new int[numCargo];
-            for (int i = 0; i <= numCargo - 1; i++) {
-                parsedCargoIds[i] = Integer.parseInt(rawCargoIds[i]);
-            }
-
             cargo = new ArrayList<>();
-            for (int id : parsedCargoIds) {
-                if (id < 0) {
+            for (String rawId : cargoIds) {
+                int id = Integer.parseInt(rawId);
+                if (id > 0 || !Cargo.cargoExists(id)) {
                     throw new BadEncodingException();
                 }
                 cargo.add(Cargo.getCargoById(id));
