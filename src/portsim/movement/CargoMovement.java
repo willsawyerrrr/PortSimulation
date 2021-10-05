@@ -2,9 +2,11 @@ package portsim.movement;
 
 import portsim.cargo.Cargo;
 import portsim.util.BadEncodingException;
+import portsim.util.NoSuchCargoException;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -167,10 +169,53 @@ public class CargoMovement extends Movement {
      * @return decoded CargoMovement instance
      *
      * @throws BadEncodingException if the format of the given string is
-     * invalid according to the rules above
+     *                              invalid according to the rules above
      */
     public static CargoMovement fromString(String string)
             throws BadEncodingException {
-        return null;
+        String[] attributes = string.split(":");
+
+        long time;
+        MovementDirection direction;
+        int numCargo;
+        String[] rawCargoIds;
+        int[] parsedCargoIds;
+        List<Cargo> cargo;
+
+        if (!attributes[0].equals("CargoMovement") || attributes.length != 5) {
+            throw new BadEncodingException();
+        }
+
+        try {
+            time = Long.parseLong(attributes[1]);
+            direction = MovementDirection.valueOf(attributes[2]);
+
+            numCargo = Integer.parseInt(attributes[3]);
+            if (numCargo < 1) {
+                throw new BadEncodingException();
+            }
+
+            rawCargoIds = attributes[4].split(",");
+            if (numCargo != rawCargoIds.length) {
+                throw new BadEncodingException();
+            }
+
+            parsedCargoIds = new int[numCargo];
+            for (int i = 0; i <= numCargo - 1; i++) {
+                parsedCargoIds[i] = Integer.parseInt(rawCargoIds[i]);
+            }
+
+            cargo = new ArrayList<>();
+            for (int id : parsedCargoIds) {
+                if (id < 0) {
+                    throw new BadEncodingException();
+                }
+                cargo.add(Cargo.getCargoById(id));
+            }
+        } catch (IllegalArgumentException | NoSuchCargoException ignored) {
+            throw new BadEncodingException();
+        }
+
+        return new CargoMovement(time, direction, cargo);
     }
 }

@@ -1,5 +1,7 @@
 package portsim.cargo;
 
+import portsim.util.BadEncodingException;
+
 /**
  * Bulk cargo is commodity cargo that is transported unpacked in large quantities.
  *
@@ -156,5 +158,27 @@ public class BulkCargo extends Cargo {
                 super.toString(),
                 this.type,
                 this.tonnage);
+    }
+
+    static BulkCargo fromString(String[] attributes)
+            throws BadEncodingException {
+        int id, tonnage;
+        String destination;
+        BulkCargoType type;
+
+        try {
+            id = Integer.parseInt(attributes[1]);
+            destination = attributes[2];
+            type = BulkCargoType.valueOf(attributes[3]);
+            tonnage = Integer.parseInt(attributes[4]);
+        } catch (IllegalArgumentException ignored) {
+            throw new BadEncodingException();
+        }
+
+        if (id < 0 || tonnage < 0) {
+            throw new BadEncodingException();
+        }
+
+        return new BulkCargo(id, destination, tonnage, type);
     }
 }

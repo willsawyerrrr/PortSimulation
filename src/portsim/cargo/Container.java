@@ -1,5 +1,7 @@
 package portsim.cargo;
 
+import portsim.util.BadEncodingException;
+
 /**
  * Represents a shipping container, used for holding or transporting something.
  *
@@ -125,5 +127,22 @@ public class Container extends Cargo {
         return String.format("%s:%s",
                 this.getClass().getSimpleName(),
                 type);
+    }
+
+    static Container fromString(String[] attributes)
+            throws BadEncodingException {
+        int id;
+        String destination;
+        ContainerType type;
+
+        try {
+            id = Integer.parseInt(attributes[1]);
+            destination = attributes[2];
+            type = ContainerType.valueOf(attributes[3]);
+        } catch (NumberFormatException nfe) {
+            throw new BadEncodingException(nfe.getMessage());
+        }
+
+        return new Container(id, destination, type);
     }
 }

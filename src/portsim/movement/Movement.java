@@ -1,13 +1,14 @@
 package portsim.movement;
 
+import portsim.util.Encodable;
+
 /**
  * The movement of ships or cargo coming into or out of the port from land or
  * sea.
  *
  * @ass1_partial
  */
-public abstract class Movement {
-
+public abstract class Movement implements Encodable {
     /**
      * The time in minutes that the movement should be completed
      */
@@ -109,6 +110,7 @@ public abstract class Movement {
      *
      * @return encoded string representation of this movement
      */
+    @Override
     public String encode() {
         return String.format("%s:%d:%s",
                 this.getClass().getSimpleName(),

@@ -3,7 +3,6 @@ package portsim.evaluators;
 import portsim.movement.Movement;
 import portsim.movement.MovementDirection;
 import portsim.movement.ShipMovement;
-import portsim.ship.Ship;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -35,6 +35,7 @@ public class ContainerQuay extends Quay {
      * Returns the maximum number of containers of this quay can process at once.
      *
      * @return maxContainers
+     *
      * @ass1
      */
     public int getMaxContainers() {
@@ -54,6 +55,7 @@ public class ContainerQuay extends Quay {
      *
      * @return true if equal, false otherwise
      */
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof ContainerQuay)) {
             return false;
@@ -71,6 +73,7 @@ public class ContainerQuay extends Quay {
      *
      * @return hash code of this quay.
      */
+    @Override
     public int hashCode() {
         return super.hashCode() % maxContainers;
     }
@@ -127,6 +130,7 @@ public class ContainerQuay extends Quay {
      *
      * @return encoded string representation of this quay
      */
+    @Override
     public String encode() {
         return String.format("%s:%d",
                 super.encode(),

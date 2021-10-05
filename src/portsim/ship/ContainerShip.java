@@ -5,6 +5,7 @@ import portsim.cargo.Cargo;
 import portsim.cargo.Container;
 import portsim.port.ContainerQuay;
 import portsim.port.Quay;
+import portsim.util.BadEncodingException;
 import portsim.util.NoSuchCargoException;
 
 import java.util.ArrayList;
@@ -99,6 +100,7 @@ public class ContainerShip extends Ship {
      *
      * @ass1
      */
+    @Override
     public boolean canLoad(Cargo cargo) {
         if (!(cargo instanceof Container)) {
             return false;
@@ -119,6 +121,7 @@ public class ContainerShip extends Ship {
      *
      * @ass1
      */
+    @Override
     public void loadCargo(Cargo cargo) {
         this.containers.add((Container) cargo);
     }
@@ -168,6 +171,7 @@ public class ContainerShip extends Ship {
      *
      * @return true if equal, false otherwise
      */
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof ContainerShip)) {
             return false;
@@ -185,6 +189,7 @@ public class ContainerShip extends Ship {
      *
      * @return hash code of this ContainerShip.
      */
+    @Override
     public int hashCode() {
         return super.hashCode() * containerCapacity;
     }
@@ -259,6 +264,7 @@ public class ContainerShip extends Ship {
      *
      * @return encoded string representation of this Ship
      */
+    @Override
     public String encode() {
         StringJoiner joiner = new StringJoiner(",");
         for (Container container : this.getCargo()) {
@@ -269,5 +275,57 @@ public class ContainerShip extends Ship {
                 containerCapacity,
                 this.getCargo().size(),
                 joiner);
+    }
+
+    static ContainerShip fromString(String[] attributes)
+            throws BadEncodingException {
+        long imoNumber;
+        String name, originFlag;
+        NauticalFlag flag;
+        int capacity, numCargo;
+        String[] rawCargoIds;
+        int[] parsedCargoIds;
+        List<Cargo> cargo;
+        ContainerShip ship;
+
+        try {
+            imoNumber = Long.parseLong(attributes[1]);
+            name = attributes[2];
+            originFlag = attributes[3];
+            flag = NauticalFlag.valueOf(attributes[4]);
+            capacity = Integer.parseInt(attributes[5]);
+
+            ship = new ContainerShip(imoNumber, name, originFlag, flag,
+                    capacity);
+
+            numCargo = Integer.parseInt(attributes[6]);
+            if (numCargo < 0) {
+                throw new BadEncodingException();
+            }
+
+            rawCargoIds = attributes[7].split(",");
+            if (numCargo != rawCargoIds.length) {
+                throw new BadEncodingException();
+            }
+
+            parsedCargoIds = new int[numCargo];
+            for (int i = 0; i <= numCargo - 1; i++) {
+                parsedCargoIds[i] = Integer.parseInt(rawCargoIds[i]);
+            }
+
+            cargo = new ArrayList<>();
+            for (int id : parsedCargoIds) {
+                if (id < 0) {
+                    throw new BadEncodingException();
+                }
+                if (ship.canLoad(Container.getCargoById(id))) {
+                    cargo.add(Container.getCargoById(id));
+                }
+            }
+        } catch (IllegalArgumentException | NoSuchCargoException ignored) {
+            throw new BadEncodingException();
+        }
+
+        return ship;
     }
 }

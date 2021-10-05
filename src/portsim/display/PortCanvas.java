@@ -323,12 +323,13 @@ public class PortCanvas extends Canvas {
         }
     }
 
-    /*
+    /**
      * Draws a ship at the given position on the canvas.
      *
      * @param ship ship to draw
      * @param x x-coord of top left corner
      * @param y y-coord of top left corner
+     * @param name whether or not to include the ship's name
      */
     private void drawShip(Ship ship, double x, double y, boolean name) {
         Color textColor = Color.BLACK;

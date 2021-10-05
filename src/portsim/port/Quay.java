@@ -2,6 +2,7 @@ package portsim.port;
 
 import portsim.ship.Ship;
 import portsim.util.BadEncodingException;
+import portsim.util.Encodable;
 
 
 /**
@@ -10,7 +11,7 @@ import portsim.util.BadEncodingException;
  *
  * @ass1_partial
  */
-public abstract class Quay {
+public abstract class Quay implements Encodable {
     /**
      * The ID of the quay
      */
@@ -107,6 +108,7 @@ public abstract class Quay {
      *
      * @return true if equal, false otherwise
      */
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof Quay)) {
             return false;
@@ -124,6 +126,7 @@ public abstract class Quay {
      *
      * @return hash code of this quay.
      */
+    @Override
     public int hashCode() {
         return id * ((Boolean) this.isEmpty()).hashCode();
     }
@@ -181,6 +184,7 @@ public abstract class Quay {
      *
      * @return encoded string representation of this quay
      */
+    @Override
     public String encode() {
         return String.format("%s:%d:%s",
                 this.getClass().getSimpleName(),

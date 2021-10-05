@@ -4,6 +4,7 @@ import portsim.ship.ContainerShip;
 import portsim.ship.NauticalFlag;
 import portsim.ship.Ship;
 import portsim.util.BadEncodingException;
+import portsim.util.Encodable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.StringJoiner;
  * Queue of ships waiting to enter a Quay at the port. Ships are chosen based
  * on their priority.
  */
-public class ShipQueue {
+public class ShipQueue implements Encodable {
     /**
      * The ships waiting to dock at the port
      */
@@ -140,6 +141,7 @@ public class ShipQueue {
      *
      * @return true if equal, false otherwise
      */
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof ShipQueue)) {
             return false;
@@ -158,6 +160,7 @@ public class ShipQueue {
      *
      * @return hash code of this ship queue.
      */
+    @Override
     public int hashCode() {
         int code = 1;
         for (Ship ship : queue) {
@@ -191,6 +194,7 @@ public class ShipQueue {
      *
      * @return encoded string representation of this ShipQueue
      */
+    @Override
     public String encode() {
         StringJoiner joiner = new StringJoiner(",");
         for (Ship ship : getShipQueue()) {
@@ -239,7 +243,7 @@ public class ShipQueue {
      * invalid according to the rules above
      */
     public static ShipQueue fromString(String string)
-        throws BadEncodingException {
+            throws BadEncodingException {
         return null;
     }
 }

@@ -9,7 +9,9 @@ import portsim.ship.BulkCarrier;
 import portsim.ship.ContainerShip;
 import portsim.ship.Ship;
 import portsim.util.BadEncodingException;
+import portsim.util.Encodable;
 import portsim.util.NoSuchCargoException;
+import portsim.util.Tickable;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -24,7 +26,7 @@ import java.util.*;
  *
  * @ass1_partial
  */
-public class Port {
+public class Port implements Tickable, Encodable {
     /**
      * The name of this port used for identification
      */
@@ -356,6 +358,7 @@ public class Port {
      *     </li>
      * </ol>
      */
+    @Override
     public void elapseOneMinute() {
         time++;
 
@@ -437,6 +440,7 @@ public class Port {
      *
      * @return encoded string representation of this Port
      */
+    @Override
     public String encode() {
         List<Ship> ships = new ArrayList<>(shipQueue.getShipQueue());
         for (Quay quay : quays) {
@@ -715,9 +719,14 @@ public class Port {
      * 
      * @throws IndexOutOfBoundsException if an IOException is encountered
      *                                   when reading from the reader
+     *
+     * @throws BadEncodingException if the reader reads a line that
+     *                                      does not adhere to the rules
+     *                                      above indicating that the
+     *                                      contents of the reader are invalid
      */
     public static Port initialisePort(Reader reader)
             throws IOException, BadEncodingException {
-        throw new BadEncodingException();
+        return null;
     }
 }

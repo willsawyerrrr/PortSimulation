@@ -1,7 +1,13 @@
 package portsim.movement;
 
+import portsim.cargo.Cargo;
 import portsim.ship.Ship;
 import portsim.util.BadEncodingException;
+import portsim.util.NoSuchCargoException;
+import portsim.util.NoSuchShipException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The movement of a ship coming into or out of the port.
@@ -28,7 +34,7 @@ public class ShipMovement extends Movement {
      * @ass1
      */
     public ShipMovement(long time, MovementDirection direction, Ship ship)
-        throws IllegalArgumentException {
+            throws IllegalArgumentException {
         super(time, direction);
         this.ship = ship;
     }
@@ -144,7 +150,31 @@ public class ShipMovement extends Movement {
      * invalid according to the rules above
      */
     public static ShipMovement fromString(String string)
-        throws BadEncodingException {
-        return null;
+            throws BadEncodingException {
+        String[] attributes = string.split(":");
+
+        long time, imoNumber;
+        MovementDirection direction;
+        Ship ship;
+
+        if (!attributes[0].equals("ShipMovement") || attributes.length != 4) {
+            throw new BadEncodingException();
+        }
+
+        try {
+            time = Long.parseLong(attributes[1]);
+            if (time < 0) {
+                throw new BadEncodingException();
+            }
+
+            direction = MovementDirection.valueOf(attributes[2]);
+
+            imoNumber = Long.parseLong(attributes[3]);
+            ship = Ship.getShipByImoNumber(imoNumber);
+        } catch (IllegalArgumentException | NoSuchShipException ignored) {
+            throw new BadEncodingException();
+        }
+
+        return new ShipMovement(time, direction, ship);
     }
 }

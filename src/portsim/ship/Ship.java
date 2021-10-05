@@ -1,6 +1,8 @@
 package portsim.ship;
 
+import portsim.cargo.BulkCargo;
 import portsim.cargo.Cargo;
+import portsim.cargo.Container;
 import portsim.port.Quay;
 import portsim.util.BadEncodingException;
 import portsim.util.Encodable;
@@ -208,7 +210,7 @@ public abstract class Ship implements Encodable {
     }
 
     /**
-     * Returns true if and only if this ship is qual to the other given ship.
+     * Returns true if and only if this ship is equal to the other given ship.
      *
      * For two ships to be equal, they must have the same name, flag, origin
      * port, and IMO number.
@@ -301,6 +303,7 @@ public abstract class Ship implements Encodable {
      *
      * @return encoded string representation of this Ship
      */
+    @Override
     public String encode() {
         return String.format("%s:%d:%s:%s:%s",
                 this.getClass().getSimpleName(),
@@ -359,7 +362,20 @@ public abstract class Ship implements Encodable {
      * invalid according to the rules above
      */
     public static Ship fromString(String string) throws BadEncodingException {
-        return null;
+        String[] attributes = string.split(":");
+
+        if (attributes.length == 0) {
+            throw new BadEncodingException();
+        }
+
+        if (attributes[0].equals("BulkCarrier") && attributes.length == 7) {
+            return BulkCarrier.fromString(attributes);
+        } else if (attributes[0].equals("ContainerShip")
+                && attributes.length == 8) {
+            return ContainerShip.fromString(attributes);
+        } else {
+            throw new BadEncodingException();
+        }
     }
 
     /**

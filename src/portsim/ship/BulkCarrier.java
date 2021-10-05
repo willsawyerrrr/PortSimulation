@@ -4,7 +4,10 @@ import portsim.cargo.BulkCargo;
 import portsim.cargo.Cargo;
 import portsim.port.BulkQuay;
 import portsim.port.Quay;
+import portsim.util.BadEncodingException;
 import portsim.util.NoSuchCargoException;
+
+import java.util.Objects;
 
 /**
  * Represents a ship capable of carrying bulk cargo.
@@ -94,6 +97,7 @@ public class BulkCarrier extends Ship {
      *
      * @ass1
      */
+    @Override
     public boolean canLoad(Cargo cargo) {
         if (this.cargo != null) {
             return false;
@@ -117,6 +121,7 @@ public class BulkCarrier extends Ship {
      *
      * @ass1
      */
+    @Override
     public void loadCargo(Cargo cargo) {
         this.cargo = (BulkCargo) cargo;
     }
@@ -153,7 +158,7 @@ public class BulkCarrier extends Ship {
     }
 
     /**
-     * Returns true if anf only if this BulkCarrier is equal to the other
+     * Returns true if and only if this BulkCarrier is equal to the other
      * given BulkCarrier.
      *
      * For two BulkCarriers to be equal, they must have the same name, flag,
@@ -163,6 +168,7 @@ public class BulkCarrier extends Ship {
      *
      * @return true if equal, false otherwise
      */
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof BulkCarrier)) {
             return false;
@@ -180,6 +186,7 @@ public class BulkCarrier extends Ship {
      *
      * @return hash code of this BulkCarrier.
      */
+    @Override
     public int hashCode() {
         return super.hashCode() * tonnageCapacity;
     }
@@ -253,10 +260,54 @@ public class BulkCarrier extends Ship {
      *
      * @return encoded string representation of this Ship
      */
+    @Override
     public String encode() {
         return String.format("%s:%d:%d",
                 super.encode(),
                 tonnageCapacity,
                 cargo.getId());
+    }
+
+    static BulkCarrier fromString(String[] attributes)
+            throws BadEncodingException {
+        long imoNumber;
+        String name, originFlag;
+        NauticalFlag flag;
+        int capacity, cargoId;
+        BulkCarrier carrier;
+
+        try {
+            imoNumber = Long.parseLong(attributes[1]);
+            name = attributes[2];
+            originFlag = attributes[3];
+            flag = NauticalFlag.valueOf(attributes[4]);
+            capacity = Integer.parseInt(attributes[5]);
+
+            try {
+                cargoId = Integer.parseInt(attributes[6]);
+                if (cargoId < 0) {
+                    throw new BadEncodingException();
+                }
+            } catch (NumberFormatException nfe) {
+                cargoId = -1;
+            }
+
+            carrier = new BulkCarrier(imoNumber, name, originFlag, flag,
+                    capacity);
+
+            if (cargoId != -1) {
+                Cargo cargo = Cargo.getCargoById(cargoId);
+                if (carrier.canLoad(cargo)) {
+                    carrier.loadCargo(cargo);
+                } else {
+                    throw new BadEncodingException();
+                }
+            }
+
+        } catch (IllegalArgumentException | NoSuchCargoException ignored) {
+            throw new BadEncodingException();
+        }
+
+        return carrier;
     }
 }

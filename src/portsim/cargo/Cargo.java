@@ -259,7 +259,19 @@ public abstract class Cargo implements Encodable {
      * invalid according to the rules above
      */
     public static Cargo fromString(String string) throws BadEncodingException {
-        return null;
+        String[] attributes = string.split(":");
+
+        if (attributes.length == 0) {
+            throw new BadEncodingException();
+        }
+
+        if (attributes[0].equals("BulkCargo") && attributes.length == 5) {
+            return BulkCargo.fromString(attributes);
+        } else if (attributes[0].equals("Container") && attributes.length == 4) {
+            return Container.fromString(attributes);
+        } else {
+            throw new BadEncodingException();
+        }
     }
 
     /**

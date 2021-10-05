@@ -33,6 +33,7 @@ public class BulkQuay extends Quay {
      * Returns the maximum number of tonnes of cargo this quay can handle at one time.
      *
      * @return maxTonnage
+     *
      * @ass1
      */
     public int getMaxTonnage() {
@@ -51,6 +52,7 @@ public class BulkQuay extends Quay {
      *
      * @return true if equal, false otherwise
      */
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof BulkQuay)) {
             return false;
@@ -68,6 +70,7 @@ public class BulkQuay extends Quay {
      *
      * @return hash code of this quay.
      */
+    @Override
     public int hashCode() {
         return super.hashCode() % maxTonnage;
     }
@@ -108,6 +111,7 @@ public class BulkQuay extends Quay {
      *
      * @return encoded string representation of this quay
      */
+    @Override
     public String encode() {
         return String.format("%s:%d",
                 super.encode(),
