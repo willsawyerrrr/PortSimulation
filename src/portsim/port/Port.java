@@ -811,6 +811,7 @@ public class Port implements Tickable, Encodable {
             }
         }
         catch (BadEncodingException
+                | ArrayIndexOutOfBoundsException
                 | NoSuchShipException
                 | NoSuchCargoException ignored) {
             throw new BadEncodingException();
