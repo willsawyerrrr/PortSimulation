@@ -283,8 +283,7 @@ public class ContainerShip extends Ship {
         String name, originFlag;
         NauticalFlag flag;
         int capacity, numCargo;
-        String[] rawCargoIds;
-        int[] parsedCargoIds;
+        String[] cargoIds;
         List<Cargo> cargo;
         ContainerShip ship;
 
@@ -303,24 +302,20 @@ public class ContainerShip extends Ship {
                 throw new BadEncodingException();
             }
 
-            rawCargoIds = attributes[7].split(",");
-            if (numCargo != rawCargoIds.length) {
+            cargoIds = attributes[7].split(",");
+            if (numCargo != cargoIds.length) {
                 throw new BadEncodingException();
             }
 
-            parsedCargoIds = new int[numCargo];
-            for (int i = 0; i <= numCargo - 1; i++) {
-                parsedCargoIds[i] = Integer.parseInt(rawCargoIds[i]);
-            }
-
             cargo = new ArrayList<>();
-            for (int id : parsedCargoIds) {
-                if (id < 0) {
+            for (String rawId : cargoIds) {
+                int id = Integer.parseInt(rawId);
+                if (id > 0
+                        || !Cargo.cargoExists(id)
+                        || !ship.canLoad(Cargo.getCargoById(id))) {
                     throw new BadEncodingException();
                 }
-                if (ship.canLoad(Container.getCargoById(id))) {
-                    cargo.add(Container.getCargoById(id));
-                }
+                cargo.add(Cargo.getCargoById(id));
             }
         } catch (IllegalArgumentException | NoSuchCargoException ignored) {
             throw new BadEncodingException();

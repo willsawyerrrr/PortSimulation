@@ -1,18 +1,16 @@
 package portsim.port;
 
 import portsim.cargo.Cargo;
-import portsim.evaluators.StatisticsEvaluator;
+import portsim.evaluators.*;
 import portsim.movement.CargoMovement;
 import portsim.movement.Movement;
 import portsim.movement.ShipMovement;
 import portsim.ship.BulkCarrier;
 import portsim.ship.ContainerShip;
 import portsim.ship.Ship;
-import portsim.util.BadEncodingException;
-import portsim.util.Encodable;
-import portsim.util.NoSuchCargoException;
-import portsim.util.Tickable;
+import portsim.util.*;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
@@ -721,12 +719,103 @@ public class Port implements Tickable, Encodable {
      *                                   when reading from the reader
      *
      * @throws BadEncodingException if the reader reads a line that
-     *                                      does not adhere to the rules
-     *                                      above indicating that the
-     *                                      contents of the reader are invalid
+     *                              does not adhere to the rules above
+     *                              indicating that the contents of the
+     *                              reader are invalid
      */
     public static Port initialisePort(Reader reader)
             throws IOException, BadEncodingException {
-        return null;
+        String name;
+        long time;
+        int numCargo, numShips, numQuays, numMovements, numEvaluators;
+        ShipQueue shipQueue = new ShipQueue();
+        List<Quay> quays = new ArrayList<>();
+        List<Cargo> storedCargo = new ArrayList<>();
+        Port port;
+
+        BufferedReader br = new BufferedReader(reader);
+        try {
+            name = br.readLine();
+            time = Long.parseLong(br.readLine());
+
+            numCargo = Integer.parseInt(br.readLine());
+            for (int i = 1; i <= numCargo; i++) {
+                storedCargo.add(Cargo.fromString(br.readLine()));
+            }
+
+            numShips = Integer.parseInt(br.readLine());
+            for (int i = 1; i <= numShips; i++) {
+                Ship.fromString(br.readLine());
+            }
+
+            numQuays = Integer.parseInt(br.readLine());
+            for (int i = 1; i <= numQuays; i++) {
+                quays.add(Quay.fromString(br.readLine()));
+            }
+
+            String[] shipQueueLine = br.readLine().split(":");
+            int numShipsInQueue = Integer.parseInt(shipQueueLine[1]);
+            String[] shipIds = shipQueueLine[2].split(",");
+            int count = 0;
+            for (String id : shipIds) {
+                long imoNumber = Long.parseLong(id);
+                shipQueue.add(Ship.getShipByImoNumber(imoNumber));
+                count++;
+            }
+            if (numShipsInQueue != count) {
+                throw new BadEncodingException();
+            }
+
+            String[] storedCargoLine = br.readLine().split(":");
+            int numStoredCargo = Integer.parseInt(storedCargoLine[1]);
+            String[] cargoIds = storedCargoLine[2].split(",");
+            count = 0;
+            for (String id : cargoIds) {
+                int cargoId = Integer.parseInt(id);
+                storedCargo.add(Cargo.getCargoById(cargoId));
+                count++;
+            }
+            if (numStoredCargo != count) {
+                throw new BadEncodingException();
+            }
+
+            numMovements = Integer.parseInt(br.readLine().split(":")[1]);
+            for (int i = 1; i <= numMovements; i++) {
+                String line = br.readLine();
+                if (line.startsWith("Cargo")) {
+                    CargoMovement.fromString(line);
+                } else if (line.startsWith("Ship")) {
+                    ShipMovement.fromString(line);
+                }
+            }
+
+            port = new Port(name, time, shipQueue, quays, storedCargo);
+
+            String[] evaluators = br.readLine().split(":");
+            numEvaluators = Integer.parseInt(evaluators[1]);
+            for (int i = 2; i <= numEvaluators + 1; i++) {
+                switch (evaluators[i]) {
+                    case "CargoDecompositionEvaluator":
+                        port.addStatisticsEvaluator(new CargoDecompositionEvaluator());
+                        break;
+                    case "QuayOccupancyEvaluator":
+                        port.addStatisticsEvaluator(new QuayOccupancyEvaluator(port));
+                        break;
+                    case "ShipFlagEvaluator":
+                        port.addStatisticsEvaluator(new ShipFlagEvaluator());
+                        break;
+                    case "ShipThroughputEvaluator":
+                        port.addStatisticsEvaluator(new ShipThroughputEvaluator());
+                        break;
+                }
+            }
+        }
+        catch (BadEncodingException
+                | NoSuchShipException
+                | NoSuchCargoException ignored) {
+            throw new BadEncodingException();
+        }
+
+        return port;
     }
 }
