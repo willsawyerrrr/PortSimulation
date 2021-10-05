@@ -153,7 +153,8 @@ public class ShipMovement extends Movement {
             throws BadEncodingException {
         String[] attributes = string.split(":");
 
-        long time, imoNumber;
+        long time;
+        long imoNumber;
         MovementDirection direction;
         Ship ship;
 

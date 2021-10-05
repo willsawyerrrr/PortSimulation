@@ -271,9 +271,11 @@ public class BulkCarrier extends Ship {
     static BulkCarrier fromString(String[] attributes)
             throws BadEncodingException {
         long imoNumber;
-        String name, originFlag;
+        String name;
+        String originFlag;
         NauticalFlag flag;
-        int capacity, cargoId;
+        int capacity;
+        int cargoId;
         BulkCarrier carrier;
 
         try {

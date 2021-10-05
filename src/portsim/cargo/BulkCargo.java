@@ -162,7 +162,8 @@ public class BulkCargo extends Cargo {
 
     static BulkCargo fromString(String[] attributes)
             throws BadEncodingException {
-        int id, tonnage;
+        int id;
+        int tonnage;
         String destination;
         BulkCargoType type;
 

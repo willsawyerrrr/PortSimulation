@@ -727,7 +727,11 @@ public class Port implements Tickable, Encodable {
             throws IOException, BadEncodingException {
         String name;
         long time;
-        int numCargo, numShips, numQuays, numMovements, numEvaluators;
+        int numCargo;
+        int numShips;
+        int numQuays;
+        int numMovements;
+        int numEvaluators;
         ShipQueue shipQueue = new ShipQueue();
         List<Quay> quays = new ArrayList<>();
         List<Cargo> storedCargo = new ArrayList<>();
@@ -809,8 +813,7 @@ public class Port implements Tickable, Encodable {
                         break;
                 }
             }
-        }
-        catch (BadEncodingException
+        } catch (BadEncodingException
                 | ArrayIndexOutOfBoundsException
                 | NoSuchShipException
                 | NoSuchCargoException ignored) {

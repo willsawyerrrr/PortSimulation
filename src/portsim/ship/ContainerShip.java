@@ -280,9 +280,11 @@ public class ContainerShip extends Ship {
     static ContainerShip fromString(String[] attributes)
             throws BadEncodingException {
         long imoNumber;
-        String name, originFlag;
+        String name;
+        String originFlag;
         NauticalFlag flag;
-        int capacity, numCargo;
+        int capacity;
+        int numCargo;
         String[] cargoIds;
         List<Cargo> cargo;
         ContainerShip ship;
