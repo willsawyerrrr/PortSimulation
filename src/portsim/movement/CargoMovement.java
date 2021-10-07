@@ -187,6 +187,10 @@ public class CargoMovement extends Movement {
 
         try {
             time = Long.parseLong(attributes[1]);
+            if (time < 0) {
+                throw new BadEncodingException();
+            }
+
             direction = MovementDirection.valueOf(attributes[2]);
 
             numCargo = Integer.parseInt(attributes[3]);
@@ -202,7 +206,7 @@ public class CargoMovement extends Movement {
             cargo = new ArrayList<>();
             for (String rawId : cargoIds) {
                 int id = Integer.parseInt(rawId);
-                if (id > 0 || !Cargo.cargoExists(id)) {
+                if (id < 0) {
                     throw new BadEncodingException();
                 }
                 cargo.add(Cargo.getCargoById(id));
