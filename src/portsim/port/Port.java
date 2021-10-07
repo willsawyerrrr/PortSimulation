@@ -13,6 +13,7 @@ import portsim.util.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.*;
 
 /**
@@ -759,31 +760,36 @@ public class Port implements Tickable, Encodable {
 
             String[] shipQueueLine = br.readLine().split(":");
             int numShipsInQueue = Integer.parseInt(shipQueueLine[1]);
-            String[] shipIds = shipQueueLine[2].split(",");
-            int count = 0;
-            for (String id : shipIds) {
-                long imoNumber = Long.parseLong(id);
-                shipQueue.add(Ship.getShipByImoNumber(imoNumber));
-                count++;
-            }
-            if (numShipsInQueue != count) {
-                throw new BadEncodingException();
+            if (numShipsInQueue != 0) {
+                String[] shipIds = shipQueueLine[2].split(",");
+                int count = 0;
+                for (String id : shipIds) {
+                    long imoNumber = Long.parseLong(id);
+                    shipQueue.add(Ship.getShipByImoNumber(imoNumber));
+                    count++;
+                }
+                if (numShipsInQueue != count) {
+                    throw new BadEncodingException();
+                }
             }
 
             String[] storedCargoLine = br.readLine().split(":");
             int numStoredCargo = Integer.parseInt(storedCargoLine[1]);
-            String[] cargoIds = storedCargoLine[2].split(",");
-            count = 0;
-            for (String id : cargoIds) {
-                int cargoId = Integer.parseInt(id);
-                storedCargo.add(Cargo.getCargoById(cargoId));
-                count++;
-            }
-            if (numStoredCargo != count) {
-                throw new BadEncodingException();
+            if (numStoredCargo != 0) {
+                String[] cargoIds = storedCargoLine[2].split(",");
+                int count = 0;
+                for (String id : cargoIds) {
+                    int cargoId = Integer.parseInt(id);
+                    storedCargo.add(Cargo.getCargoById(cargoId));
+                    count++;
+                }
+                if (numStoredCargo != count) {
+                    throw new BadEncodingException();
+                }
             }
 
-            numMovements = Integer.parseInt(br.readLine().split(":")[1]);
+            String movementLine = br.readLine();
+            numMovements = Integer.parseInt(movementLine.split(":")[1]);
             for (int i = 1; i <= numMovements; i++) {
                 String line = br.readLine();
                 if (line.startsWith("Cargo")) {
@@ -797,20 +803,22 @@ public class Port implements Tickable, Encodable {
 
             String[] evaluators = br.readLine().split(":");
             numEvaluators = Integer.parseInt(evaluators[1]);
-            for (int i = 2; i <= numEvaluators + 1; i++) {
-                switch (evaluators[i]) {
-                    case "CargoDecompositionEvaluator":
-                        port.addStatisticsEvaluator(new CargoDecompositionEvaluator());
-                        break;
-                    case "QuayOccupancyEvaluator":
-                        port.addStatisticsEvaluator(new QuayOccupancyEvaluator(port));
-                        break;
-                    case "ShipFlagEvaluator":
-                        port.addStatisticsEvaluator(new ShipFlagEvaluator());
-                        break;
-                    case "ShipThroughputEvaluator":
-                        port.addStatisticsEvaluator(new ShipThroughputEvaluator());
-                        break;
+            if (numEvaluators != 0) {
+                for (int i = 2; i <= numEvaluators + 1; i++) {
+                    switch (evaluators[i]) {
+                        case "CargoDecompositionEvaluator":
+                            port.addStatisticsEvaluator(new CargoDecompositionEvaluator());
+                            break;
+                        case "QuayOccupancyEvaluator":
+                            port.addStatisticsEvaluator(new QuayOccupancyEvaluator(port));
+                            break;
+                        case "ShipFlagEvaluator":
+                            port.addStatisticsEvaluator(new ShipFlagEvaluator());
+                            break;
+                        case "ShipThroughputEvaluator":
+                            port.addStatisticsEvaluator(new ShipThroughputEvaluator());
+                            break;
+                    }
                 }
             }
         } catch (BadEncodingException
