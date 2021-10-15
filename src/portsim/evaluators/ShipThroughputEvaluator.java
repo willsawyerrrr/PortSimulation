@@ -9,26 +9,22 @@ import java.util.List;
 
 /**
  * Gathers data on how many ships pass through the port over time.
- *
+ * <p>
  * This evaluator only counts ships that have passed through the port in the
- * last hour (60 minutes)
- *
- * <b>Note:</b> The Javadoc for this class is intentionally vague to provide
- * you with an opportunity to determine for yourself how to best implement
- * the functionality specified.
+ * last hour (60 minutes).
  */
 public class ShipThroughputEvaluator extends StatisticsEvaluator {
     /**
-     * The movements of ships which have passed through the port in the last
-     * 60 minutes
+     * The movements of ships which have passed through the port in the last 60
+     * minutes
      */
     private List<Movement> throughput;
 
     /**
      * Constructs a new ShipThroughputElevator.
-     *
+     * <p>
      * Immediately after creating a new ShipThroughputEvaluator,
-     * {@link ShipThroughputEvaluator#getThroughputPerHour()} should return 0.
+     * {@link #getThroughputPerHour()} should return 0.
      */
     public ShipThroughputEvaluator() {
         super();
@@ -36,8 +32,8 @@ public class ShipThroughputEvaluator extends StatisticsEvaluator {
     }
 
     /**
-     * Return the number of ships that have passed through the port in the
-     * last 60 minutes.
+     * Return the number of ships that have passed through the port in the last
+     * 60 minutes.
      *
      * @return ships throughput
      */
@@ -48,15 +44,15 @@ public class ShipThroughputEvaluator extends StatisticsEvaluator {
     /**
      * Updates the internal count of ships that have passed through the port
      * using the given movement.
-     *
+     * <p>
      * If the movement is not an OUTBOUND ShipMovement, this method returns
      * immediately without taking any action.
-     *
+     * <p>
      * Otherwise, the internal state of this evaluator should be modified
      * such that {@link ShipThroughputEvaluator#getThroughputPerHour()}
      * should return a value 1 more than before this method was called. e.g.
      * If the following code and output occurred over a program execution:
-     *
+     * <p>
      * <table>
      *     <caption>Example of behaviour</caption>
      *     <tr>
@@ -76,8 +72,8 @@ public class ShipThroughputEvaluator extends StatisticsEvaluator {
      *         <td>2</td>
      *     </tr>
      * </table>
-     *
-     * Where {@code validMovement} is an OUTBOUND ShipMovement.
+     * <p>
+     * Where <pre>validMovement</pre> is an OUTBOUND ShipMovement.
      *
      * @param movement movement to read
      */
@@ -91,7 +87,7 @@ public class ShipThroughputEvaluator extends StatisticsEvaluator {
     /**
      * Simulate a minute passing. The time since the evaluator was created
      * should be incremented by one.
-     *
+     * <p>
      * If it has been more than 60 minutes since a ship exited the port, it
      * should no longer be counted towards the count returned by
      * {@link #getThroughputPerHour()}.

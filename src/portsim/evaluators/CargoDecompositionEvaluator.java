@@ -17,10 +17,10 @@ import java.util.Map;
  * Collects data on what types of cargo are passing through the port. Gathers
  * data on all derivatives of the cargo class.
  * <p>
- * The data gathered is a count of how many times each type of cargo has
- * entered the port. This includes a count of how many times the port has
- * received "BulkCargo" or "Container" class cargo. As well as a count of how
- * many times the port has seen each cargo subclass type
+ * The data gathered is a count of how many times each type of cargo has entered
+ * the port. This includes a count of how many times the port has received
+ * "BulkCargo" or "Container" class cargo. As well as a count of how many times
+ * the port has seen each cargo subclass type
  * ({@link portsim.cargo.ContainerType} and
  * {@link portsim.cargo.BulkCargoType}).
  */
@@ -78,52 +78,41 @@ public class CargoDecompositionEvaluator extends StatisticsEvaluator {
      * Updates the internal distributions of cargo types using the given
      * movement.
      * <p>
-     * If the movement is not an {@code INBOUND} movement, this method returns
-     * immediately without taking any action.
+     * If the movement is not an <pre>INBOUND</pre> movement, this method 
+     * returns immediately without taking any action.
      * <p>
      * If the movement is an {@code INBOUND} movement, do the following:
-     * <p>
      * <ul>
-     *     <li>
-     *         If the movement is a ShipMovement, Retrieve the cargo from the
-     *         ships and for each piece of cargo:
+     *     <li>If the movement is a ShipMovement, Retrieve the cargo from the
+     *     ships and for each piece of cargo:
      *         <ol>
-     *             <li>
-     *                 If the cargo class (Container / BulkCargo) has been seen
-     *                 before (simple name exists as a key in the cargo map) ->
-     *                 increment that number
-     *             </li>
-     *             <li>
-     *                 If the cargo class has not been seen before then add its
-     *                 class simple name as a key in the map with a
-     *                 corresponding value of 1
-     *             </li>
-     *             <li>
-     *                 If the cargo type (Value of ContainerType /
-     *                 BulkCargoType) for the given cargo class has been seen
-     *                 before (exists as a key in the map) increment that number
-     *             </li>
-     *             <li>
-     *                 If the cargo type (Value of ContainerType /
-     *                 BulkCargoType) for the given cargo class has not been
-     *                 seen before add as a key in the map with a
-     *                 corresponding value of 1
-     *             </li>
-     *     </ol>
+     *             <li>If the cargo class (Container / BulkCargo) has been seen
+     *             before (simple name exists as a key in the cargo map) -&gt;
+     *             increment that number</li>
+     *             <li>If the cargo class has not been seen before then add its
+     *             class simple name as a key in the map with a corresponding
+     *             value of 1 </li>
+     *             <li>If the cargo type (Value of ContainerType / 
+     *             BulkCargoType) for the given cargo class has been seen 
+     *             before (exists as a key in the map) increment that
+     *             number</li>
+     *             <li>If the cargo type (Value of ContainerType / 
+     *             BulkCargoType) for the given cargo class has not been seen
+     *             before add as a key in the map with a corresponding value 
+     *             of 1</li>
+     *         </ol>
      *     </li>
-     *     <li>
-     *         If the movement is a CargoMovement, Retrieve the cargo
-     *         from the movement. For the cargo retrieved:
+     *     <li>If the movement is a CargoMovement, Retrieve the cargo from 
+     *     the movement. For the cargo retrieved:
      *         <ol>
-     *             <li>
-     *                 Complete steps 1-4 as given above for ShipMovement
-     *             </li>
+     *             <li>Complete steps 1-4 as given above for ShipMovement</li>
      *         </ol>
      *     </li>
      * </ul>
      *
      * @param movement movement to read
      */
+    @Override
     public void onProcessMovement(Movement movement) {
         if (movement.getDirection() == MovementDirection.INBOUND
                 && movement instanceof ShipMovement) {
@@ -177,8 +166,8 @@ public class CargoDecompositionEvaluator extends StatisticsEvaluator {
     }
 
     /**
-     * Increments the value mapped to by the given key, if it exists.
-     * Otherwise, creates a new map entry with value of 1.
+     * Increments the value mapped to by the given key, if it exists. Otherwise,
+     * creates a new map entry with value of 1.
      *
      * @param statistics cargo seen at this port
      * @param key type of bulk cargo
@@ -194,8 +183,8 @@ public class CargoDecompositionEvaluator extends StatisticsEvaluator {
     }
 
     /**
-     * Increments the value mapped to by the given key, if it exists.
-     * Otherwise, creates a new map entry with value of 1.
+     * Increments the value mapped to by the given key, if it exists. Otherwise,
+     * creates a new map entry with value of 1.
      *
      * @param statistics cargo seen at this port
      * @param key type of container

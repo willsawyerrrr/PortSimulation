@@ -20,7 +20,8 @@ public class Launcher extends Application {
      * <b>Note</b>: you do not need to write this constructor, it is generated automatically and
      * cannot be removed from the Javadoc.
      */
-    public Launcher() {}
+    public Launcher() {
+    }
 
     /**
      * Launches the GUI.
@@ -61,7 +62,8 @@ public class Launcher extends Application {
     public void start(Stage stage) {
         View view;
         try {
-            view = new View(stage, new ViewModel(getParameters().getRaw().get(0)));
+            view = new View(stage, new ViewModel(getParameters().getRaw()
+                    .get(0)));
         } catch (BadEncodingException | IOException e) {
             System.err.println("Error loading from file. Stack trace below:");
             e.printStackTrace();

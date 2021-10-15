@@ -17,10 +17,11 @@ public class BadEncodingException extends Exception implements Serializable {
     }
 
     /**
-     * Constructs a BadEncodingException that contains a helpful detail
-     * message explaining why the exception occurred.
+     * Constructs a BadEncodingException that contains a helpful detail message
+     * explaining why the exception occurred.
      *
      * @param message detail message
+     *
      * @see Exception#Exception(String)
      */
     public BadEncodingException(String message) {
@@ -28,10 +29,11 @@ public class BadEncodingException extends Exception implements Serializable {
     }
 
     /**
-     * Constructs a BadEncodingException that stores the underlying cause of
-     * the exception
+     * Constructs a BadEncodingException that stores the underlying cause of the
+     * exception
      *
      * @param cause throwable that caused this exception
+     *
      * @see Exception#Exception(Throwable)
      */
     public BadEncodingException(Throwable cause) {
@@ -39,12 +41,13 @@ public class BadEncodingException extends Exception implements Serializable {
     }
 
     /**
-     * Constructs a BadEncodingException that contains a helpful detail
-     * message explaining why the exception occurred and the underlying cause
-     * of the exception.
+     * Constructs a BadEncodingException that contains a helpful detail message
+     * explaining why the exception occurred and the underlying cause of the
+     * exception.
      *
      * @param message detail message
      * @param cause throwable that caused this exception
+     *
      * @see Exception#Exception(String, Throwable)
      */
     public BadEncodingException(String message, Throwable cause) {

@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.StringJoiner;
 
 /**
- * Queue of ships waiting to enter a Quay at the port. Ships are chosen based
- * on their priority.
+ * Queue of ships waiting to enter a Quay at the port. Ships are chosen based on
+ * their priority.
  */
 public class ShipQueue implements Encodable {
     /**
@@ -48,32 +48,20 @@ public class ShipQueue implements Encodable {
      * The rules for determining which ship in the queue should be returned
      * next are as follows:
      * <ol>
-     *     <li>
-     *         If a ship carrying dangerous cargo, it should be returned. If
-     *         more than one ship is carrying dangerous cargo return the one
-     *         added to the queue first.
-     *     </li>
-     *     <li>
-     *         If a ship requires medical assistance, it should be returned.
-     *         If more than one ship requires medical assistance, return the
-     *         one added ot the queue first.
-     *     </li>
-     *     <li>
-     *         If a ship is ready to be docked, it should be returned. If
-     *         more than one ship is ready to be docked, return the one added
-     *         ot the queue first.
-     *     </li>
-     *     <li>
-     *         If there is a container ship in the queue, return the one
-     *         added to the queue first.
-     *     </li>
-     *     <li>
-     *         If this point is reached and no ship has been returned, return
-     *         the ship that was added to the queue first.
-     *     </li>
-     *     <li>
-     *         If there are no ships in the queue, return null.
-     *     </li>
+     *     <li>If a ship carrying dangerous cargo, it should be returned. If
+     *     more than one ship is carrying dangerous cargo return the one added
+     *     to the queue first.</li>
+     *     <li>If a ship requires medical assistance, it should be returned. If
+     *     more than one ship requires medical assistance, return the one added
+     *     to the queue first.</li>
+     *     <li>If a ship is ready to be docked, it should be returned. If more
+     *     than one ship is ready to be docked, return the one added to the
+     *     queue first.</li>
+     *     <li>If there is a container ship in the queue, return the one added
+     *     to the queue first.</li>
+     *     <li>If this point is reached and no ship has been returned, return
+     *     the ship that was added to the queue first.</li>
+     *     <li>If there are no ships in the queue, return null.</li>
      * </ol>
      *
      * @return next ship in queue
@@ -118,11 +106,11 @@ public class ShipQueue implements Encodable {
      * Returns a list containing all the ships currently stored in this
      * ShipQueue.
      * <p>
-     * The order of ships in the returned list should be the order in which
-     * the ships were added to the queue.
+     * The order of ships in the returned list should be the order in which the
+     * ships were added to the queue.
      * <p>
-     * Adding or removing elements from the returned list should ont affect
-     * the original list.
+     * Adding or removing elements from the returned list should not affect the
+     * original list.
      *
      * @return ships in queue
      */
@@ -131,8 +119,8 @@ public class ShipQueue implements Encodable {
     }
 
     /**
-     * Returns true if and only if this queue is equal to the other given
-     * ship queue.
+     * Returns true if and only if this queue is equal to the other given ship
+     * queue.
      * <p>
      * For two ship queue to be equal, they must have the same ships in the
      * queue.
@@ -154,7 +142,7 @@ public class ShipQueue implements Encodable {
 
     /**
      * Returns the hash code of this ship queue.
-     *
+     * <p>
      * Two ship queue's that are equal according to {@link #equals(Object)}
      * method should have the same hash code.
      *
@@ -171,26 +159,20 @@ public class ShipQueue implements Encodable {
 
     /**
      * Returns the machine-readable string representation of this ShipQueue.
-     *
-     * The format of the string to return is
-     * {@code ShipQueue:numShipsInQueue:shipID,shipID,...}
-     *
+     * <p>
+     * The format of the string to return is:
+     * <pre>ShipQueue:numShipsInQueue:shipID,shipID,...</pre>
+     * <p>
      * Where:
      * <ul>
-     *     <li>
-     *         numShipsInQueue is the number of ships in the ship queue in
-     *         the port
-     *     </li>
-     *     <li>
-     *         If present (numShipsInQueue &gt; 0): shipIDs is each ship's ID
-     *         in the aforementioned queue
-     *     </li>
+     *     <li>numShipsInQueue is the number of ships in the ship queue in the
+     *     port</li>
+     *     <li>if present (numShipsInQueue &gt; 0): shipIDs is each ship's ID
+     *     in the aforementioned queue</li>
      * </ul>
      *
-     * For example:
-     * {@code ShipQueue:0:}
-     * or
-     * {@code ShipQueue:2:3456789,1234567}
+     * For example: <pre>ShipQueue:0:</pre> OR
+     * <pre>ShipQueue:2:3456789,1234567</pre>
      *
      * @return encoded string representation of this ShipQueue
      */
@@ -207,32 +189,23 @@ public class ShipQueue implements Encodable {
 
     /**
      * Creates a ship queue from a string encoding.
-     *
+     * <p>
      * The format of the string should match the encoded representation of a
      * ship queue, as described in {@link #encode()}.
-     *
+     * <p>
      * The encoded string is invalid if any of the following conditions are
      * true:
      * <ul>
-     *     <li>
-     *         The number of colons (:) detected was more/fewer than expected.
-     *     </li>
-     *     <li>
-     *         The string does not start with the literal string "{@code
-     *         ShipQueue}"
-     *     </li>
-     *     <li>
-     *         The number of ships in the shipQueue is not an integer (i.e.
-     *         cannot be parsed by {@code Integer.parseInt(String)}).
-     *     </li>
-     *     <li>
-     *         The imoNumber of the ships in the shipQueue are not valid
-     *         longs. (i.e. cannot be parsed by {@code Long.parseLong(String)}).
-     *     </li>
-     *     <li>
-     *         Any imoNumber read does not correspond to a valid ship in the
-     *         simulation
-     *     </li>
+     *     <li>The number of colons (:) detected was more/fewer than
+     *     expected.</li>
+     *     <li>The string does not start with the literal string
+     *     "<pre>ShipQueue</pre>".</li>
+     *     <li>The number of ships in the shipQueue is not an integer (i.e.
+     *     cannot be parsed by <pre>Integer.parseInt(String)</pre>).</li>
+     *     <li>The imoNumber of the ships in the shipQueue are not valid longs.
+     *     (i.e. cannot be parsed by <pre>Long.parseLong(String)</pre>).</li>
+     *     <li>Any imoNumber read does not correspond to a valid ship in the
+     *     simulation.</li>
      * </ul>
      *
      * @param string string containing the encoded ShipQueue
@@ -240,10 +213,11 @@ public class ShipQueue implements Encodable {
      * @return decoded ship queue instance
      *
      * @throws BadEncodingException if the format of the given string is
-     * invalid according to the rules above
+     *                              invalid according to the rules above
      */
     public static ShipQueue fromString(String string)
             throws BadEncodingException {
+        // TODO: Implement this method.
         return null;
     }
 }

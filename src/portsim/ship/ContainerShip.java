@@ -14,8 +14,6 @@ import java.util.StringJoiner;
 
 /**
  * Represents a ship capable of carrying shipping containers.
- *
- * @ass1_partial
  */
 public class ContainerShip extends Ship {
     /**
@@ -42,15 +40,14 @@ public class ContainerShip extends Ship {
      *                                  imoNumber, imoNumber &lt; 0,
      *                                  imoNumber is not 7 digits long or if
      *                                  the container capacity is &lt; than 0
-     *
-     * @ass1
      */
     public ContainerShip(long imoNumber, String name, String originFlag,
-                         NauticalFlag flag, int capacity) throws IllegalArgumentException {
+                         NauticalFlag flag, int capacity)
+            throws IllegalArgumentException {
         super(imoNumber, name, originFlag, flag);
         if (capacity < 0) {
-            throw new IllegalArgumentException("The container capacity of the"
-                + " ship must be positive: " + capacity);
+            throw new IllegalArgumentException("The container capacity of the "
+                + "ship must be positive: " + capacity);
         }
         this.containerCapacity = capacity;
         this.containers = new ArrayList<>();
@@ -69,8 +66,6 @@ public class ContainerShip extends Ship {
      * @param quay quay to be checked
      *
      * @return true if the Quay satisfies the conditions else false
-     *
-     * @ass1
      */
     @Override
     public boolean canDock(Quay quay) {
@@ -85,7 +80,8 @@ public class ContainerShip extends Ship {
     /**
      * Checks whether the specified cargo can be loaded onto the ship.
      * <p>
-     * The given cargo can only be loaded if all the following conditions are true:
+     * The given cargo can only be loaded if all the following conditions are
+     * true:
      * <ol>
      *     <li>The cargo given is a Container</li>
      *     <li>The current number of containers on board is less than the
@@ -97,8 +93,6 @@ public class ContainerShip extends Ship {
      * @param cargo cargo to be loaded
      *
      * @return true if the Cargo satisfies the conditions else false
-     *
-     * @ass1
      */
     @Override
     public boolean canLoad(Cargo cargo) {
@@ -118,8 +112,6 @@ public class ContainerShip extends Ship {
      *
      * @require Cargo given is able to be loaded onto this ship according to
      * {@link ContainerShip#canLoad(Cargo)}
-     *
-     * @ass1
      */
     @Override
     public void loadCargo(Cargo cargo) {
@@ -135,8 +127,6 @@ public class ContainerShip extends Ship {
      *
      * @throws NoSuchCargoException if the ship has already been unloaded
      *                              (i.e. the ship has no cargo onboard)
-     *
-     * @ass1
      */
     public List<Container> unloadCargo() throws NoSuchCargoException {
         if (containers.size() == 0) {
@@ -150,11 +140,10 @@ public class ContainerShip extends Ship {
     /**
      * Returns the current cargo onboard this vessel.
      * <p>
-     * Adding or removing elements from the returned list should not affect the original list.
+     * Adding or removing elements from the returned list should not affect the
+     * original list.
      *
      * @return containers on the vessel
-     *
-     * @ass1
      */
     public List<Container> getCargo() {
         return new ArrayList<>(containers);
@@ -163,8 +152,8 @@ public class ContainerShip extends Ship {
     /**
      * Returns true if an only if this ContainerShip is equal to the other
      * given ContainerShip.
-     *
-     * For to ContainerShips to be equal, they must have the same name, fla,
+     * <p>
+     * For to ContainerShips to be equal, they must have the same name, flag,
      * IMO number, and container capacity.
      *
      * @param o other object to check equality
@@ -183,7 +172,7 @@ public class ContainerShip extends Ship {
 
     /**
      * Returns the hash code of this ContainerShip.
-     *
+     * <p>
      * Two ContainerShips that are equal according to {@link #equals(Object)}
      * method should have the same hash code.
      *
@@ -199,19 +188,20 @@ public class ContainerShip extends Ship {
      * <p>
      * The format of the string to return is
      * <pre>ContainerShip name from origin [flag] carrying num containers</pre>
+     *  <p>
      * Where:
      * <ul>
-     *   <li>{@code name} is the name of this ship </li>
-     *   <li>{@code origin} is the country of origin of this ship </li>
-     *   <li>{@code flag} is the nautical flag of this ship </li>
-     *   <li>{@code num} is the number of containers on board </li>
+     *   <li><pre>name</pre> is the name of this ship </li>
+     *   <li><pre>origin</pre> is the country of origin of this ship </li>
+     *   <li><pre>flag</pre> is the nautical flag of this ship </li>
+     *   <li><pre>num</pre> is the number of containers on board </li>
      * </ul>
+     *  <p>
      * For example:
-     * <pre>
-     * ContainerShip Evergreen from Australia [BRAVO] carrying 3 containers</pre>
+     * <pre>ContainerShip Evergreen from Australia [BRAVO] carrying 3
+     * containers</pre>
      *
      * @return string representation of this ContainerShip
-     * @ass1
      */
     @Override
     public String toString() {
@@ -222,45 +212,27 @@ public class ContainerShip extends Ship {
 
     /**
      * Returns the machine-readable string representation of this Ship.
-     *
+     * <p>
      * The format of the string to return is
-     *
-     * {@code ShipClass:imoNumber:name:origin:flag:capacity:cargoNum:[ID1,
-     * ID2,...]}
-     *
+     * <pre>ShipClass:imoNumber:name:origin:flag:capacity:cargoNum:[ID1,
+     * ID2,...]</pre>
+     * <p>
      * Where:
      * <ul>
-     *     <li>
-     *         {@code ShipClass} is the Ship class name
-     *     </li>
-     *     <li>
-     *         {@code imoNumber} is the IMO number of the ship
-     *     </li>
-     *     <li>
-     *         {@code name} is the name of this ship
-     *     </li>
-     *     <li>
-     *         {@code origin} is the country of origin of this ship
-     *     </li>
-     *     <li>
-     *         {@code flag} is the nautical flag of this ship
-     *     </li>
-     *     <li>
-     *         {@code capacity} is the container capacity of this ship
-     *     </li>
-     *     <li>
-     *         {@code cargoNum} is the number of containers currently on board
-     *     </li>
-     *     <li>
-     *         {@code ID1,ID2,...} are the IDs of the cargo on the ship
-     *         separated with a comma or an empty string "" if there are none
-     *     </li>
+     *     <li><pre>imoNumber</pre> is the IMO number of the ship</li>
+     *     <li><pre>name</pre> is the name of this ship</li>
+     *     <li><pre>origin</pre> is the country of origin of this ship</li>
+     *     <li><pre>flag</pre> is the nautical flag of this ship</li>
+     *     <li><pre>capacity</pre> is the container capacity of this ship</li>
+     *     <li><pre>cargoNum</pre> is the number of containers currently on
+     *     board</li>
+     *     <li><pre>ID1,ID2,...</pre> are the IDs of the cargo on the ship
+     *     separated with a comma or an empty string "" if there are none</li>
      * </ul>
-     *
+     * <p>
      * For example:
-     * {@code ContainerShip:1338622:Columbus:Unknown:HOTEL:200:3:23,1,51}
-     * or
-     * {@code ContainerShip:1338622:Columbus:Unknown:HOTEL:200:0:}
+     * <pre>ContainerShip:1338622:Columbus:Unknown:HOTEL:200:3:23,1,51</pre> OR
+     * <pre>ContainerShip:1338622:Columbus:Unknown:HOTEL:200:0:</pre>
      *
      * @return encoded string representation of this Ship
      */
@@ -277,6 +249,7 @@ public class ContainerShip extends Ship {
                 joiner);
     }
 
+    // TODO: Add JavaDoc here.
     static ContainerShip fromString(String[] attributes)
             throws BadEncodingException {
         long imoNumber;

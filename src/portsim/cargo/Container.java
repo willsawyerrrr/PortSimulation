@@ -4,8 +4,6 @@ import portsim.util.BadEncodingException;
 
 /**
  * Represents a shipping container, used for holding or transporting something.
- *
- * @ass1_partial
  */
 public class Container extends Cargo {
     /**
@@ -14,8 +12,8 @@ public class Container extends Cargo {
     private ContainerType type;
 
     /**
-     * Creates a new Container of the specified {@link ContainerType},
-     * with the given ID and destination.
+     * Creates a new Container of the specified {@link ContainerType}, with the
+     * given ID and destination.
      *
      * @param id          cargo ID
      * @param destination destination port
@@ -23,8 +21,6 @@ public class Container extends Cargo {
      *
      * @throws IllegalArgumentException if a cargo already exists with the
      *                                  given ID or ID &lt; 0
-     *
-     * @ass1
      */
     public Container(int id, String destination, ContainerType type)
             throws IllegalArgumentException {
@@ -36,7 +32,6 @@ public class Container extends Cargo {
      * Returns the type of this container.
      *
      * @return container type
-     * @ass1
      */
     public ContainerType getType() {
         return type;
@@ -45,7 +40,7 @@ public class Container extends Cargo {
     /**
      * Returns true if and only if this Container is equal to the other given
      * Container
-     *
+     * <p>
      * For two Containers to be equal, they must have the same ID,
      * destination and type.
      *
@@ -65,12 +60,13 @@ public class Container extends Cargo {
 
     /**
      * Returns the hash code of this Container.
-     *
+     * <p>
      * Two Containers that are equal according to the {@link #equals(Object)}
      * method should have the same hash code.
      *
      * @return hash code of this Container.
      */
+    @Override
     public int hashCode() {
         return super.hashCode() % type.hashCode();
     }
@@ -82,14 +78,14 @@ public class Container extends Cargo {
      * <pre>Container id to destination [type]</pre>
      * Where:
      * <ul>
-     *   <li>{@code id} is the id of this cargo </li>
-     *   <li>{@code destination} is the destination of the cargo </li>
-     *   <li>{@code type} is the type of cargo</li>
+     *   <li><pre>id</pre> is the id of this cargo </li>
+     *   <li><pre>destination</pre> is the destination of the cargo </li>
+     *   <li><pre>type</pre> is the type of cargo</li>
      * </ul>
+     * <p>
      * For example: <pre>Container 42 to Brazil [OTHER]</pre>
      *
      * @return string representation of this Container
-     * @ass1
      */
     @Override
     public String toString() {
@@ -100,26 +96,19 @@ public class Container extends Cargo {
 
     /**
      * Returns the machine-readable string representation of this Container.
-     *
+     * <p>
      * The format of the string to return is
-     *
-     * {@code Container:id:destination:type}
-     *
+     * <p>
+     * <pre>Container:id:destination:type</pre>
+     * <p>
      * Where:
      * <ul>
-     *     <li>
-     *         {@code id} is the id of this cargo
-     *     </li>
-     *     <li>
-     *         {@code destination} is the destination of this cargo
-     *     </li>
-     *     <li>
-     *         {@code type} is the container type
-     *     </li>
+     *     <li><pre>id</pre> is the id of this cargo</li>
+     *     <li><pre>destination</pre> is the destination of this cargo</li>
+     *     <li><pre>type</pre> is the container type</li>
      * </ul>
-     *
-     * For example:
-     * {@code Container:3:Australia:OPEN_TOP}
+     * <p>
+     * For example: <pre>Container:3:Australia:OPEN_TOP</pre>
      *
      * @return encoded string representation of this Cargo
      */
@@ -129,6 +118,21 @@ public class Container extends Cargo {
                 type);
     }
 
+    /**
+     * Reads a piece of container from its representation in the given array
+     * of strings.
+     * <p>
+     * This is a helper method called by {@link Cargo#fromString(String)}.
+     *
+     * @param attributes string representations of the attributes required to
+     *                   create a container object
+     *
+     * @return decoded container instance
+     *
+     * @throws BadEncodingException if the format of the given arguments is
+     *                              invalid according to the rules defined
+     *                              within {@link Cargo#fromString(String)}
+     */
     static Container fromString(String[] attributes)
             throws BadEncodingException {
         int id;
@@ -139,8 +143,8 @@ public class Container extends Cargo {
             id = Integer.parseInt(attributes[1]);
             destination = attributes[2];
             type = ContainerType.valueOf(attributes[3]);
-        } catch (NumberFormatException nfe) {
-            throw new BadEncodingException(nfe.getMessage());
+        } catch (NumberFormatException ignored) {
+            throw new BadEncodingException();
         }
 
         return new Container(id, destination, type);

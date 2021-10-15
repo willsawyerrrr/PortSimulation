@@ -41,12 +41,13 @@ public class QuayOccupancyEvaluator extends StatisticsEvaluator {
     }
 
     /**
-     * QuayOccupancyEvaluator does not make use of {@code onProcessMovement
-     * ()}, so this method can be left empty.
+     * QuayOccupancyEvaluator does not make use of <pre>onProcessMovement()
+     * </pre>, so this method can be left empty.
      * <p>
      * Does nothing. This method is not used by this evaluator.
      *
      * @param movement movement to read
      */
+    @Override
     public void onProcessMovement(Movement movement) {}
 }

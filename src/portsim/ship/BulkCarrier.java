@@ -11,8 +11,6 @@ import java.util.Objects;
 
 /**
  * Represents a ship capable of carrying bulk cargo.
- *
- * @ass1_partial
  */
 public class BulkCarrier extends Ship {
     /**
@@ -36,13 +34,13 @@ public class BulkCarrier extends Ship {
      * @param capacity   the tonnage capacity of this ship
      *
      * @throws IllegalArgumentException if a ship already exists with the given
-     *                                  imoNumber, imoNumber &lt; 0, imoNumber is not 7 digits long
-     *                                  or if the tonnage capacity is &lt; than 0
-     *                                  
-     * @ass1
+     *                                  imoNumber, imoNumber &lt; 0, imoNumber
+     *                                  is not 7 digits long or if the tonnage
+     *                                  capacity is &lt; than 0
      */
     public BulkCarrier(long imoNumber, String name, String originFlag,
-                       NauticalFlag flag, int capacity) throws IllegalArgumentException {
+                       NauticalFlag flag, int capacity)
+            throws IllegalArgumentException {
         super(imoNumber, name, originFlag, flag);
         if (capacity < 0) {
             throw new IllegalArgumentException("The tonnage capacity of the "
@@ -58,15 +56,13 @@ public class BulkCarrier extends Ship {
      * The conditions for a compatible quay are:
      * <ol>
      *     <li>Quay must be a BulkQuay.</li>
-     *     <li>The quay's maximum cargo weight must be &ge; the weight of the cargo on board the
-     *     ship in tonnes.</li>
+     *     <li>The quay's maximum cargo weight must be &ge; the weight of the
+     *     cargo on board the ship in tonnes.</li>
      * </ol>
      *
      * @param quay quay to be checked
      *
      * @return true if the Quay satisfies the conditions else false
-     *
-     * @ass1
      */
     @Override
     public boolean canDock(Quay quay) {
@@ -94,8 +90,6 @@ public class BulkCarrier extends Ship {
      * @param cargo cargo to be loaded
      *
      * @return true if the Cargo satisfies the conditions else false
-     *
-     * @ass1
      */
     @Override
     public boolean canLoad(Cargo cargo) {
@@ -117,9 +111,7 @@ public class BulkCarrier extends Ship {
      * @param cargo cargo to be loaded
      *
      * @require Cargo given is able to be loaded onto this ship according to
-     * {@link BulkCarrier#canLoad(Cargo)}
-     *
-     * @ass1
+     *          {@link BulkCarrier#canLoad(Cargo)}
      */
     @Override
     public void loadCargo(Cargo cargo) {
@@ -129,13 +121,12 @@ public class BulkCarrier extends Ship {
     /**
      * Unloads the cargo from the ship.
      * <p>
-     * The ship's current cargo should be set to {@code null} at the end of the operation.
+     * The ship's current cargo should be set to {@code null} at the end of the
+     * operation.
      *
      * @return the ships cargo
      *
      * @throws NoSuchCargoException if the ship has already been unloaded
-     *
-     * @ass1
      */
     public BulkCargo unloadCargo() throws NoSuchCargoException {
         if (cargo == null) {
@@ -150,17 +141,15 @@ public class BulkCarrier extends Ship {
      * Returns the current cargo onboard this vessel.
      *
      * @return bulk cargo on the vessel
-     *
-     * @ass1
      */
     public BulkCargo getCargo() {
         return cargo;
     }
 
     /**
-     * Returns true if and only if this BulkCarrier is equal to the other
-     * given BulkCarrier.
-     *
+     * Returns true if and only if this BulkCarrier is equal to the other given
+     * BulkCarrier.
+     * <p>
      * For two BulkCarriers to be equal, they must have the same name, flag,
      * origin flag, IMO number, and tonnage capacity.
      *
@@ -180,9 +169,9 @@ public class BulkCarrier extends Ship {
 
     /**
      * Returns the hash code of this BulkCarrier.
-     *
-     * Two BulkCarriers that equal according to {@link #equals(Object)}
-     * method should have the same hash code.
+     * <p>
+     * Two BulkCarriers that equal according to {@link #equals(Object)} method
+     * should have the same hash code.
      *
      * @return hash code of this BulkCarrier.
      */
@@ -198,20 +187,16 @@ public class BulkCarrier extends Ship {
      * <pre>BulkCarrier name from origin [flag] carrying cargoType</pre>
      * Where:
      * <ul>
-     *   <li>{@code name} is the name of this ship </li>
-     *   <li>{@code origin} is the country of origin of this ship </li>
-     *   <li>{@code flag} is the nautical flag of this ship </li>
-     *   <li>{@code cargoType} is the type of cargo on board or the
-     *   literal String {@code nothing} if there is no cargo currently on
-     *   board</li>
+     *   <li><pre>name</pre> is the name of this ship </li>
+     *   <li><pre>origin</pre> is the country of origin of this ship </li>
+     *   <li><pre>flag</pre> is the nautical flag of this ship </li>
+     *   <li><pre>cargoType</pre> is the type of cargo on board or the literal
+     *   String <pre>nothing</pre> if there is no cargo currently on board</li>
      * </ul>
      * For example:
-     * <pre>
-     * BulkCarrier Evergreen from Australia [BRAVO] carrying OIL</pre>
+     * <pre>BulkCarrier Evergreen from Australia [BRAVO] carrying OIL</pre>
      *
      * @return string representation of this BulkCarrier
-     *
-     * @ass1
      */
     @Override
     public String toString() {
@@ -222,41 +207,24 @@ public class BulkCarrier extends Ship {
 
     /**
      * Returns the machine-readable string representation of this BulkCarrier.
-     *
-     * The format of the string to return is
-     *
-     * {@code BulkCarrier:imoNumber:name:origin:flag:capacity:id}
-     *
+     * <p>
+     * The format of the string to return is:
+     * <pre>BulkCarrier:imoNumber:name:origin:flag:capacity:id</pre>
+     * <p>
      * Where:
      * <ul>
-     *     <li>
-     *         {@code ShipClass} is the Ship class name
-     *     </li>
-     *     <li>
-     *         {@code imoNumber} is the IMO number of the ship
-     *     </li>
-     *     <li>
-     *         {@code name} is the name of this ship
-     *     </li>
-     *     <li>
-     *         {@code origin} is the country of origin of this ship
-     *     </li>
-     *     <li>
-     *         {@code flag} is the nautical flag of this ship
-     *     </li>
-     *     <li>
-     *         {@code capacity} is the tonnage capacity of this ship
-     *     </li>
-     *     <li>
-     *         {@code id} is the ID of the cargo on the ship or an empty
-     *         string "" if there is none
-     *     </li>
+     *     <li><pre>imoNumber</pre> is the IMO number of the ship</li>
+     *     <li><pre>name</pre> is the name of this ship</li>
+     *     <li><pre>origin</pre> is the country of origin of this ship</li>
+     *     <li><pre>flag</pre> is the nautical flag of this ship</li>
+     *     <li><pre>capacity</pre> is the tonnage capacity of this ship</li>
+     *     <li><pre>id</pre> is the ID of the cargo on the ship or an empty
+     *     string "" if there is none</li>
      * </ul>
-     *
+     * <p>
      * For example:
-     * {@code BulkCarrier:1248691:Voyager:New Zealand:HOTEL:200:3}
-     * or:
-     * {@code BulkCarrier:1248291:Searcher:Australia:BRAVE:220:}
+     * <pre>BulkCarrier:1248691:Voyager:NewZealand:HOTEL:200:3</pre> OR
+     * <pre>BulkCarrier:1248291:Searcher:Australia:BRAVE:220:</pre>
      *
      * @return encoded string representation of this Ship
      */
@@ -268,6 +236,7 @@ public class BulkCarrier extends Ship {
                 cargo.getId());
     }
 
+    // TODO: Add JavaDoc here.
     static BulkCarrier fromString(String[] attributes)
             throws BadEncodingException {
         long imoNumber;

@@ -10,8 +10,8 @@ import java.util.Map;
 /**
  * Gathers data on how many ships each country has sent to this port.
  * <p>
- * Stores a mapping of country-of-origin flags to the number of times that
- * flag has been seen in inbound movements.
+ * Stores a mapping of country-of-origin flags to the number of times that flag
+ * has been seen in inbound movements.
  */
 public class ShipFlagEvaluator extends StatisticsEvaluator {
     /**
@@ -51,23 +51,19 @@ public class ShipFlagEvaluator extends StatisticsEvaluator {
     /**
      * Updates the internal mapping of ship country flags using the given
      * movement.
-     *
-     * If the movement is not an INBOUND movement, this method
-     * returns immediately without taking any action.
-     *
+     * <p>
+     * If the movement is not an INBOUND movement, this method returns
+     * immediately without taking any action.
+     * <p>
      * If the movement is not a ShipMovement, this method returns immediately
      * without taking any action.
-     *
+     * <p>
      * If the movement is an INBOUND ShipMovement, do the following:
      * <ul>
-     *     <li>
-     *         If the flag has been seen before (exists as a key in the map)
-     *         increment that number
-     *     </li>
-     *     <li>
-     *         If the flag has not been seen before add as a key in the map
-     *         with a corresponding value of 1
-     *     </li>
+     *     <li>If the flag has been seen before (exists as a key in the map)
+     *     increment that number</li>
+     *     <li>If the flag has not been seen before add as a key in the map
+     *     with a corresponding value of 1</li>
      * </ul>
      *
      * @param movement movement to read

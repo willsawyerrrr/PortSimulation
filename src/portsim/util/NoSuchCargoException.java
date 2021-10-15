@@ -11,14 +11,11 @@ import java.io.Serializable;
  * Also thrown when a ship that is already unloaded is attempted to be unloaded.
  * See {@link portsim.ship.BulkCarrier#unloadCargo()} or
  * {@link portsim.ship.ContainerShip#unloadCargo()}
- *
- * @ass1_partial
  */
 public class NoSuchCargoException extends Exception implements Serializable {
     /**
      * Constructs a new NoSuchCargoException with no detail message or cause.
      *
-     * @ass1
      * @see Exception#Exception()
      */
     public NoSuchCargoException() {
@@ -26,11 +23,11 @@ public class NoSuchCargoException extends Exception implements Serializable {
     }
 
     /**
-     * Constructs a NoSuchCargoException that contains a helpful detail
-     * message explaining why the exception occurred.
+     * Constructs a NoSuchCargoException that contains a helpful detail message
+     * explaining why the exception occurred.
      *
      * @param message detail message
-     * @ass1
+     *
      * @see Exception#Exception(String)
      */
     public NoSuchCargoException(String message) {
@@ -38,10 +35,11 @@ public class NoSuchCargoException extends Exception implements Serializable {
     }
 
     /**
-     * Constructs a NoSuchCargoException that stores the underlying cause of
-     * the exception
+     * Constructs a NoSuchCargoException that stores the underlying cause of the
+     * exception
      *
      * @param cause throwable that caused this exception
+     *
      * @see Exception#Exception(Throwable)
      */
     public NoSuchCargoException(Throwable cause) {
@@ -49,12 +47,13 @@ public class NoSuchCargoException extends Exception implements Serializable {
     }
 
     /**
-     * Constructs a NoSuchCargoException that contains a helpful detail
-     * message explaining why the exception occurred and the underlying cause
-     * of the exception.
+     * Constructs a NoSuchCargoException that contains a helpful detail message
+     * explaining why the exception occurred and the underlying cause of the
+     * exception.
      *
      * @param message detail message
      * @param cause throwable that caused this exception
+     *
      * @see Exception#Exception(String, Throwable)
      */
     public NoSuchCargoException(String message, Throwable cause) {

@@ -4,8 +4,8 @@ import portsim.movement.Movement;
 import portsim.util.Tickable;
 
 /**
- * A base class representing an object that fathers and reports data on
- * various aspects of the port's operation.
+ * A base class representing an object that fathers and reports data on various
+ * aspects of the port's operation.
  */
 public abstract class StatisticsEvaluator implements Tickable {
     /**
@@ -32,7 +32,7 @@ public abstract class StatisticsEvaluator implements Tickable {
 
     /**
      * Read a movement to update the relevant evaluator data.
-     *
+     * <p>
      * This method is called by the
      * {@link portsim.port.Port#processMovement(Movement)} method.
      *

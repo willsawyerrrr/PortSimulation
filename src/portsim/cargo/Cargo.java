@@ -12,8 +12,6 @@ import java.util.Map;
  * transport.
  * <p>
  * Cargo is kept track of via its ID.
- *
- * @ass1_partial
  */
 public abstract class Cargo implements Encodable {
     /**
@@ -34,23 +32,22 @@ public abstract class Cargo implements Encodable {
     /**
      * Creates a new Cargo with the given ID and destination port.
      * <p>
-     * When a new piece of cargo is created, it should be added to the cargo registry.
+     * When a new piece of cargo is created, it should be added to the cargo
+     * registry.
      *
      * @param id          cargo ID
      * @param destination destination port
      *
      * @throws IllegalArgumentException if a cargo already exists with the
      *                                  given ID or ID &lt; 0
-     *
-     * @ass1_partial
      */
     public Cargo(int id, String destination) throws IllegalArgumentException {
         if (id < 0) {
-            throw new IllegalArgumentException("Cargo ID must be greater than"
-                + " or equal to 0: " + id);
+            throw new IllegalArgumentException("Cargo ID must be greater than "
+                + "or equal to 0: " + id);
         } else if (cargoRegistry.containsKey(id)) {
-            throw new IllegalArgumentException("Cargo already exists with "
-                    + "id: " + id);
+            throw new IllegalArgumentException("Cargo already exists with id: "
+                    + id);
         }
         this.id = id;
         this.destination = destination;
@@ -61,8 +58,6 @@ public abstract class Cargo implements Encodable {
      * Retrieve the ID of this piece of cargo.
      *
      * @return the cargo's ID
-     *
-     * @ass1
      */
     public int getId() {
         return id;
@@ -72,8 +67,6 @@ public abstract class Cargo implements Encodable {
      * Retrieve the destination of this piece of cargo.
      *
      * @return the cargo's destination
-     *
-     * @ass1
      */
     public String getDestination() {
         return destination;
@@ -82,9 +75,9 @@ public abstract class Cargo implements Encodable {
     /**
      * Returns the global registry of all pieces of cargo, as a mapping from
      * cargo IDs to Cargo instances.
-     *
-     * Adding or removing elements from the returned map should not affect
-     * the original map.
+     * <p>
+     * Adding or removing elements from the returned map should not affect the
+     * original map.
      *
      * @return cargo registry
      */
@@ -98,7 +91,7 @@ public abstract class Cargo implements Encodable {
      * @param id unique key to identify cargo
      *
      * @return true if there is a cargo stored in the registry with key
-     * {@code id} false otherwise
+     * <pre>id</pre> false otherwise
      */
     public static boolean cargoExists(int id) {
         return cargoRegistry.containsKey(id);
@@ -122,13 +115,14 @@ public abstract class Cargo implements Encodable {
 
     /**
      * Returns true if and only if this cargo is equal to the other given cargo.
-     *
+     * <p>
      * For two cargo to be equal, they must have the same ID and destination.
      *
      * @param o other object to check equality
      *
      * @return true if equal, false otherwise
      */
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof Cargo)) {
             return false;
@@ -140,7 +134,7 @@ public abstract class Cargo implements Encodable {
 
     /**
      * Returns the hash code of this cargo.
-     *
+     * <p>
      * Two cargo are equal according to {@link #equals(Object)} method should
      * have the same hash code.
      *
@@ -158,15 +152,14 @@ public abstract class Cargo implements Encodable {
      * <pre>CargoClass id to destination</pre>
      * Where:
      * <ul>
-     *   <li>{@code CargoClass} is the cargo class name</li>
-     *   <li>{@code id} is the id of this cargo </li>
-     *   <li>{@code destination} is the destination of the cargo </li>
+     *   <li><pre>CargoClass</pre> is the cargo class name</li>
+     *   <li><pre>id</pre> is the id of this cargo </li>
+     *   <li><pre>destination</pre> is the destination of the cargo </li>
      * </ul>
      * <p>
      * For example: <pre>Container 55 to New Zealand</pre>
      *
      * @return string representation of this Cargo
-     * @ass1
      */
     @Override
     public String toString() {
@@ -178,28 +171,19 @@ public abstract class Cargo implements Encodable {
 
     /**
      * Returns the machine-readable string representation of this Cargo.
-     *
+     * <p>
      * The format of the string to return is
-     *
-     * {@code CargoClass:id:destination}
-     *
+     * <p>
+     * <pre>CargoClass:id:destination}</pre>
      * Where:
      * <ul>
-     *     <li>
-     *         {@code CargoClass} is the Cargo class name
-     *     </li>
-     *     <li>
-     *         {@code id} is the id of this cargo
-     *     </li>
-     *     <li>
-     *         {@code destination} is the destination of this cargo
-     *     </li>
+     *     <li><pre>CargoClass</pre> is the Cargo class name</li>
+     *     <li><pre>id</pre> is the id of this cargo</li>
+     *     <li><pre>destination</pre> is the destination of this cargo</li>
      * </ul>
-     *
-     * For example:
-     * {@code Container:3:Australia}
-     * OR
-     * {@code BulkCargo:2:France}
+     * <p>
+     * For example: <pre>Container:3:Australia</pre> OR <pre>BulkCargo:2:France
+     * </pre>
      *
      * @return encoded string representation of this Cargo
      */
@@ -213,40 +197,26 @@ public abstract class Cargo implements Encodable {
     /**
      * Reads a piece of cargo from its encoded representation in the given
      * string.
-     *
+     * <p>
      * The format of the given string should match the encoded representation
      * of a Cargo, as described in {@link #encode()} (and subclasses).
-     *
+     * <p>
      * The encoded string is invalid if any of the following conditions are
      * true:
      * <ul>
-     *     <li>
-     *         The number of colons (:) detected was more/fewer than expected.
-     *     </li>
-     *     <li>
-     *         The cargo id is not an integer (i.e. cannot be parsed by
-     *         {@code Integer.parseInt(String)}).
-     *     </li>
-     *     <li>
-     *         The cargo id is less than one (1).
-     *     </li>
-     *     <li>
-     *         A piece of cargo with the specified ID already exists
-     *     </li>
-     *     <li>
-     *         The cargo type specified is not one of {@link BulkCargoType}
-     *         or {@link ContainerType}
-     *     </li>
-     *     <li>
-     *         If the cargo type is a BulkCargo:
+     *     <li>The number of colons (:) detected was more/fewer than
+     *     expected.</li>
+     *     <li>The cargo id is not an integer (i.e. cannot be parsed by
+     *     {@code Integer.parseInt(String)}).</li>
+     *     <li>The cargo id is less than one (1).</li>
+     *     <li>A piece of cargo with the specified ID already exists</li>
+     *     <li>The cargo type specified is not one of {@link BulkCargoType}
+     *     or {@link ContainerType}</li>
+     *     <li>If the cargo type is a BulkCargo:
      *         <ol>
-     *             <li>
-     *                 The cargo weight in tonnes is not an integer (i.e.
-     *                 cannot be parsed by {@code Integer.parseInt(String)}).
-     *             </li>
-     *             <li>
-     *                 The cargo weight in tonnes in less than one (1).
-     *             </li>
+     *             <li>The cargo weight in tonnes is not an integer (i.e.
+     *             cannot be parsed by {@code Integer.parseInt(String)}).</li>
+     *             <li>The cargo weight in tonnes in less than one (1).</li>
      *         </ol>
      *     </li>
      * </ul>
@@ -256,7 +226,7 @@ public abstract class Cargo implements Encodable {
      * @return decoded cargo instance
      *
      * @throws BadEncodingException if the format of the given string is
-     * invalid according to the rules above
+     *                              invalid according to the rules above
      */
     public static Cargo fromString(String string) throws BadEncodingException {
         String[] attributes = string.split(":");
@@ -276,9 +246,8 @@ public abstract class Cargo implements Encodable {
 
     /**
      * Resets the global cargo registry.
+     * <p>
      * This utility method is for the testing suite.
-     *
-     * @given
      */
     public static void resetCargoRegistry() {
         cargoRegistry = new HashMap<>();
