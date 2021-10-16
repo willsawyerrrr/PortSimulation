@@ -23,8 +23,6 @@ import java.util.*;
  * Subclass of the JavaFX Canvas to represent the main elements of the port graphically.
  * <p>
  * <b>NOTE: </b> The contents of this file do not necessarily follow best practice
- *
- * @given
  */
 public class PortCanvas extends Canvas {
 
@@ -64,7 +62,8 @@ public class PortCanvas extends Canvas {
     private Random random = new Random();
 
     /**
-     * A class to represent a rectangular region on the canvas that responds to click events
+     * A class to represent a rectangular region on the canvas that responds to
+     * click events
      */
     private static class ClickableRegion {
 
@@ -86,9 +85,8 @@ public class PortCanvas extends Canvas {
         private final double height;
 
         /**
-         * Creates a new clickable region with the given coordinates and dimensions
-         *
-         * @given
+         * Creates a new clickable region with the given coordinates and
+         * dimensions
          */
         public ClickableRegion(double x, double y, double width, double height) {
             this.xcoord = x;
@@ -98,10 +96,8 @@ public class PortCanvas extends Canvas {
         }
 
         /**
-         * Returns whether the given click event's coordinates fall within this clickable
-         * region
-         *
-         * @given
+         * Returns whether the given click event's coordinates fall within this
+         * clickable region
          */
         public boolean wasClicked(double clickX, double clickY) {
             return clickX >= this.xcoord && clickX <= this.xcoord + this.width
@@ -115,7 +111,6 @@ public class PortCanvas extends Canvas {
      * @param viewModel view model to use to render elements on the canvas
      * @param width     width of the canvas, in pixels
      * @param height    height of the canvas, in pixels
-     * @given
      */
     public PortCanvas(ViewModel viewModel, double width, double height) {
         super(width, height);
@@ -147,8 +142,6 @@ public class PortCanvas extends Canvas {
 
     /**
      * Draws all the relevant elements of the port onto the canvas.
-     *
-     * @given
      */
     public void draw() {
         this.drawnShip.clear();

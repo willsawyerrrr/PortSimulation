@@ -29,8 +29,6 @@ import java.util.*;
 
 /**
  * View for the Port Simulation GUI.
- *
- * @given
  */
 public class View {
     /**
@@ -74,7 +72,6 @@ public class View {
      *
      * @param stage     stage to add GUI elements to
      * @param viewModel view model to display
-     * @given
      */
     public View(Stage stage, ViewModel viewModel) {
         this.stage = stage;
@@ -328,7 +325,7 @@ public class View {
                     q.shipArrives(newShip);
                 } else {
                     viewModel.createErrorDialog("Cannot add ship to Quay",
-                        "Since selecting that Quay (" + q.toString() + ") it has become occupied. "
+                        "Since selecting that Quay (" + q + ") it has become occupied. "
                             +
                             "Try pausing the simulation first.");
                     return;
@@ -588,8 +585,8 @@ public class View {
      * @param header header text of dialog box
      * @param label label text to display beside input box
      * @param defaultValue initial contents of the input box
+     *
      * @return value entered by the user
-     * @given
      */
     public Optional<String> getResponse(String title, String header,
                                         String label, String defaultValue) {
@@ -608,8 +605,8 @@ public class View {
      * @param header header text of dialog box
      * @param label label text to display beside input box
      * @param defaultValue initial contents of the input box
+     *
      * @return value entered by the user
-     * @given
      */
     public Optional<Integer> getResponse(String title, String header,
                                          String label, int defaultValue) {
@@ -640,9 +637,8 @@ public class View {
     }
 
     /**
-     * Initialises the view and begins the timer responsible for performing ticks
-     *
-     * @given
+     * Initialises the view and begins the timer responsible for performing
+     * ticks
      */
     public void run() {
         final long nanosPerSecond = 1000000000;

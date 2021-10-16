@@ -111,7 +111,7 @@ public class ContainerShip extends Ship {
      * @param cargo cargo to be loaded
      *
      * @require Cargo given is able to be loaded onto this ship according to
-     * {@link ContainerShip#canLoad(Cargo)}
+     *          {@link ContainerShip#canLoad(Cargo)}
      */
     @Override
     public void loadCargo(Cargo cargo) {
