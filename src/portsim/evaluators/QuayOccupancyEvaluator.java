@@ -33,7 +33,7 @@ public class QuayOccupancyEvaluator extends StatisticsEvaluator {
     public int getQuaysOccupied() {
         int occupied = 0;
         for (Quay quay : port.getQuays()) {
-            if (!(quay.isEmpty())) {
+            if (!quay.isEmpty()) {
                 occupied++;
             }
         }

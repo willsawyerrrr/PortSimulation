@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.StringJoiner;
+import java.util.function.Consumer;
 
 /**
  * A place where ships can come and dock with Quays to load / unload their
@@ -536,7 +537,7 @@ public class Port implements Tickable, Encodable {
      *     docked to one quay.</li>
      *     <li>If the time is a multiple of 5, all quays must unload the cargo
      *     from ships docked (if any) and add it to warehouses at the port (the
-     *     Port's list of stored cargo)</li>
+     *     Port's list of stored cargo).</li>
      *     <li>All movements stored in the queue whose action time is equal to
      *     the current time should be processed by
      *     {@link #processMovement(Movement)}.</li>
@@ -559,35 +560,29 @@ public class Port implements Tickable, Encodable {
 
         if (time % 5 == 0) {
             for (Quay quay : quays) {
-                if (!(quay.isEmpty())) {
-                    if (quay.getShip() instanceof BulkCarrier) {
-                        BulkCarrier ship = (BulkCarrier) quay.getShip();
-                        try {
-                            storedCargo.add(ship.unloadCargo());
-                        } catch (NoSuchCargoException ignored) {
-                            // Do nothing
-                        }
-                    } else if (quay.getShip() instanceof ContainerShip) {
-                        ContainerShip ship = (ContainerShip) quay.getShip();
-                        try {
-                            storedCargo.addAll(ship.unloadCargo());
-                        } catch (NoSuchCargoException ignored) {
-                            // Do nothing
-                        }
+                if (!quay.isEmpty()
+                        && quay.getShip() instanceof BulkCarrier) {
+                    BulkCarrier ship = (BulkCarrier) quay.getShip();
+                    try {
+                        storedCargo.add(ship.unloadCargo());
+                    } catch (NoSuchCargoException ignored) {
+                        // do nothing
+                    }
+                } else if (!quay.isEmpty()
+                        && quay.getShip() instanceof ContainerShip) {
+                    ContainerShip ship = (ContainerShip) quay.getShip();
+                    try {
+                        storedCargo.addAll(ship.unloadCargo());
+                    } catch (NoSuchCargoException ignored) {
+                        // do nothing
                     }
                 }
             }
         }
 
-        for (Movement movement : movements) {
-            if (movement.getTime() == time) {
-                this.processMovement(movement);
-            }
-        }
+        movements.forEach(this::processMovement);
 
-        for (StatisticsEvaluator evaluator : evaluators) {
-            evaluator.elapseOneMinute();
-        }
+        evaluators.forEach(StatisticsEvaluator::elapseOneMinute);
     }
 
     /**
