@@ -102,7 +102,7 @@ public class ShipMovement extends Movement {
      *     <li>The number of colons (:) detected was more/fewer than
      *     expected.</li>
      *     <li>The time is not a long (i.e. cannot be parsed by
-     *     <pre>>Long.parseInt(String)</pre>).</li>
+     *     <pre>Long.parseInt(String)</pre>).</li>
      *     <li>The time is less than zero (0).</li>
      *     <li>The movementDirection is not one of the valid directions (See
      *     {@link MovementDirection}.</li>

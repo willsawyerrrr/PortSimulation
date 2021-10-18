@@ -5,6 +5,7 @@ import portsim.ship.NauticalFlag;
 import portsim.ship.Ship;
 import portsim.util.BadEncodingException;
 import portsim.util.Encodable;
+import portsim.util.NoSuchShipException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -217,7 +218,45 @@ public class ShipQueue implements Encodable {
      */
     public static ShipQueue fromString(String string)
             throws BadEncodingException {
-        // TODO: Implement this method.
-        return null;
+        String[] attributes = string.split(":");
+
+        if (attributes.length < 2 || attributes.length > 3) {
+            throw new BadEncodingException();
+        }
+
+        if (!attributes[0].equals("ShipQueue")) {
+            throw new BadEncodingException();
+        }
+
+        int numShips;
+        try {
+            numShips = Integer.parseInt(attributes[1]);
+        } catch (NumberFormatException ignored) {
+            throw new BadEncodingException();
+        }
+
+        ShipQueue queue = new ShipQueue();
+
+        if (numShips != 0) {
+            String[] rawImoNums = attributes[2].split(",");
+            Long[] imoNums = new Long[rawImoNums.length];
+            for (int i = 0; i < rawImoNums.length; i++) {
+                try {
+                    imoNums[i] = Long.parseLong(rawImoNums[i]);
+                } catch (NumberFormatException ignored) {
+                    throw new BadEncodingException();
+                }
+            }
+
+            for (Long imoNum : imoNums) {
+                try {
+                    queue.add(Ship.getShipByImoNumber(imoNum));
+                } catch (NoSuchShipException ignored) {
+                    throw new BadEncodingException();
+                }
+            }
+        }
+
+        return queue;
     }
 }

@@ -1,5 +1,9 @@
 package portsim.port;
 
+import portsim.ship.Ship;
+import portsim.util.BadEncodingException;
+import portsim.util.NoSuchShipException;
+
 /**
  * A Bulk Quay is a type of quay specifically designed for the unloading of
  * Bulk Carrier vessels.

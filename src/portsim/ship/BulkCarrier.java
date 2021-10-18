@@ -236,7 +236,21 @@ public class BulkCarrier extends Ship {
                 cargo.getId());
     }
 
-    // TODO: Add JavaDoc here.
+    /**
+     * Reads a bulk carrier from its representation in the given array
+     * of strings.
+     * <p>
+     * This is a helper method called by {@link Ship#fromString(String)}.
+     *
+     * @param attributes string representations of the attributes required to
+     *                   create a bulk carrier object
+     *
+     * @return decoded bulk carrier instance
+     *
+     * @throws BadEncodingException if the format of the given arguments is
+     *                              invalid according to the rules defined
+     *                              within {@link Ship#fromString(String)}
+     */
     static BulkCarrier fromString(String[] attributes)
             throws BadEncodingException {
         long imoNumber;

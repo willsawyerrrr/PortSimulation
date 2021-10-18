@@ -239,9 +239,8 @@ public abstract class Cargo implements Encodable {
             return BulkCargo.fromString(attributes);
         } else if (attributes[0].equals("Container") && attributes.length == 4) {
             return Container.fromString(attributes);
-        } else {
-            throw new BadEncodingException();
         }
+        throw new BadEncodingException();
     }
 
     /**

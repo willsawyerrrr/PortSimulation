@@ -5,8 +5,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 
-import portsim.cargo.BulkCargoType;
-import portsim.cargo.Cargo;
 import portsim.evaluators.*;
 import portsim.port.Port;
 import portsim.ship.BulkCarrier;
@@ -17,11 +15,8 @@ import portsim.cargo.BulkCargo;
 import portsim.cargo.Container;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
-import java.util.stream.Collectors;
 
 /**
  * View model for the Port Simulation GUI.
@@ -144,7 +139,7 @@ public class ViewModel {
      *     {@link ContainerShip#getCargo()} for the currently selected ship
      *     returns a value indicating there is no cargo on board , then the
      *     <pre>cargoManifestText</pre> property should be set to
-     *     <pre>"No cargo on board."}.</li>
+     *     <pre>"No cargo on board."</pre>.</li>
      *     <li>If the ship currently selected  is a {@link BulkCarrier}, the
      *     <pre>cargoManifestText</pre> property should be set to the
      *     {@link BulkCargo#toString()} representation of the cargo onboard.<br>
@@ -163,32 +158,54 @@ public class ViewModel {
      * @return event handler for "Show Cargo Manifest for Selected Ship" button
      */
     public EventHandler<ActionEvent> getShipContentsHandler() {
-        // TODO: do this with an event handler instead
+        EventHandler<ActionEvent> handler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {}
+        };
         Ship ship = getSelectedShip().get();
-        if (ship == null) {
-            return null;
-        } else if (ship instanceof BulkCarrier) {
+        if (ship instanceof BulkCarrier) {
             BulkCarrier carrier = (BulkCarrier) ship;
             if (carrier.getCargo() == null) {
-                cargoManifestText.setValue("No cargo on board.");
-                return null;
+                handler = new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        cargoManifestText.setValue("No cargo on board.");
+                    }
+                };
+            } else {
+                handler = new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        cargoManifestText.setValue(carrier.getCargo()
+                                .toString());
+                    }
+                };
             }
-            cargoManifestText.setValue(carrier.getCargo().toString());
         } else if (ship instanceof ContainerShip) {
             ContainerShip containerShip = (ContainerShip) ship;
             if (containerShip.getCargo() == null) {
-                cargoManifestText.setValue("No cargo on board.");
-                return null;
+                handler = new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        cargoManifestText.setValue("No cargo on board.");
+                    }
+                };
+            } else {
+                StringJoiner joiner = new StringJoiner(","
+                        + System.lineSeparator());
+                for (Container container : containerShip.getCargo()) {
+                    joiner.add(container.toString());
+                }
+                handler = new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        cargoManifestText.setValue(joiner.toString());
+                    }
+                };
             }
-            StringJoiner joiner = new StringJoiner(","
-                    + System.lineSeparator());
-            for (Container container : containerShip.getCargo()) {
-                joiner.add(container.toString());
-            }
-            cargoManifestText.setValue(joiner.toString());
         }
 
-        return null;
+        return handler;
     }
 
     /**
@@ -199,12 +216,11 @@ public class ViewModel {
      * {@link System#lineSeparator()}.
      * <ul>
      *     <li>If there are no evaluators at the port then the evaluatorsText
-     *     should be set to <pre>"No Evaluators Present"</pre>.
-     *     </li>
+     *     should be set to <pre>"No Evaluators Present"</pre>.</li>
      *     <li>If there are evaluators present their contents should be added in
      *     the order that they appear in the list of evaluator in port
-     *     ({@link Port#getEvaluators()}). The contents of each evaluator is
-     *     as follows with each bullet point indicating a new line.
+     *     ({@link Port#getEvaluators()}). The contents of each evaluator is as
+     *     follows with each bullet point indicating a new line.
      *         <ol>
      *             <li>If the port has a {@link QuayOccupancyEvaluator}:
      *                 <ul>
@@ -250,34 +266,32 @@ public class ViewModel {
      * </ul>
      * For example:
      * <pre>
-     * QuayOccupancyEvaluator
-     * 4 Quay(s) currently occupied
-     * ShipFlagEvaluator
-     * New Zealand : 2
-     * Australia : 4
-     * ShipThroughputEvaluator
-     * 2 Ships passed in the last hour
-     * CargoDecompositionEvaluator
-     * Container : 7
-     * BulkCargo : 12
+     * QuayOccupancyEvaluator<br>
+     * 4 Quay(s) currently occupied<br>
+     * ShipFlagEvaluator<br>
+     * New Zealand : 2<br>
+     * Australia : 4<br>
+     * ShipThroughputEvaluator<br>
+     * 2 Ships passed in the last hour<br>
+     * CargoDecompositionEvaluator<br>
+     * Container : 7<br>
+     * BulkCargo : 12<br>
      * </pre>
      */
     public void updateEvaluatorText() {
         if (port.getEvaluators().isEmpty()) {
             evaluatorsText.setValue("No Evaluators Present");
         } else {
-            StringBuilder builder = new StringBuilder();
+            StringJoiner joiner = new StringJoiner(System.lineSeparator());
             for (StatisticsEvaluator eval : port.getEvaluators()) {
-                builder.append(eval.getClass().getSimpleName());
-                builder.append(System.lineSeparator());
-                switch (eval.getClass().getSimpleName()) {
+                String evaluatorClass = eval.getClass().getSimpleName();
+                joiner.add(evaluatorClass);
+                switch (evaluatorClass) {
                     case "QuayOccupancyEvaluator":
                         QuayOccupancyEvaluator quayEval =
                                 (QuayOccupancyEvaluator) eval;
-
-                        builder.append(String.format("%d Quay(s) currently "
+                        joiner.add(String.format("%d Quay(s) currently "
                                 + "occupied", quayEval.getQuaysOccupied()));
-                        builder.append(System.lineSeparator());
                         break;
 
                     case "ShipFlagEvaluator":
@@ -287,10 +301,9 @@ public class ViewModel {
 
                         for (Map.Entry<String, Integer> entry :
                                 distribution.entrySet()) {
-                            builder.append(String.format("%s : %d",
+                            joiner.add(String.format("%s : %d",
                                     entry.getKey(),
                                     entry.getValue()));
-                            builder.append(System.lineSeparator());
                         }
                         break;
 
@@ -298,9 +311,8 @@ public class ViewModel {
                         ShipThroughputEvaluator throughEval =
                                 (ShipThroughputEvaluator) eval;
 
-                        builder.append(String.format("%d Ships passed in the "
-                                + "last hour", throughEval.getThroughputPerHour()));
-                        builder.append(System.lineSeparator());
+                        joiner.add(String.format("%d Ships passed in the last "
+                                + "hour", throughEval.getThroughputPerHour()));
                         break;
 
                     case "CargoDecompositionEvaluator":
@@ -311,15 +323,14 @@ public class ViewModel {
 
                         for (Map.Entry<String, Integer> entry :
                                 decomposition.entrySet()) {
-                            builder.append(String.format("%s : %d",
+                            joiner.add(String.format("%s : %d",
                                     entry.getKey(),
                                     entry.getValue()));
-                            builder.append(System.lineSeparator());
                         }
                         break;
                 }
             }
-            evaluatorsText.setValue(builder.toString().trim());
+            evaluatorsText.setValue(joiner.toString().trim());
         }
     }
 
@@ -384,7 +395,6 @@ public class ViewModel {
      * @see Port#encode()
      */
     public void saveAs(Writer portWriter) throws IOException {
-        // TODO implement for assignment 2
         portWriter.write(port.encode());
         portWriter.flush();
     }
@@ -492,7 +502,6 @@ public class ViewModel {
      * Returns the property storing the contents of the ship info text box.
      *
      * @return ship info text box
-     * @given
      */
     public StringProperty getShipInfoText() {
         return shipInfoText;

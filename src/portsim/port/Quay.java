@@ -3,6 +3,7 @@ package portsim.port;
 import portsim.ship.Ship;
 import portsim.util.BadEncodingException;
 import portsim.util.Encodable;
+import portsim.util.NoSuchShipException;
 
 
 /**
@@ -202,7 +203,49 @@ public abstract class Quay implements Encodable {
      *                              invalid according to the rules above
      */
     public static Quay fromString(String string) throws BadEncodingException {
-        // TODO: Implement this method.
-        return null;
+        String[] attributes = string.split(":");
+
+        if (attributes.length != 4) {
+            throw new BadEncodingException();
+        }
+
+        int id;
+        long imoNumber;
+        Ship ship = null;
+        Quay quay = null;
+
+        try {
+            id = Integer.parseInt(attributes[1]);
+            if (!attributes[2].equals("None")) {
+                imoNumber = Long.parseLong(attributes[2]);
+                ship = Ship.getShipByImoNumber(imoNumber);
+            }
+        } catch (NumberFormatException | NoSuchShipException ignored) {
+            throw new BadEncodingException();
+        }
+
+        if (attributes[0].equals("BulkQuay")) {
+            int maxTonnage;
+            try {
+                maxTonnage = Integer.parseInt(attributes[3]);
+            } catch (NumberFormatException ignored) {
+                throw new BadEncodingException();
+            }
+            quay = new BulkQuay(id, maxTonnage);
+        } else if (attributes[0].equals("ContainerQuay")) {
+            int maxContainers;
+            try {
+                maxContainers = Integer.parseInt(attributes[3]);
+            } catch (NumberFormatException ignored) {
+                throw new BadEncodingException();
+            }
+            quay = new ContainerQuay(id, maxContainers);
+        }
+
+        if (quay != null && ship != null) {
+            quay.shipArrives(ship);
+        }
+
+        return quay;
     }
 }

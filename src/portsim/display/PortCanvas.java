@@ -20,12 +20,13 @@ import portsim.ship.Ship;
 import java.util.*;
 
 /**
- * Subclass of the JavaFX Canvas to represent the main elements of the port graphically.
+ * Subclass of the JavaFX Canvas to represent the main elements of the port
+ * graphically.
  * <p>
- * <b>NOTE: </b> The contents of this file do not necessarily follow best practice
+ * <b>NOTE: </b> The contents of this file do not necessarily follow best
+ * practice
  */
 public class PortCanvas extends Canvas {
-
     /**
      * View model containing the main model of the application
      */
