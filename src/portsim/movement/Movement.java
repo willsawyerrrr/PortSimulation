@@ -2,6 +2,8 @@ package portsim.movement;
 
 import portsim.util.Encodable;
 
+import java.util.Comparator;
+
 /**
  * The movement of ships or cargo coming into or out of the port from land or
  * sea.
@@ -16,6 +18,18 @@ public abstract class Movement implements Encodable {
      * The direction of the movement in relation to the port
      */
     private MovementDirection direction;
+
+    /**
+     * {@inheritDoc}
+     */
+    public static class MovementComparator implements Comparator<Movement> {
+        @Override
+        public int compare(Movement m1, Movement m2) {
+            Long time1 = m1.getTime();
+            Long time2 = m2.getTime();
+            return time1.compareTo(time2);
+        }
+    }
 
     /**
      * Creates a new movement with the given action time and direction.
