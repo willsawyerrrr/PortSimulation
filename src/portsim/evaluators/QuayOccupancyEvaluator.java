@@ -21,6 +21,7 @@ public class QuayOccupancyEvaluator extends StatisticsEvaluator {
     public QuayOccupancyEvaluator(Port port) {
         super();
         this.port = port;
+        port.addStatisticsEvaluator(this);
     }
 
     /**
