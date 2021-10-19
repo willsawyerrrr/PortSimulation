@@ -66,12 +66,12 @@ public abstract class Ship implements Encodable {
                 NauticalFlag flag) throws IllegalArgumentException {
         if (imoNumber < 0) {
             throw new IllegalArgumentException("The imoNumber of the ship must "
-                + "be positive: " + imoNumber);
+                    + "be positive: " + imoNumber);
         }
         if (String.valueOf(imoNumber).length() != 7
                 || String.valueOf(imoNumber).startsWith("0")) {
             throw new IllegalArgumentException("The imoNumber of the ship must "
-                + "have 7 digits (no leading zero's [0]): " + imoNumber);
+                    + "have 7 digits (no leading zero's [0]): " + imoNumber);
         }
         if (shipExists(imoNumber)) {
             throw new IllegalArgumentException("The imoNumber of the ship must "
@@ -325,10 +325,11 @@ public abstract class Ship implements Encodable {
             throw new BadEncodingException();
         }
 
-        if (attributes[0].equals("BulkCarrier") && attributes.length == 7) {
+        if (attributes[0].equals("BulkCarrier")
+                && (attributes.length == 6 || attributes.length == 7)) {
             return BulkCarrier.fromString(attributes);
         } else if (attributes[0].equals("ContainerShip")
-                && attributes.length == 8) {
+                && attributes.length == 7 || attributes.length == 8) {
             return ContainerShip.fromString(attributes);
         } else {
             throw new BadEncodingException();

@@ -144,7 +144,7 @@ public class ShipQueue implements Encodable {
     /**
      * Returns the hash code of this ship queue.
      * <p>
-     * Two ship queue's that are equal according to {@link #equals(Object)}
+     * Two ship queues that are equal according to {@link #equals(Object)}
      * method should have the same hash code.
      *
      * @return hash code of this ship queue.

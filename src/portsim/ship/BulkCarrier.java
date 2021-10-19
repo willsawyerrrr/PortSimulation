@@ -268,19 +268,16 @@ public class BulkCarrier extends Ship {
             flag = NauticalFlag.valueOf(attributes[4]);
             capacity = Integer.parseInt(attributes[5]);
 
-            try {
+            carrier = new BulkCarrier(imoNumber, name, originFlag, flag,
+                    capacity);
+
+            // Only attempt to parse cargo IDs if there is a section for it
+            if (attributes.length == 7) {
                 cargoId = Integer.parseInt(attributes[6]);
                 if (cargoId < 0) {
                     throw new BadEncodingException();
                 }
-            } catch (NumberFormatException nfe) {
-                cargoId = -1;
-            }
 
-            carrier = new BulkCarrier(imoNumber, name, originFlag, flag,
-                    capacity);
-
-            if (cargoId != -1) {
                 Cargo cargo = Cargo.getCargoById(cargoId);
                 if (carrier.canLoad(cargo)) {
                     carrier.loadCargo(cargo);

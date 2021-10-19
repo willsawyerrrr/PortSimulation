@@ -99,9 +99,8 @@ public class CargoMovement extends Movement {
      */
     public String encode() {
         StringJoiner joiner = new StringJoiner(",");
-        for (Cargo cargo : this.getCargo()) {
-            joiner.add(String.valueOf(cargo.getId()));
-        }
+        this.getCargo().forEach(cargo ->
+                joiner.add(String.valueOf(cargo.getId())));
         return String.format("%s:%d:%s",
                 super.encode(),
                 this.cargo.size(),

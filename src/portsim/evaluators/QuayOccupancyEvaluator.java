@@ -31,6 +31,8 @@ public class QuayOccupancyEvaluator extends StatisticsEvaluator {
      * @return number of quays
      */
     public int getQuaysOccupied() {
+        // TODO: Debug through the test of this method, including all other
+        //  called methods. Determine why this is returning 1, instead of 2.
         int occupied = 0;
         for (Quay quay : port.getQuays()) {
             if (!quay.isEmpty()) {

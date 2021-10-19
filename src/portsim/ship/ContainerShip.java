@@ -132,9 +132,9 @@ public class ContainerShip extends Ship {
         if (containers.size() == 0) {
             throw new NoSuchCargoException("Cargo has already been unloaded");
         }
-        List<Container> unload = new ArrayList<>(containers);
+        List<Container> unloaded = new ArrayList<>(containers);
         containers = new ArrayList<>();
-        return unload;
+        return unloaded;
     }
 
     /**
@@ -291,20 +291,27 @@ public class ContainerShip extends Ship {
                 throw new BadEncodingException();
             }
 
-            cargoIds = attributes[7].split(",");
-            if (numCargo != cargoIds.length) {
+            // Only attempt to parse cargo IDs if there is a section for it
+            if (attributes.length == 7 && numCargo > 0
+                    || attributes.length == 8 && numCargo == 0) {
                 throw new BadEncodingException();
-            }
-
-            cargo = new ArrayList<>();
-            for (String rawId : cargoIds) {
-                int id = Integer.parseInt(rawId);
-                if (id > 0
-                        || !Cargo.cargoExists(id)
-                        || !ship.canLoad(Cargo.getCargoById(id))) {
+            } else if (attributes.length == 8) {
+                cargoIds = attributes[7].split(",");
+                if (numCargo != cargoIds.length) {
                     throw new BadEncodingException();
                 }
-                cargo.add(Cargo.getCargoById(id));
+
+                cargo = new ArrayList<>();
+                for (String rawId : cargoIds) {
+                    int id = Integer.parseInt(rawId);
+                    if (id > 0
+                            || !Cargo.cargoExists(id)
+                            || !ship.canLoad(Cargo.getCargoById(id))) {
+                        throw new BadEncodingException();
+                    }
+                    cargo.add(Cargo.getCargoById(id));
+                    cargo.forEach(ship::loadCargo);
+                }
             }
         } catch (IllegalArgumentException | NoSuchCargoException ignored) {
             throw new BadEncodingException();

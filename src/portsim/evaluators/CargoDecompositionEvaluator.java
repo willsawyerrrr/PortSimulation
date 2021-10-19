@@ -91,7 +91,7 @@ public class CargoDecompositionEvaluator extends StatisticsEvaluator {
      *             increment that number</li>
      *             <li>If the cargo class has not been seen before then add its
      *             class simple name as a key in the map with a corresponding
-     *             value of 1 </li>
+     *             value of 1</li>
      *             <li>If the cargo type (Value of ContainerType / 
      *             BulkCargoType) for the given cargo class has been seen 
      *             before (exists as a key in the map) increment that
@@ -126,9 +126,10 @@ public class CargoDecompositionEvaluator extends StatisticsEvaluator {
             } else if (ship instanceof ContainerShip) {
                 List<Container> containers = ((ContainerShip) ship).getCargo();
 
-                for (Container con : containers) {
-                    updateValue(cargoStats, con.getClass().getSimpleName());
-                    updateValue(containerStats, con.getType());
+                for (Container container : containers) {
+                    updateValue(cargoStats,
+                            container.getClass().getSimpleName());
+                    updateValue(containerStats, container.getType());
                 }
             }
         } else if (movement.getDirection() == MovementDirection.INBOUND

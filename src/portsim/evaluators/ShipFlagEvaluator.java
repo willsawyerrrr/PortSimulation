@@ -33,7 +33,7 @@ public class ShipFlagEvaluator extends StatisticsEvaluator {
      * @return flag distribution
      */
     public Map<String, Integer> getFlagDistribution() {
-        return flagStats.isEmpty() ? new HashMap<>() : new HashMap<>(flagStats);
+        return new HashMap<>(flagStats);
     }
 
     /**
@@ -44,8 +44,8 @@ public class ShipFlagEvaluator extends StatisticsEvaluator {
      * @return number of times flag seen or 0 if not seen
      */
     public int getFlagStatistics(String flag) {
-        Integer distribution = getFlagDistribution().get(flag);
-        return (distribution == null) ? 0 : distribution;
+        Integer appearances = getFlagDistribution().get(flag);
+        return (appearances == null) ? 0 : appearances;
     }
 
     /**

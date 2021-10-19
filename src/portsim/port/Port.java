@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.StringJoiner;
-import java.util.function.Consumer;
 
 /**
  * A place where ships can come and dock with Quays to load / unload their
@@ -258,14 +257,12 @@ public class Port implements Tickable, Encodable {
             int numShipsInQueue = Integer.parseInt(shipQueueLine[1]);
             if (numShipsInQueue != 0) {
                 String[] shipIds = shipQueueLine[2].split(",");
-                int count = 0;
+                if (numShipsInQueue != shipIds.length) {
+                    throw new BadEncodingException();
+                }
                 for (String id : shipIds) {
                     long imoNumber = Long.parseLong(id);
                     shipQueue.add(Ship.getShipByImoNumber(imoNumber));
-                    count++;
-                }
-                if (numShipsInQueue != count) {
-                    throw new BadEncodingException();
                 }
             }
 
@@ -273,14 +270,12 @@ public class Port implements Tickable, Encodable {
             int numStoredCargo = Integer.parseInt(storedCargoLine[1]);
             if (numStoredCargo != 0) {
                 String[] cargoIds = storedCargoLine[2].split(",");
-                int count = 0;
+                if (numStoredCargo != cargoIds.length) {
+                    throw new BadEncodingException();
+                }
                 for (String id : cargoIds) {
                     int cargoId = Integer.parseInt(id);
                     storedCargo.add(Cargo.getCargoById(cargoId));
-                    count++;
-                }
-                if (numStoredCargo != count) {
-                    throw new BadEncodingException();
                 }
             }
 
@@ -292,6 +287,8 @@ public class Port implements Tickable, Encodable {
                     CargoMovement.fromString(line);
                 } else if (line.startsWith("Ship")) {
                     ShipMovement.fromString(line);
+                } else {
+                    throw new BadEncodingException();
                 }
             }
 
@@ -303,17 +300,23 @@ public class Port implements Tickable, Encodable {
                 for (int i = 2; i <= numEvaluators + 1; i++) {
                     switch (evaluators[i]) {
                         case "CargoDecompositionEvaluator":
-                            port.addStatisticsEvaluator(new CargoDecompositionEvaluator());
+                            port.addStatisticsEvaluator(
+                                    new CargoDecompositionEvaluator());
                             break;
                         case "QuayOccupancyEvaluator":
-                            port.addStatisticsEvaluator(new QuayOccupancyEvaluator(port));
+                            port.addStatisticsEvaluator(
+                                    new QuayOccupancyEvaluator(port));
                             break;
                         case "ShipFlagEvaluator":
-                            port.addStatisticsEvaluator(new ShipFlagEvaluator());
+                            port.addStatisticsEvaluator(
+                                    new ShipFlagEvaluator());
                             break;
                         case "ShipThroughputEvaluator":
-                            port.addStatisticsEvaluator(new ShipThroughputEvaluator());
+                            port.addStatisticsEvaluator(
+                                    new ShipThroughputEvaluator());
                             break;
+                        default:
+                            throw new BadEncodingException();
                     }
                 }
             }
@@ -331,7 +334,7 @@ public class Port implements Tickable, Encodable {
      * Adds a movement to the PriorityQueue of movements.
      * <p>
      * If the given movement's action time is less than the current number of
-     * minutes elapsed than an {@code IllegalArgumentException} should be
+     * minutes elapsed than an <pre>IllegalArgumentException</pre> should be
      * thrown.
      *
      * @param movement movement to add
@@ -340,10 +343,9 @@ public class Port implements Tickable, Encodable {
      *                                  already passed
      */
     public void addMovement(Movement movement) throws IllegalArgumentException {
-        long difference = time - movement.getTime();
-        if (difference > 0) {
+        if (movement.getTime() < time) {
             throw new IllegalArgumentException("This movement should have "
-                    + "occurred " + difference + " minutes ago.");
+                    + "already occurred.");
         }
         movements.add(movement);
     }
@@ -381,7 +383,7 @@ public class Port implements Tickable, Encodable {
     public void processMovement(Movement movement) {
         if (movement instanceof ShipMovement) {
             ShipMovement shipMovement = (ShipMovement) movement;
-            switch (movement.getDirection()) {
+            switch (shipMovement.getDirection()) {
                 case INBOUND:
                     shipQueue.add(shipMovement.getShip());
                     break;
@@ -400,7 +402,7 @@ public class Port implements Tickable, Encodable {
             }
         } else if (movement instanceof CargoMovement) {
             CargoMovement cargoMovement = (CargoMovement) movement;
-            switch (movement.getDirection()) {
+            switch (cargoMovement.getDirection()) {
                 case INBOUND:
                     storedCargo.addAll(cargoMovement.getCargo());
                     break;
@@ -580,7 +582,11 @@ public class Port implements Tickable, Encodable {
             }
         }
 
-        movements.forEach(this::processMovement);
+        for (Movement movement : movements) {
+            if (movement.getTime() == time) {
+                this.processMovement(movement);
+            }
+        }
 
         evaluators.forEach(StatisticsEvaluator::elapseOneMinute);
     }
@@ -625,7 +631,7 @@ public class Port implements Tickable, Encodable {
     public String encode() {
         List<Ship> ships = new ArrayList<>(shipQueue.getShipQueue());
         for (Quay quay : quays) {
-            if (!(quay.isEmpty())) {
+            if (!quay.isEmpty()) {
                 ships.add(quay.getShip());
             }
         }
@@ -645,87 +651,66 @@ public class Port implements Tickable, Encodable {
             }
         }
 
-        StringBuilder builder = new StringBuilder();
-        builder.append(name);
-        builder.append("\n");
-        builder.append(time);
-        builder.append("\n");
+        StringJoiner joiner = new StringJoiner("\n");
+        joiner.add(name);
+        joiner.add(Long.toString(time));
 
-        builder.append(allCargo.size());
-        builder.append("\n");
+        joiner.add(Integer.toString(allCargo.size()));
         if (allCargo.size() > 0) {
-            StringJoiner joiner = new StringJoiner("\n");
-            for (Cargo cargo : allCargo) {
-                joiner.add(cargo.encode());
-            }
-            builder.append(joiner);
+            allCargo.forEach(cargo -> joiner.add(cargo.encode()));
         }
 
-        builder.append(ships.size());
-        builder.append("\n");
+        joiner.add(Integer.toString(ships.size()));
+        joiner.add("\n");
         if (ships.size() > 0) {
-            StringJoiner joiner = new StringJoiner("\n");
-            for (Ship ship : ships) {
-                joiner.add(ship.encode());
-            }
-            builder.append(joiner);
+            ships.forEach(ship -> joiner.add(ship.encode()));
         }
 
-        builder.append(quays.size());
-        builder.append("\n");
+        joiner.add(Integer.toString(quays.size()));
         if (quays.size() > 0) {
-            StringJoiner joiner = new StringJoiner("\n");
-            for (Quay quay : quays) {
-                joiner.add(quay.encode());
-            }
-            builder.append(joiner);
+            quays.forEach(quay -> joiner.add(quay.encode()));
         }
 
-        builder.append("ShipQueue:");
-        builder.append(shipQueue.getShipQueue().size());
-        builder.append(":");
-        if (shipQueue.getShipQueue().size() > 0) {
-            StringJoiner joiner = new StringJoiner(",");
-            for (Ship ship : shipQueue.getShipQueue()) {
-                joiner.add(String.valueOf(ship.getImoNumber()));
-            }
-            builder.append(joiner);
+        List<Ship> queue = shipQueue.getShipQueue();
+        StringJoiner queueJoiner = new StringJoiner(":");
+        queueJoiner.add("ShipQueue");
+        queueJoiner.add(Integer.toString(queue.size()));
+        if (queue.size() > 0) {
+            StringJoiner internalQueueJoiner = new StringJoiner(",");
+            queue.forEach(ship -> internalQueueJoiner.add(
+                    Long.toString(ship.getImoNumber())));
+            queueJoiner.merge(internalQueueJoiner);
         }
-        builder.setLength(builder.length() - 1);
+        joiner.merge(queueJoiner);
 
-        builder.append("StoredCargo:");
-        builder.append(storedCargo.size());
-        builder.append(":");
+        StringJoiner cargoJoiner = new StringJoiner(":");
+        cargoJoiner.add("StoredCargo");
+        cargoJoiner.add(Integer.toString(storedCargo.size()));
         if (storedCargo.size() > 0) {
-            StringJoiner joiner = new StringJoiner(",");
-            for (Cargo cargo : storedCargo) {
-                joiner.add(String.valueOf(cargo.getId()));
-            }
-            builder.append(joiner);
+            StringJoiner internalCargoJoiner = new StringJoiner(",");
+            storedCargo.forEach(cargo -> internalCargoJoiner.add(
+                    Integer.toString(cargo.getId())));
+            cargoJoiner.merge(internalCargoJoiner);
         }
+        joiner.merge(cargoJoiner);
 
-        builder.append("Movements:");
-        builder.append(movements.size());
-        builder.append("\n");
+        joiner.add(String.format("Movements:%d", movements.size()));
+        joiner.add(Integer.toString(movements.size()));
         if (movements.size() > 0) {
-            StringJoiner joiner = new StringJoiner("\n");
-            for (Movement movement : movements) {
-                joiner.add(movement.encode());
-            }
-            builder.append(joiner);
+            movements.forEach(movement -> joiner.add(movement.encode()));
         }
 
-        builder.append("Evaluators:");
-        builder.append(evaluators.size());
-        builder.append(":");
+        StringJoiner evalJoiner = new StringJoiner(":");
+        evalJoiner.add("Evaluators");
+        evalJoiner.add(Integer.toString(evaluators.size()));
         if (evaluators.size() > 0) {
-            StringJoiner joiner = new StringJoiner(",");
-            for (StatisticsEvaluator evaluator : evaluators) {
-                builder.append(evaluator.getClass().getSimpleName());
-            }
-            builder.append(joiner);
+            StringJoiner internalEvalJoiner = new StringJoiner(",");
+            evaluators.forEach(eval -> joiner.add(
+                    eval.getClass().getSimpleName()));
+            evalJoiner.merge(internalEvalJoiner);
         }
+        joiner.merge(evalJoiner);
 
-        return builder.toString();
+        return joiner.toString();
     }
 }
