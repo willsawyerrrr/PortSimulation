@@ -75,7 +75,7 @@ public class ContainerQuay extends Quay {
      */
     @Override
     public int hashCode() {
-        return super.hashCode() % maxContainers;
+        return super.hashCode() * maxContainers;
     }
 
     /**

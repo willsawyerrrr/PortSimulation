@@ -73,7 +73,7 @@ public class BulkQuay extends Quay {
      */
     @Override
     public int hashCode() {
-        return super.hashCode() % maxTonnage;
+        return super.hashCode() * maxTonnage;
     }
 
     /**

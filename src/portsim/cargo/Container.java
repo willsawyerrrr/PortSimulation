@@ -68,7 +68,7 @@ public class Container extends Cargo {
      */
     @Override
     public int hashCode() {
-        return super.hashCode() % type.hashCode();
+        return super.hashCode() * type.hashCode();
     }
 
     /**

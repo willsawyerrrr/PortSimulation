@@ -224,8 +224,8 @@ public abstract class Ship implements Encodable {
      */
     @Override
     public int hashCode() {
-        return (name.hashCode() * flag.hashCode()) % originFlag.hashCode()
-                + (int) imoNumber;
+        return name.hashCode() * flag.hashCode() * originFlag.hashCode()
+                * (int) imoNumber;
     }
 
     /**

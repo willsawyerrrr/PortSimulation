@@ -90,7 +90,7 @@ public class BulkCargo extends Cargo {
      */
     @Override
     public int hashCode() {
-        return super.hashCode() % type.hashCode() + tonnage;
+        return super.hashCode() * type.hashCode() * tonnage;
     }
 
     /**
