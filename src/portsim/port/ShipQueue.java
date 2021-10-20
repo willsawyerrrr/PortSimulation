@@ -239,6 +239,9 @@ public class ShipQueue implements Encodable {
 
         if (numShips != 0) {
             String[] rawImoNums = attributes[2].split(",");
+            if (numShips != rawImoNums.length) {
+                throw new BadEncodingException();
+            }
             Long[] imoNums = new Long[rawImoNums.length];
             for (int i = 0; i < rawImoNums.length; i++) {
                 try {

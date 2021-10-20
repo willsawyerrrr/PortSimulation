@@ -20,38 +20,6 @@ public abstract class Movement implements Encodable {
     private MovementDirection direction;
 
     /**
-     * A comparison function, which imposes a <em>total ordering</em> on
-     * Movements.
-     */
-    public static class MovementComparator implements Comparator<Movement> {
-        /**
-         * Compares two Movements for order. Returns a negative integer,
-         * zero, or a positive integer as the first argument is to occur
-         * before, at the same time as, or after  the second.
-         *
-         * @param m1 the first movement to be compared
-         * @param m2 the second movement to be compared
-         *
-         * @return a negative integer, zero, or a positive integer as the first
-         *         argument is to occur before, at the same time as, or after
-         *         the second
-         *
-         * @throws NullPointerException if an argument is null and this
-         *                              comparator does not permit null
-         *                              arguments
-         * @throws ClassCastException if the arguments' types prevent them from
-         *                            being compared by this comparator
-         */
-        @Override
-        public int compare(Movement m1, Movement m2)
-                throws NullPointerException, ClassCastException {
-            Long time1 = m1.getTime();
-            Long time2 = m2.getTime();
-            return time1.compareTo(time2);
-        }
-    }
-
-    /**
      * Creates a new movement with the given action time and direction.
      *
      * @param time      the time the movement should occur

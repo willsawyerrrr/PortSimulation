@@ -74,7 +74,8 @@ public class Port implements Tickable, Encodable {
         this.quays = new ArrayList<>();
         this.storedCargo = new ArrayList<>();
         this.evaluators = new ArrayList<>();
-        this.movements = new PriorityQueue<>(new Movement.MovementComparator());
+        this.movements =
+                new PriorityQueue<>(Comparator.comparing(Movement::getTime));
     }
 
     /**
@@ -106,7 +107,6 @@ public class Port implements Tickable, Encodable {
         this.quays = quays;
         this.storedCargo = storedCargo;
         this.evaluators = new ArrayList<>();
-        // this.movements = new PriorityQueue<>(new Movement.MovementComparator());
         this.movements =
                 new PriorityQueue<>(Comparator.comparing(Movement::getTime));
     }

@@ -52,5 +52,7 @@ public class QuayOccupancyEvaluator extends StatisticsEvaluator {
      * @param movement movement to read
      */
     @Override
-    public void onProcessMovement(Movement movement) {}
+    public void onProcessMovement(Movement movement) {
+        // do nothing
+    }
 }
