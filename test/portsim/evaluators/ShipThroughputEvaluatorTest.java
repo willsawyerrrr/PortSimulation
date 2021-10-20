@@ -10,6 +10,7 @@ import portsim.movement.MovementDirection;
 import portsim.movement.ShipMovement;
 import portsim.ship.BulkCarrier;
 import portsim.ship.NauticalFlag;
+import portsim.ship.Ship;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,12 +64,8 @@ public class ShipThroughputEvaluatorTest {
     @After
     public void tearDown() {
         eval = null;
-        carrier = null;
-        cargo = null;
-        bulkCargo1 = null;
-        bulkCargo2 = null;
-        container1 = null;
-        container2 = null;
+        Ship.resetShipRegistry();
+        Cargo.resetCargoRegistry();
     }
 
     @Test
