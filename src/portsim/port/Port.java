@@ -13,10 +13,7 @@ import portsim.util.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.StringJoiner;
+import java.util.*;
 
 /**
  * A place where ships can come and dock with Quays to load / unload their
@@ -109,7 +106,9 @@ public class Port implements Tickable, Encodable {
         this.quays = quays;
         this.storedCargo = storedCargo;
         this.evaluators = new ArrayList<>();
-        this.movements = new PriorityQueue<>(new Movement.MovementComparator());
+        // this.movements = new PriorityQueue<>(new Movement.MovementComparator());
+        this.movements =
+                new PriorityQueue<>(Comparator.comparing(Movement::getTime));
     }
 
     /**
@@ -428,15 +427,8 @@ public class Port implements Tickable, Encodable {
      * @param eval statistics evaluator to add to the port
      */
     public void addStatisticsEvaluator(StatisticsEvaluator eval) {
-        boolean add = true;
-        for (StatisticsEvaluator existingEval : evaluators) {
-            if (eval.getClass().getSimpleName().equals(
-                    existingEval.getClass().getSimpleName())) {
-                add = false;
-                break;
-            }
-        }
-        if (add) {
+        if (evaluators.stream().noneMatch(existing ->
+                eval.getClass().equals(existing.getClass()))) {
             evaluators.add(eval);
         }
     }
@@ -585,10 +577,14 @@ public class Port implements Tickable, Encodable {
         for (Movement movement : movements) {
             if (movement.getTime() == time) {
                 this.processMovement(movement);
+                movements.remove(movement);
             }
         }
 
-        evaluators.forEach(StatisticsEvaluator::elapseOneMinute);
+        for (StatisticsEvaluator eval : evaluators) {
+            eval.elapseOneMinute();
+        }
+        // evaluators.forEach(StatisticsEvaluator::elapseOneMinute);
     }
 
     /**
