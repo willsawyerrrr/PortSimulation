@@ -153,7 +153,7 @@ public class ShipQueue implements Encodable {
     public int hashCode() {
         int code = 1;
         for (Ship ship : queue) {
-            code = (code * ship.hashCode()) % 10000;
+            code = code * ship.hashCode();
         }
         return code;
     }
