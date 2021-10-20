@@ -212,7 +212,7 @@ public class ShipQueueTest {
         queue1.add(carrier2);
         queue2.add(carrier2);
         queue2.add(carrier1);
-        assertEquals(queue1, queue2);
+        assertNotEquals(queue1, queue2);
     }
 
     @Test
@@ -233,15 +233,6 @@ public class ShipQueueTest {
         queue1.add(containerShip2);
         queue2.add(carrier1);
         queue2.add(containerShip2);
-        assertEquals(queue1.hashCode(), queue2.hashCode());
-    }
-
-    @Test
-    public void differentOrderHashCodeTest() {
-        queue1.add(carrier1);
-        queue1.add(containerShip2);
-        queue2.add(containerShip2);
-        queue2.add(carrier1);
         assertEquals(queue1.hashCode(), queue2.hashCode());
     }
 

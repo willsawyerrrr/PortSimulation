@@ -124,7 +124,7 @@ public class ShipQueue implements Encodable {
      * queue.
      * <p>
      * For two ship queue to be equal, they must have the same ships in the
-     * queue.
+     * queue, in the same order.
      *
      * @param o other object to check equality
      *
@@ -136,9 +136,7 @@ public class ShipQueue implements Encodable {
             return false;
         }
         ShipQueue other = (ShipQueue) o;
-        // If A subset of B and B subset of A, then A = B.
-        return getShipQueue().containsAll(other.getShipQueue())
-                && other.getShipQueue().containsAll(getShipQueue());
+        return queue.equals(other.getShipQueue());
     }
 
     /**
