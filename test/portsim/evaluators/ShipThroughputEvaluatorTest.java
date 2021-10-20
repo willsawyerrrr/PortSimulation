@@ -17,7 +17,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 public class ShipThroughputEvaluatorTest {
-    ShipThroughputEvaluator eval = null;
+    ShipThroughputEvaluator eval;
     BulkCarrier carrier;
     List<Cargo> cargo;
     Cargo bulkCargo1;
@@ -58,6 +58,17 @@ public class ShipThroughputEvaluatorTest {
                 "America",
                 ContainerType.OPEN_TOP
         );
+    }
+
+    @After
+    public void tearDown() {
+        eval = null;
+        carrier = null;
+        cargo = null;
+        bulkCargo1 = null;
+        bulkCargo2 = null;
+        container1 = null;
+        container2 = null;
     }
 
     @Test

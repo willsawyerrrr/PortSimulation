@@ -57,6 +57,16 @@ public class ShipQueueTest {
         );
     }
 
+    @After
+    public void tearDown() {
+        queue1 = null;
+        queue2 = null;
+        carrier1 = null;
+        carrier2 = null;
+        containerShip1 = null;
+        containerShip2 = null;
+    }
+
     @Test
     public void basicConstructorTest() {
         assertEquals(new ArrayList<>(), queue1.getShipQueue());
