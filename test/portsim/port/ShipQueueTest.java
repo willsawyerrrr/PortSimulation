@@ -286,6 +286,13 @@ public class ShipQueueTest {
     }
 
     @Test(expected = BadEncodingException.class)
+    public void trailingCommaInvalidFromStringTest()
+            throws BadEncodingException {
+        String encoding = "ShipQueue:2:1234567,7654321,";
+        ShipQueue.fromString(encoding);
+    }
+
+    @Test(expected = BadEncodingException.class)
     public void doesNotStartWithShipQueueInvalidFromStringTest()
             throws BadEncodingException {
         String encoding = "Queue:2:1234567,7654321";
