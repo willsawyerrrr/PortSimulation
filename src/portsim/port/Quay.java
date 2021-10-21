@@ -203,7 +203,7 @@ public abstract class Quay implements Encodable {
      *                              invalid according to the rules above
      */
     public static Quay fromString(String string) throws BadEncodingException {
-        String[] attributes = string.split(":");
+        String[] attributes = string.split(":", -1);
 
         if (attributes.length != 4) {
             throw new BadEncodingException();
