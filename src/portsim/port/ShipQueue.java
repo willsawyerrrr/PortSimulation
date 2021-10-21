@@ -223,7 +223,8 @@ public class ShipQueue implements Encodable {
 
         if (attributes.length < 2
                 || attributes.length > 3
-                || !attributes[0].equals("ShipQueue")) {
+                || !attributes[0].equals("ShipQueue")
+                || string.endsWith(",")) {
             throw new BadEncodingException();
         }
 

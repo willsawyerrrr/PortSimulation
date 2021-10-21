@@ -233,8 +233,7 @@ public class Port implements Tickable, Encodable {
         List<Cargo> storedCargo = new ArrayList<>();
         Port port;
 
-        BufferedReader br = new BufferedReader(reader);
-        try {
+        try (BufferedReader br = new BufferedReader(reader)) {
             name = br.readLine();
             time = Long.parseLong(br.readLine());
 
@@ -266,10 +265,14 @@ public class Port implements Tickable, Encodable {
                 }
             }
 
-            String[] storedCargoLine = br.readLine().split(":");
-            int numStoredCargo = Integer.parseInt(storedCargoLine[1]);
+            String storedCargoLine = br.readLine();
+            if (storedCargoLine.endsWith(",")) {
+                throw new BadEncodingException();
+            }
+            String[] splitStoredCargoLine = storedCargoLine.split(":");
+            int numStoredCargo = Integer.parseInt(splitStoredCargoLine[1]);
             if (numStoredCargo != 0) {
-                String[] cargoIds = storedCargoLine[2].split(",");
+                String[] cargoIds = splitStoredCargoLine[2].split(",");
                 if (numStoredCargo != cargoIds.length) {
                     throw new BadEncodingException();
                 }
@@ -280,6 +283,9 @@ public class Port implements Tickable, Encodable {
             }
 
             String movementLine = br.readLine();
+            if (movementLine.endsWith(",")) {
+                throw new BadEncodingException();
+            }
             numMovements = Integer.parseInt(movementLine.split(":")[1]);
             for (int i = 1; i <= numMovements; i++) {
                 String line = br.readLine();
@@ -294,7 +300,11 @@ public class Port implements Tickable, Encodable {
 
             port = new Port(name, time, shipQueue, quays, storedCargo);
 
-            String[] evaluators = br.readLine().split(":");
+            String evaluatorLine = br.readLine();
+            if (evaluatorLine.endsWith(",")) {
+                throw new BadEncodingException();
+            }
+            String[] evaluators = evaluatorLine.split(":");
             numEvaluators = Integer.parseInt(evaluators[1]);
             if (numEvaluators != 0) {
                 for (int i = 2; i <= numEvaluators + 1; i++) {
@@ -326,6 +336,8 @@ public class Port implements Tickable, Encodable {
                 | NoSuchCargoException ignored) {
             throw new BadEncodingException();
         }
+
+        reader.close();
 
         return port;
     }

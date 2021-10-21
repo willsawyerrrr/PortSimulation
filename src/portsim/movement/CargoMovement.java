@@ -150,7 +150,9 @@ public class CargoMovement extends Movement {
         String[] cargoIds;
         List<Cargo> cargo;
 
-        if (!attributes[0].equals("CargoMovement") || attributes.length != 5) {
+        if (!attributes[0].equals("CargoMovement")
+                || attributes.length != 5
+                || string.endsWith(",")) {
             throw new BadEncodingException();
         }
 
