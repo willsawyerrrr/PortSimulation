@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * A place where ships can come and dock with Quays to load / unload their
@@ -387,16 +388,17 @@ public class Port implements Tickable, Encodable {
                     shipQueue.add(shipMovement.getShip());
                     break;
                 case OUTBOUND:
-                    for (Cargo cargo : storedCargo) {
-                        if (shipMovement.getShip().canLoad(cargo)) {
-                            shipMovement.getShip().loadCargo(cargo);
-                        }
-                    }
-                    for (Quay quay : quays) {
-                        if (shipMovement.getShip().equals(quay.getShip())) {
-                            quay.shipDeparts();
-                        }
-                    }
+                    Ship ship = shipMovement.getShip();
+                    // Load appropriate cargo to the ship and remove it from
+                    // the warehouse
+                    Stream<Cargo> involvedCargo =
+                            storedCargo.stream().filter(ship::canLoad);
+                    involvedCargo.forEach(ship::loadCargo);
+                    involvedCargo.forEach(cargo -> storedCargo.remove(cargo));
+                    // Departs ship from its quay
+                    quays.stream().filter(quay ->
+                            quay.getShip().equals(shipMovement.getShip()))
+                            .forEach(Quay::shipDeparts);
                     break;
             }
         } else if (movement instanceof CargoMovement) {
@@ -406,16 +408,13 @@ public class Port implements Tickable, Encodable {
                     storedCargo.addAll(cargoMovement.getCargo());
                     break;
                 case OUTBOUND:
-                    for (Cargo moving : cargoMovement.getCargo()) {
-                        storedCargo.removeIf(
-                                stored -> moving.getId() == stored.getId());
-                    }
-                    break;
+                    cargoMovement.getCargo().forEach(moving ->
+                            storedCargo.removeIf(
+                                stored -> stored.getId() == moving.getId()));
             }
         }
-        for (StatisticsEvaluator evaluator : evaluators) {
-            evaluator.onProcessMovement(movement);
-        }
+
+        evaluators.forEach(eval -> eval.onProcessMovement(movement));
     }
 
     /**
