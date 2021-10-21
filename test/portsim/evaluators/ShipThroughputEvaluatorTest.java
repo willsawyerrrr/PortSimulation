@@ -94,7 +94,7 @@ public class ShipThroughputEvaluatorTest {
 
         while (eval.getTime() < 65) {
             eval.elapseOneMinute();
-            switch (Integer.valueOf(eval.getTime())) {
+            switch (Long.valueOf(eval.getTime()).intValue()) {
                 case 2:
                     assertEquals(0, eval.getThroughputPerHour());
                     break;
