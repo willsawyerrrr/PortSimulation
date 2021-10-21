@@ -142,7 +142,7 @@ public class CargoMovement extends Movement {
      */
     public static CargoMovement fromString(String string)
             throws BadEncodingException {
-        String[] attributes = string.split(":", -1);
+        String[] attributes = string.split(":");
 
         long time;
         MovementDirection direction;
@@ -150,8 +150,8 @@ public class CargoMovement extends Movement {
         String[] cargoIds;
         List<Cargo> cargo;
 
-        if (attributes.length != 5
-                || !attributes[0].equals("CargoMovement")
+        if (!attributes[0].equals("CargoMovement")
+                || attributes.length != 5
                 || string.endsWith(",")) {
             throw new BadEncodingException();
         }

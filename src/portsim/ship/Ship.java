@@ -319,12 +319,17 @@ public abstract class Ship implements Encodable {
      *                              invalid according to the rules above
      */
     public static Ship fromString(String string) throws BadEncodingException {
-        String[] attributes = string.split(":", -1);
+        String[] attributes = string.split(":");
 
-        if (attributes.length == 7 && attributes[0].equals("BulkCarrier")) {
+        if (attributes.length < 6 || attributes.length > 9) {
+            throw new BadEncodingException();
+        }
+
+        if (attributes[0].equals("BulkCarrier")
+                && (attributes.length == 6 || attributes.length == 7)) {
             return BulkCarrier.fromString(attributes);
-        } else if (attributes.length == 8
-                && attributes[0].equals("ContainerShip")) {
+        } else if (attributes[0].equals("ContainerShip")
+                && attributes.length == 7 || attributes.length == 8) {
             return ContainerShip.fromString(attributes);
         } else {
             throw new BadEncodingException();

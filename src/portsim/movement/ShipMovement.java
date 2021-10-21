@@ -121,14 +121,14 @@ public class ShipMovement extends Movement {
      */
     public static ShipMovement fromString(String string)
             throws BadEncodingException {
-        String[] attributes = string.split(":", -1);
+        String[] attributes = string.split(":");
 
         long time;
         long imoNumber;
         MovementDirection direction;
         Ship ship;
 
-        if (attributes.length != 4 || !attributes[0].equals("ShipMovement")) {
+        if (!attributes[0].equals("ShipMovement") || attributes.length != 4) {
             throw new BadEncodingException();
         }
 

@@ -219,9 +219,10 @@ public class ShipQueue implements Encodable {
         int numShips;
         ShipQueue queue = new ShipQueue();
 
-        String[] attributes = string.split(":", -1);
+        String[] attributes = string.split(":");
 
-        if (attributes.length != 3
+        if (attributes.length < 2
+                || attributes.length > 3
                 || !attributes[0].equals("ShipQueue")
                 || string.endsWith(",")) {
             throw new BadEncodingException();
@@ -234,7 +235,7 @@ public class ShipQueue implements Encodable {
         }
 
         if (numShips != 0) {
-            String[] rawImoNums = attributes[2].split(",", -1);
+            String[] rawImoNums = attributes[2].split(",");
             if (numShips != rawImoNums.length) {
                 throw new BadEncodingException();
             }

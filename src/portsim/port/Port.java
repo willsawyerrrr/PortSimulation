@@ -252,14 +252,10 @@ public class Port implements Tickable, Encodable {
                 quays.add(Quay.fromString(br.readLine()));
             }
 
-            String shipQueueLine = br.readLine();
-            String[] splitQueueLine = shipQueueLine.split(":", -1);
-            if (splitQueueLine.length != 3) {
-                throw new BadEncodingException();
-            }
-            int numShipsInQueue = Integer.parseInt(splitQueueLine[1]);
+            String[] shipQueueLine = br.readLine().split(":");
+            int numShipsInQueue = Integer.parseInt(shipQueueLine[1]);
             if (numShipsInQueue != 0) {
-                String[] shipIds = splitQueueLine[2].split(",", -1);
+                String[] shipIds = shipQueueLine[2].split(",");
                 if (numShipsInQueue != shipIds.length) {
                     throw new BadEncodingException();
                 }
@@ -270,13 +266,13 @@ public class Port implements Tickable, Encodable {
             }
 
             String storedCargoLine = br.readLine();
-            String[] splitCargoLine = storedCargoLine.split(":");
-            if (storedCargoLine.endsWith(",") || splitCargoLine.length != 3) {
+            if (storedCargoLine.endsWith(",")) {
                 throw new BadEncodingException();
             }
-            int numStoredCargo = Integer.parseInt(splitCargoLine[1]);
+            String[] splitStoredCargoLine = storedCargoLine.split(":");
+            int numStoredCargo = Integer.parseInt(splitStoredCargoLine[1]);
             if (numStoredCargo != 0) {
-                String[] cargoIds = splitCargoLine[2].split(",", -1);
+                String[] cargoIds = splitStoredCargoLine[2].split(",");
                 if (numStoredCargo != cargoIds.length) {
                     throw new BadEncodingException();
                 }
@@ -287,11 +283,10 @@ public class Port implements Tickable, Encodable {
             }
 
             String movementLine = br.readLine();
-            String[] movementParts = movementLine.split(":", -1);
-            if (movementLine.endsWith(",") || movementParts.length != 2) {
+            if (movementLine.endsWith(",")) {
                 throw new BadEncodingException();
             }
-            numMovements = Integer.parseInt(movementParts[1]);
+            numMovements = Integer.parseInt(movementLine.split(":")[1]);
             for (int i = 1; i <= numMovements; i++) {
                 String line = br.readLine();
                 if (line.startsWith("Cargo")) {
@@ -306,10 +301,10 @@ public class Port implements Tickable, Encodable {
             port = new Port(name, time, shipQueue, quays, storedCargo);
 
             String evaluatorLine = br.readLine();
-            String[] evaluators = evaluatorLine.split(":", -1);
-            if (evaluators.length != 3 || evaluatorLine.endsWith(",")) {
+            if (evaluatorLine.endsWith(",")) {
                 throw new BadEncodingException();
             }
+            String[] evaluators = evaluatorLine.split(":");
             numEvaluators = Integer.parseInt(evaluators[1]);
             if (numEvaluators != 0) {
                 for (int i = 2; i <= numEvaluators + 1; i++) {
