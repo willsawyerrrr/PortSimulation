@@ -27,34 +27,14 @@ public class ShipQueueTest {
     public void setUp() {
         queue1 = new ShipQueue();
         queue2 = new ShipQueue();
-        carrier1 = new BulkCarrier(
-                1234567,
-                "Alpha",
-                "Australia",
-                NauticalFlag.HOTEL,
-                85
-        );
-        carrier2 = new BulkCarrier(
-                4567890,
-                "Bravo",
-                "China",
-                NauticalFlag.NOVEMBER,
-                120
-        );
-        containerShip1 = new ContainerShip(
-                9876543,
-                "Charlie",
-                "England",
-                NauticalFlag.WHISKEY,
-                8
-        );
-        containerShip2 = new ContainerShip(
-                7654321,
-                "Delta",
-                "New Zealand",
-                NauticalFlag.NOVEMBER,
-                15
-        );
+        carrier1 = new BulkCarrier(1234567, "Alpha", "Australia",
+                NauticalFlag.HOTEL, 85);
+        carrier2 = new BulkCarrier(4567890, "Bravo", "China",
+                NauticalFlag.NOVEMBER, 120);
+        containerShip1 = new ContainerShip(9876543, "Charlie", "England",
+                NauticalFlag.WHISKEY, 8);
+        containerShip2 = new ContainerShip(7654321, "Delta", "New Zealand",
+                NauticalFlag.NOVEMBER, 15);
     }
 
     @After

@@ -29,36 +29,13 @@ public class ShipThroughputEvaluatorTest {
     @Before
     public void setUp() {
         eval = new ShipThroughputEvaluator();
-        carrier = new BulkCarrier(
-                1234567,
-                "Alpha",
-                "Australia",
-                NauticalFlag.WHISKEY,
-                15
-        );
+        carrier = new BulkCarrier(1234567, "Alpha", "Australia",
+                NauticalFlag.WHISKEY, 15);
         cargo = new ArrayList<>();
-        bulkCargo1 = new BulkCargo(
-                1,
-                "Australia",
-                80,
-                BulkCargoType.GRAIN
-        );
-        bulkCargo2 = new BulkCargo(
-                2,
-                "China",
-                100,
-                BulkCargoType.MINERALS
-        );
-        container1 = new Container(
-                3,
-                "New Zealand",
-                ContainerType.STANDARD
-        );
-        container2 = new Container(
-                4,
-                "America",
-                ContainerType.OPEN_TOP
-        );
+        bulkCargo1 = new BulkCargo(1, "Australia", 80, BulkCargoType.GRAIN);
+        bulkCargo2 = new BulkCargo(2, "China", 100, BulkCargoType.MINERALS);
+        container1 = new Container(3, "New Zealand", ContainerType.STANDARD);
+        container2 = new Container(4, "America", ContainerType.OPEN_TOP);
     }
 
     @After
@@ -76,10 +53,8 @@ public class ShipThroughputEvaluatorTest {
 
     @Test
     public void processValidMovementTest() {
-        Movement validMovement = new ShipMovement(
-                5,
-                MovementDirection.OUTBOUND,
-                carrier);
+        Movement validMovement = new ShipMovement(5,
+                MovementDirection.OUTBOUND, carrier);
 
         assertEquals(0, eval.getThroughputPerHour());
         eval.onProcessMovement(validMovement);
@@ -94,11 +69,8 @@ public class ShipThroughputEvaluatorTest {
         cargo.add(container1);
         cargo.add(container2);
 
-        Movement invalidMovement = new CargoMovement(
-                3,
-                MovementDirection.OUTBOUND,
-                cargo
-        );
+        Movement invalidMovement = new CargoMovement(3,
+                MovementDirection.OUTBOUND, cargo);
 
         assertEquals(0, eval.getThroughputPerHour());
         eval.onProcessMovement(invalidMovement);
@@ -107,11 +79,8 @@ public class ShipThroughputEvaluatorTest {
 
     @Test
     public void processInvalidInboundMovementTest() {
-        Movement invalidMovement = new ShipMovement(
-                3,
-                MovementDirection.INBOUND,
-                carrier
-        );
+        Movement invalidMovement = new ShipMovement(3,
+                MovementDirection.INBOUND, carrier);
 
         assertEquals(0, eval.getThroughputPerHour());
         eval.onProcessMovement(invalidMovement);
@@ -120,24 +89,27 @@ public class ShipThroughputEvaluatorTest {
 
     @Test
     public void removeMovementAfter60MinutesTest() {
-        Movement validMovement = new ShipMovement(
-                3,
-                MovementDirection.OUTBOUND,
-                carrier);
+        Movement validMovement = new ShipMovement(3,
+                MovementDirection.OUTBOUND, carrier);
 
         while (eval.getTime() < 65) {
             eval.elapseOneMinute();
-            if (eval.getTime() == 2) {
-                assertEquals(0, eval.getThroughputPerHour());
-            } else if (eval.getTime() == 3) {
-                eval.onProcessMovement(validMovement);
-                assertEquals(1, eval.getThroughputPerHour());
-            } else if (eval.getTime() == 62) {
-                assertEquals(1, eval.getThroughputPerHour());
-            } else if (eval.getTime() == 63) {
-                assertEquals(1, eval.getThroughputPerHour());
-            } else if (eval.getTime() == 64) {
-                assertEquals(0, eval.getThroughputPerHour());
+            switch (eval.getTime()) {
+                case 2:
+                    assertEquals(0, eval.getThroughputPerHour());
+                    break;
+                case 3:
+                    eval.onProcessMovement(validMovement);
+                    assertEquals(1, eval.getThroughputPerHour());
+                    break;
+                case 62:
+                    assertEquals(1, eval.getThroughputPerHour());
+                    break;
+                case 63:
+                    assertEquals(1, eval.getThroughputPerHour());
+                    break;
+                case 64:
+                    assertEquals(0, eval.getThroughputPerHour());
             }
         }
     }
