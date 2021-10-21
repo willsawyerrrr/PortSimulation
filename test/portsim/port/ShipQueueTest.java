@@ -300,7 +300,14 @@ public class ShipQueueTest {
     }
 
     @Test(expected = BadEncodingException.class)
-    public void numShipsNotEqualNumberOfImoNumbersInvalidFromStringTest()
+    public void numShipsLessThanNumberOfImoNumbersInvalidFromStringTest()
+            throws BadEncodingException {
+        String encoding = "ShipQueue:1:1234567,7654321";
+        ShipQueue.fromString(encoding);
+    }
+
+    @Test(expected = BadEncodingException.class)
+    public void numShipsGreaterThanNumberOfImoNumbersInvalidFromStringTest()
             throws BadEncodingException {
         String encoding = "ShipQueue:3:1234567,7654321";
         ShipQueue.fromString(encoding);
