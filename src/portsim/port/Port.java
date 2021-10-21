@@ -545,9 +545,8 @@ public class Port implements Tickable, Encodable {
 
         if (time % 10 == 0) {
             for (Quay quay : quays) {
-                if (shipQueue.peek().canDock(quay)) {
+                if (quay.isEmpty() && shipQueue.peek().canDock(quay)) {
                     quay.shipArrives(shipQueue.poll());
-                    break;
                 }
             }
         }
@@ -581,10 +580,7 @@ public class Port implements Tickable, Encodable {
             }
         }
 
-        for (StatisticsEvaluator eval : evaluators) {
-            eval.elapseOneMinute();
-        }
-        // evaluators.forEach(StatisticsEvaluator::elapseOneMinute);
+        evaluators.forEach(eval -> eval.elapseOneMinute());
     }
 
     /**

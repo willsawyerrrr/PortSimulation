@@ -70,9 +70,9 @@ public class ContainerShip extends Ship {
     @Override
     public boolean canDock(Quay quay) {
         if (quay instanceof ContainerQuay) {
-            ContainerQuay containerQuay = (ContainerQuay) quay;
-            // check if quay can handle ship cargo
-            return containerQuay.getMaxContainers() >= this.containers.size();
+            ContainerQuay conQuay = (ContainerQuay) quay;
+            return this.containers.isEmpty()
+                    || conQuay.getMaxContainers() >= this.containers.size();
         }
         return false;
     }

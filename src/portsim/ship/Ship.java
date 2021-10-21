@@ -321,7 +321,7 @@ public abstract class Ship implements Encodable {
     public static Ship fromString(String string) throws BadEncodingException {
         String[] attributes = string.split(":");
 
-        if (attributes.length == 0) {
+        if (attributes.length < 6 || attributes.length > 9) {
             throw new BadEncodingException();
         }
 
