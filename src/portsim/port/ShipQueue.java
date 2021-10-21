@@ -132,11 +132,14 @@ public class ShipQueue implements Encodable {
      */
     @Override
     public boolean equals(Object o) {
+        return false;
+        /*
         if (!(o instanceof ShipQueue)) {
             return false;
         }
         ShipQueue other = (ShipQueue) o;
         return queue.equals(other.getShipQueue());
+         */
     }
 
     /**
@@ -216,24 +219,22 @@ public class ShipQueue implements Encodable {
      */
     public static ShipQueue fromString(String string)
             throws BadEncodingException {
+        int numShips;
+        ShipQueue queue = new ShipQueue();
+
         String[] attributes = string.split(":");
 
-        if (attributes.length < 2 || attributes.length > 3) {
+        if (attributes.length < 2
+                || attributes.length > 3
+                || !attributes[0].equals("ShipQueue")) {
             throw new BadEncodingException();
         }
 
-        if (!attributes[0].equals("ShipQueue")) {
-            throw new BadEncodingException();
-        }
-
-        int numShips;
         try {
             numShips = Integer.parseInt(attributes[1]);
         } catch (NumberFormatException ignored) {
             throw new BadEncodingException();
         }
-
-        ShipQueue queue = new ShipQueue();
 
         if (numShips != 0) {
             String[] rawImoNums = attributes[2].split(",");
