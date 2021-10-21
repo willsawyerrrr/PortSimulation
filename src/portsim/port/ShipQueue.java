@@ -132,14 +132,11 @@ public class ShipQueue implements Encodable {
      */
     @Override
     public boolean equals(Object o) {
-        return false;
-        /*
         if (!(o instanceof ShipQueue)) {
             return false;
         }
         ShipQueue other = (ShipQueue) o;
         return queue.equals(other.getShipQueue());
-         */
     }
 
     /**
