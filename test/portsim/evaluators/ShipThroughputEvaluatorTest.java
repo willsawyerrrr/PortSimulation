@@ -95,20 +95,20 @@ public class ShipThroughputEvaluatorTest {
         while (eval.getTime() < 65) {
             eval.elapseOneMinute();
             switch (eval.getTime()) {
-                case 2:
+                case (long) 2:
                     assertEquals(0, eval.getThroughputPerHour());
                     break;
-                case 3:
+                case (long) 3:
                     eval.onProcessMovement(validMovement);
                     assertEquals(1, eval.getThroughputPerHour());
                     break;
-                case 62:
+                case (long) 62:
                     assertEquals(1, eval.getThroughputPerHour());
                     break;
-                case 63:
+                case (long) 63:
                     assertEquals(1, eval.getThroughputPerHour());
                     break;
-                case 64:
+                case (long) 64:
                     assertEquals(0, eval.getThroughputPerHour());
             }
         }
