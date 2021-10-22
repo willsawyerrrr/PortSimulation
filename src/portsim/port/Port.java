@@ -232,37 +232,31 @@ public class Port implements Tickable, Encodable {
         List<Quay> quays = new ArrayList<>();
         List<Cargo> storedCargo = new ArrayList<>();
         Port port;
-
         try (BufferedReader br = new BufferedReader(reader)) {
             name = br.readLine();
             time = Long.parseLong(br.readLine());
-
             numCargo = Integer.parseInt(br.readLine());
             for (int i = 1; i <= numCargo; i++) {
                 storedCargo.add(Cargo.fromString(br.readLine()));
             }
-
             numShips = Integer.parseInt(br.readLine());
             for (int i = 1; i <= numShips; i++) {
                 Ship.fromString(br.readLine());
             }
-
             numQuays = Integer.parseInt(br.readLine());
             for (int i = 1; i <= numQuays; i++) {
                 quays.add(Quay.fromString(br.readLine()));
             }
 
-            String[] shipQueueLine = br.readLine().split(":");
-            int numShipsInQueue = Integer.parseInt(shipQueueLine[1]);
+            String shipQueueLine = br.readLine();
+            if (shipQueueLine.endsWith(",")) {
+                throw new BadEncodingException();
+            }
+            String[] splitShipQueueLine = shipQueueLine.split(":");
+            int numShipsInQueue = Integer.parseInt(splitShipQueueLine[1]);
             if (numShipsInQueue != 0) {
-                String[] shipIds = shipQueueLine[2].split(",");
-                if (numShipsInQueue != shipIds.length) {
-                    throw new BadEncodingException();
-                }
-                for (String id : shipIds) {
-                    long imoNumber = Long.parseLong(id);
-                    shipQueue.add(Ship.getShipByImoNumber(imoNumber));
-                }
+                shipQueueHelper(splitShipQueueLine[2], numShipsInQueue)
+                        .forEach(shipQueue::add);
             }
 
             String storedCargoLine = br.readLine();
@@ -272,14 +266,8 @@ public class Port implements Tickable, Encodable {
             String[] splitStoredCargoLine = storedCargoLine.split(":");
             int numStoredCargo = Integer.parseInt(splitStoredCargoLine[1]);
             if (numStoredCargo != 0) {
-                String[] cargoIds = splitStoredCargoLine[2].split(",");
-                if (numStoredCargo != cargoIds.length) {
-                    throw new BadEncodingException();
-                }
-                for (String id : cargoIds) {
-                    int cargoId = Integer.parseInt(id);
-                    storedCargo.add(Cargo.getCargoById(cargoId));
-                }
+                storedCargo.addAll(storedCargoHelper(splitStoredCargoLine[2],
+                                numStoredCargo));
             }
 
             String movementLine = br.readLine();
@@ -297,7 +285,6 @@ public class Port implements Tickable, Encodable {
                     throw new BadEncodingException();
                 }
             }
-
             port = new Port(name, time, shipQueue, quays, storedCargo);
 
             String evaluatorLine = br.readLine();
@@ -330,16 +317,74 @@ public class Port implements Tickable, Encodable {
                     }
                 }
             }
-        } catch (BadEncodingException
-                | ArrayIndexOutOfBoundsException
-                | NoSuchShipException
-                | NoSuchCargoException ignored) {
+        } catch (BadEncodingException | ArrayIndexOutOfBoundsException ignore) {
             throw new BadEncodingException();
         }
-
         reader.close();
-
         return port;
+    }
+
+    /**
+     * Helper method called by {@link Port#initialisePort(Reader)} to get
+     * appropriate ships to add to ShipQueue.
+     *
+     * @param ids comma-separated IMO Numbers of ships to be added to the queue
+     * @param expected the number of ships which are expected to be added
+     *
+     * @return list of ships to add the queue
+     *
+     * @throws BadEncodingException if the number of IMO Numbers is not equal
+     *                              to the expected number or one of the
+     *                              given IMO Numbers does not correspond to
+     *                              an existing ship
+     */
+    private static List<Ship> shipQueueHelper(String ids, int expected)
+            throws BadEncodingException {
+        List<Ship> queue = new ArrayList<>();
+        String[] splitIds = ids.split(",");
+        if (splitIds.length != expected) {
+            throw new BadEncodingException();
+        }
+        try {
+            for (String id : splitIds) {
+                long imoNumber = Long.parseLong(id);
+                queue.add(Ship.getShipByImoNumber(imoNumber));
+            }
+        } catch (NoSuchShipException ignored) {
+            throw new BadEncodingException();
+        }
+        return queue;
+    }
+
+    /**
+     * Helper method called by {@link Port#initialisePort(Reader)} to get
+     * appropriate cargo to add to stored cargo.
+     *
+     * @param ids comma-separated IDs of cargo to be added to the queue
+     * @param expected the number of cargo which are expected to be added
+     *
+     * @return list of cargo to add the stored cargo
+     *
+     * @throws BadEncodingException if the number of IDs is not equal to the
+     *                              expected number or one of the given IDs
+     *                              does not correspond to existing cargo
+     */
+    private static List<Cargo> storedCargoHelper(String ids, int expected)
+            throws BadEncodingException {
+        List<Cargo> cargo = new ArrayList<>();
+        String[] splitIds = ids.split(",");
+        if (splitIds.length != expected) {
+            throw new BadEncodingException();
+        }
+        try {
+            for (String id : splitIds) {
+                int parsedId = Integer.parseInt(id);
+                cargo.add(Cargo.getCargoById(parsedId));
+            }
+        } catch (NoSuchCargoException ignored) {
+            throw new BadEncodingException();
+        }
+        return cargo;
     }
 
     /**
