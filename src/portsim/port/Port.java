@@ -248,21 +248,22 @@ public class Port implements Tickable, Encodable {
                 quays.add(Quay.fromString(br.readLine()));
             }
 
-            String queueLine = br.readLine();
-            String[] splitQueueLine = queueLine.split(":");
-            if (numColons(queueLine) != 2 || queueLine.endsWith(",")) {
+            String shipQueueLine = br.readLine();
+            if (shipQueueLine.endsWith(",")) {
                 throw new BadEncodingException();
             }
-            int numShipsInQueue = Integer.parseInt(splitQueueLine[1]);
+            String[] splitShipQueueLine = shipQueueLine.split(":");
+            int numShipsInQueue = Integer.parseInt(splitShipQueueLine[1]);
             if (numShipsInQueue != 0) {
-                shipQueueHelper(splitQueueLine[2], numShipsInQueue).forEach(
-                        shipQueue::add);
+                shipQueueHelper(splitShipQueueLine[2], numShipsInQueue)
+                        .forEach(shipQueue::add);
             }
 
             String storedCargoLine = br.readLine();
             String[] splitStoredCargoLine = storedCargoLine.split(":");
             if (storedCargoLine.endsWith(",")
-                    || numColons(storedCargoLine) != 2) {
+                    || (storedCargoLine.endsWith(":")
+                        && splitStoredCargoLine.length == 3)) {
                 throw new BadEncodingException();
             }
             int numStoredCargo = Integer.parseInt(splitStoredCargoLine[1]);
@@ -272,7 +273,7 @@ public class Port implements Tickable, Encodable {
             }
 
             String movementLine = br.readLine();
-            if (movementLine.endsWith(",") || numColons(movementLine) != 1) {
+            if (movementLine.endsWith(",")) {
                 throw new BadEncodingException();
             }
             numMovements = Integer.parseInt(movementLine.split(":")[1]);
@@ -290,7 +291,9 @@ public class Port implements Tickable, Encodable {
 
             String evaluatorLine = br.readLine();
             String[] evaluators = evaluatorLine.split(":");
-            if (numColons(evaluatorLine) != 2 || evaluatorLine.endsWith(",")) {
+            if (evaluatorLine.endsWith(",")
+                    || (evaluatorLine.endsWith(":")
+                        && evaluators.length == 3)) {
                 throw new BadEncodingException();
             }
             numEvaluators = Integer.parseInt(evaluators[1]);
@@ -323,12 +326,6 @@ public class Port implements Tickable, Encodable {
         }
         reader.close();
         return port;
-    }
-
-    private static long numColons(String line) {
-        Stream<String> colons =
-                Stream.of(line).filter(character -> character.equals(":"));
-        return colons.count();
     }
 
     /**
