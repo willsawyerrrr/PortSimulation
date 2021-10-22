@@ -260,10 +260,12 @@ public class Port implements Tickable, Encodable {
             }
 
             String storedCargoLine = br.readLine();
-            if (storedCargoLine.endsWith(",")) {
+            String[] splitStoredCargoLine = storedCargoLine.split(":");
+            if (storedCargoLine.endsWith(",")
+                    || (storedCargoLine.endsWith(":")
+                        && splitStoredCargoLine.length == 3)) {
                 throw new BadEncodingException();
             }
-            String[] splitStoredCargoLine = storedCargoLine.split(":");
             int numStoredCargo = Integer.parseInt(splitStoredCargoLine[1]);
             if (numStoredCargo != 0) {
                 storedCargo.addAll(storedCargoHelper(splitStoredCargoLine[2],
@@ -288,10 +290,12 @@ public class Port implements Tickable, Encodable {
             port = new Port(name, time, shipQueue, quays, storedCargo);
 
             String evaluatorLine = br.readLine();
-            if (evaluatorLine.endsWith(",")) {
+            String[] evaluators = evaluatorLine.split(":");
+            if (evaluatorLine.endsWith(",")
+                    || (evaluatorLine.endsWith(":")
+                        && evaluators.length == 3)) {
                 throw new BadEncodingException();
             }
-            String[] evaluators = evaluatorLine.split(":");
             numEvaluators = Integer.parseInt(evaluators[1]);
             if (numEvaluators != 0) {
                 for (int i = 2; i <= numEvaluators + 1; i++) {

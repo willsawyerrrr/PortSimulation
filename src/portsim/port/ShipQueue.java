@@ -224,7 +224,8 @@ public class ShipQueue implements Encodable {
         if (attributes.length < 2
                 || attributes.length > 3
                 || !attributes[0].equals("ShipQueue")
-                || string.endsWith(",")) {
+                || string.endsWith(",")
+                || (string.endsWith(":") && attributes.length == 3)) {
             throw new BadEncodingException();
         }
 
